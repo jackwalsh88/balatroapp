@@ -62,8 +62,11 @@ down).
 
 ### The honesty flag is the important part
 
-Roughly 75 of Balatro's ~150 jokers are modelled exactly. The rest are **not
-silently scored as zero.** Anything the scorer cannot compute — an unknown
+All **150** vanilla jokers are in the table by name and rarity, so a joker is
+never an unrecognised key. **77** have modelled effects; the remaining 67 are
+awaiting effect data from `balatrowiki.org` (see
+[`data/sources/wiki/README.md`](data/sources/wiki/README.md)). Anything not
+modelled is **not silently scored as zero.** Anything the scorer cannot compute — an unknown
 joker, a Blueprint copy chain (ordering unverified, spec §9), a random trigger
 like Misprint or a Lucky card, or a scaling joker whose counter the adapter did
 not read — sets `exact: false` and lands in `unmodelled`:
@@ -157,10 +160,13 @@ the scorer. That proves the scorer is self-consistent and does not regress. It
 way. Closing this needs the mod adapter, which §0 blocks. See
 [`fixtures/README.md`](fixtures/README.md).
 
-**Half the joker table is unmodelled.** Deliberate. Adding the rest means
-transcribing scaling constants from recall, and a wrong constant is exactly the
-invented number the architecture exists to prevent. Unmodelled is honest;
-wrong-but-confident is not.
+**67 of 150 jokers have no effect data yet.** All 150 are *known* — correct
+name, correct rarity, verified against an independent enumeration — but only 77
+are *modelled*. The gap closes when the wiki pages land in
+`data/sources/wiki/`; until then those jokers make a hand non-exact rather than
+being guessed at. The 77 already modelled came from recall and have not
+themselves been checked against a source, which is why the import verifies all
+150 rather than only the 67.
 
 **The live API path has not been exercised.** It is written against the SDK
 reference, but no credential was available in the environment where this was

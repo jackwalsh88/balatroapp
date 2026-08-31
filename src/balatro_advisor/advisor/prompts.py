@@ -164,17 +164,31 @@ def _joker_brief(state: dict[str, Any]) -> list[dict[str, Any]]:
     out = []
     for joker in state.get("jokers") or []:
         entry = data.joker(joker["key"]) or {}
+        if not entry:
+            does = "NOT IN THE JOKER TABLE AT ALL - treat its effect as wholly unknown."
+        elif entry.get("description"):
+            does = entry["description"]
+        else:
+            # Enumerated but not yet modelled: we know it is a real joker and
+            # what it is called, and nothing about what it does. Saying so beats
+            # a null, which reads as "does nothing".
+            does = (
+                "EFFECT NOT YET SOURCED. This is a real joker and its name is "
+                "correct, but this project has no description or numbers for it. "
+                "Do not infer its effect from its name."
+            )
         out.append({
             "position": joker["position"],
             "name": joker.get("name") or entry.get("name") or joker["key"],
             "key": joker["key"],
-            "does": entry.get("description", "UNKNOWN JOKER - not in the static table"),
+            "does": does,
             "edition": joker.get("edition", "base"),
             "stickers": joker.get("stickers") or [],
             "sell_value": joker.get("sell_value"),
             "counter": (joker.get("internal_state") or {}).get("counter"),
             "current_contribution": joker.get("current_contribution"),
             "modelled_by_scorer": bool(entry) and not entry.get("unmodelled"),
+            "rarity": entry.get("rarity"),
         })
     return out
 

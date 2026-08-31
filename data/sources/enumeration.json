@@ -1,0 +1,776 @@
+{
+  "_doc": {
+    "purpose": "Complete enumeration of vanilla Balatro jokers. Names and sprite order come from an Immolate-derived seed searcher, which needs the full pool to function, so the list is complete by construction rather than by transcription.",
+    "source": "https://github.com/alex-cova/balatro4j @ ca72d0f309ad55369477f550c38d241c6afb89de",
+    "fetched": "2026-08-31",
+    "files": [
+      "ui/src/main/resources/json/jokers.json (150 names, sprite order)",
+      "perkeo/src/main/java/com/balatro/enums/{Common,Rare,Legendary}Joker.java (rarity)"
+    ],
+    "rarity_note": "The repo ships no UncommonJoker.java. Uncommon is derived by elimination: 150 total - 61 common - 20 rare - 5 legendary = 64 uncommon.",
+    "what_this_does_NOT_provide": [
+      "internal game keys (no j_* strings anywhere in the repo) - ours are derived and flagged key_verified: false",
+      "per-joker cost",
+      "effect descriptions or any numeric constants"
+    ]
+  },
+  "count": 150,
+  "rarity_counts": {
+    "common": 61,
+    "uncommon": 64,
+    "rare": 20,
+    "legendary": 5
+  },
+  "jokers": [
+    {
+      "name": "Joker",
+      "rarity": "common",
+      "order": 0
+    },
+    {
+      "name": "Greedy Joker",
+      "rarity": "common",
+      "order": 1
+    },
+    {
+      "name": "Lusty Joker",
+      "rarity": "common",
+      "order": 2
+    },
+    {
+      "name": "Wrathful Joker",
+      "rarity": "common",
+      "order": 3
+    },
+    {
+      "name": "Gluttonous Joker",
+      "rarity": "common",
+      "order": 4
+    },
+    {
+      "name": "Jolly Joker",
+      "rarity": "common",
+      "order": 5
+    },
+    {
+      "name": "Zany Joker",
+      "rarity": "common",
+      "order": 6
+    },
+    {
+      "name": "Mad Joker",
+      "rarity": "common",
+      "order": 7
+    },
+    {
+      "name": "Crazy Joker",
+      "rarity": "common",
+      "order": 8
+    },
+    {
+      "name": "Droll Joker",
+      "rarity": "common",
+      "order": 9
+    },
+    {
+      "name": "Sly Joker",
+      "rarity": "common",
+      "order": 10
+    },
+    {
+      "name": "Wily Joker",
+      "rarity": "common",
+      "order": 11
+    },
+    {
+      "name": "Clever Joker",
+      "rarity": "common",
+      "order": 12
+    },
+    {
+      "name": "Devious Joker",
+      "rarity": "common",
+      "order": 13
+    },
+    {
+      "name": "Crafty Joker",
+      "rarity": "common",
+      "order": 14
+    },
+    {
+      "name": "Half Joker",
+      "rarity": "common",
+      "order": 15
+    },
+    {
+      "name": "Joker Stencil",
+      "rarity": "uncommon",
+      "order": 16
+    },
+    {
+      "name": "Four Fingers",
+      "rarity": "uncommon",
+      "order": 17
+    },
+    {
+      "name": "Mime",
+      "rarity": "uncommon",
+      "order": 18
+    },
+    {
+      "name": "Credit Card",
+      "rarity": "common",
+      "order": 19
+    },
+    {
+      "name": "Ceremonial Dagger",
+      "rarity": "uncommon",
+      "order": 20
+    },
+    {
+      "name": "Banner",
+      "rarity": "common",
+      "order": 21
+    },
+    {
+      "name": "Mystic Summit",
+      "rarity": "common",
+      "order": 22
+    },
+    {
+      "name": "Marble Joker",
+      "rarity": "uncommon",
+      "order": 23
+    },
+    {
+      "name": "Loyalty Card",
+      "rarity": "uncommon",
+      "order": 24
+    },
+    {
+      "name": "8 Ball",
+      "rarity": "common",
+      "order": 25
+    },
+    {
+      "name": "Misprint",
+      "rarity": "common",
+      "order": 26
+    },
+    {
+      "name": "Dusk",
+      "rarity": "uncommon",
+      "order": 27
+    },
+    {
+      "name": "Raised Fist",
+      "rarity": "common",
+      "order": 28
+    },
+    {
+      "name": "Chaos the Clown",
+      "rarity": "common",
+      "order": 29
+    },
+    {
+      "name": "Fibonacci",
+      "rarity": "uncommon",
+      "order": 30
+    },
+    {
+      "name": "Steel Joker",
+      "rarity": "uncommon",
+      "order": 31
+    },
+    {
+      "name": "Scary Face",
+      "rarity": "common",
+      "order": 32
+    },
+    {
+      "name": "Abstract Joker",
+      "rarity": "common",
+      "order": 33
+    },
+    {
+      "name": "Delayed Gratification",
+      "rarity": "common",
+      "order": 34
+    },
+    {
+      "name": "Hack",
+      "rarity": "uncommon",
+      "order": 35
+    },
+    {
+      "name": "Pareidolia",
+      "rarity": "uncommon",
+      "order": 36
+    },
+    {
+      "name": "Gros Michel",
+      "rarity": "common",
+      "order": 37
+    },
+    {
+      "name": "Even Steven",
+      "rarity": "common",
+      "order": 38
+    },
+    {
+      "name": "Odd Todd",
+      "rarity": "common",
+      "order": 39
+    },
+    {
+      "name": "Scholar",
+      "rarity": "common",
+      "order": 40
+    },
+    {
+      "name": "Business Card",
+      "rarity": "common",
+      "order": 41
+    },
+    {
+      "name": "Supernova",
+      "rarity": "common",
+      "order": 42
+    },
+    {
+      "name": "Ride the Bus",
+      "rarity": "common",
+      "order": 43
+    },
+    {
+      "name": "Space Joker",
+      "rarity": "uncommon",
+      "order": 44
+    },
+    {
+      "name": "Egg",
+      "rarity": "common",
+      "order": 45
+    },
+    {
+      "name": "Burglar",
+      "rarity": "uncommon",
+      "order": 46
+    },
+    {
+      "name": "Blackboard",
+      "rarity": "uncommon",
+      "order": 47
+    },
+    {
+      "name": "Runner",
+      "rarity": "common",
+      "order": 48
+    },
+    {
+      "name": "Ice Cream",
+      "rarity": "common",
+      "order": 49
+    },
+    {
+      "name": "DNA",
+      "rarity": "rare",
+      "order": 50
+    },
+    {
+      "name": "Splash",
+      "rarity": "common",
+      "order": 51
+    },
+    {
+      "name": "Blue Joker",
+      "rarity": "common",
+      "order": 52
+    },
+    {
+      "name": "Sixth Sense",
+      "rarity": "uncommon",
+      "order": 53
+    },
+    {
+      "name": "Constellation",
+      "rarity": "uncommon",
+      "order": 54
+    },
+    {
+      "name": "Hiker",
+      "rarity": "uncommon",
+      "order": 55
+    },
+    {
+      "name": "Faceless Joker",
+      "rarity": "common",
+      "order": 56
+    },
+    {
+      "name": "Green Joker",
+      "rarity": "common",
+      "order": 57
+    },
+    {
+      "name": "Superposition",
+      "rarity": "common",
+      "order": 58
+    },
+    {
+      "name": "To Do List",
+      "rarity": "common",
+      "order": 59
+    },
+    {
+      "name": "Cavendish",
+      "rarity": "common",
+      "order": 60
+    },
+    {
+      "name": "Card Sharp",
+      "rarity": "uncommon",
+      "order": 61
+    },
+    {
+      "name": "Red Card",
+      "rarity": "common",
+      "order": 62
+    },
+    {
+      "name": "Madness",
+      "rarity": "uncommon",
+      "order": 63
+    },
+    {
+      "name": "Square Joker",
+      "rarity": "common",
+      "order": 64
+    },
+    {
+      "name": "Seance",
+      "rarity": "uncommon",
+      "order": 65
+    },
+    {
+      "name": "Riff-raff",
+      "rarity": "common",
+      "order": 66
+    },
+    {
+      "name": "Vampire",
+      "rarity": "uncommon",
+      "order": 67
+    },
+    {
+      "name": "Shortcut",
+      "rarity": "uncommon",
+      "order": 68
+    },
+    {
+      "name": "Hologram",
+      "rarity": "uncommon",
+      "order": 69
+    },
+    {
+      "name": "Vagabond",
+      "rarity": "rare",
+      "order": 70
+    },
+    {
+      "name": "Baron",
+      "rarity": "rare",
+      "order": 71
+    },
+    {
+      "name": "Cloud 9",
+      "rarity": "uncommon",
+      "order": 72
+    },
+    {
+      "name": "Rocket",
+      "rarity": "uncommon",
+      "order": 73
+    },
+    {
+      "name": "Obelisk",
+      "rarity": "rare",
+      "order": 74
+    },
+    {
+      "name": "Midas Mask",
+      "rarity": "uncommon",
+      "order": 75
+    },
+    {
+      "name": "Luchador",
+      "rarity": "uncommon",
+      "order": 76
+    },
+    {
+      "name": "Photograph",
+      "rarity": "common",
+      "order": 77
+    },
+    {
+      "name": "Gift Card",
+      "rarity": "uncommon",
+      "order": 78
+    },
+    {
+      "name": "Turtle Bean",
+      "rarity": "uncommon",
+      "order": 79
+    },
+    {
+      "name": "Erosion",
+      "rarity": "uncommon",
+      "order": 80
+    },
+    {
+      "name": "Reserved Parking",
+      "rarity": "common",
+      "order": 81
+    },
+    {
+      "name": "Mail In Rebate",
+      "rarity": "common",
+      "order": 82
+    },
+    {
+      "name": "To the Moon",
+      "rarity": "uncommon",
+      "order": 83
+    },
+    {
+      "name": "Hallucination",
+      "rarity": "common",
+      "order": 84
+    },
+    {
+      "name": "Fortune Teller",
+      "rarity": "common",
+      "order": 85
+    },
+    {
+      "name": "Juggler",
+      "rarity": "common",
+      "order": 86
+    },
+    {
+      "name": "Drunkard",
+      "rarity": "common",
+      "order": 87
+    },
+    {
+      "name": "Stone Joker",
+      "rarity": "uncommon",
+      "order": 88
+    },
+    {
+      "name": "Golden Joker",
+      "rarity": "common",
+      "order": 89
+    },
+    {
+      "name": "Lucky Cat",
+      "rarity": "uncommon",
+      "order": 90
+    },
+    {
+      "name": "Baseball Card",
+      "rarity": "rare",
+      "order": 91
+    },
+    {
+      "name": "Bull",
+      "rarity": "uncommon",
+      "order": 92
+    },
+    {
+      "name": "Diet Cola",
+      "rarity": "uncommon",
+      "order": 93
+    },
+    {
+      "name": "Trading Card",
+      "rarity": "uncommon",
+      "order": 94
+    },
+    {
+      "name": "Flash Card",
+      "rarity": "uncommon",
+      "order": 95
+    },
+    {
+      "name": "Popcorn",
+      "rarity": "common",
+      "order": 96
+    },
+    {
+      "name": "Spare Trousers",
+      "rarity": "uncommon",
+      "order": 97
+    },
+    {
+      "name": "Ancient Joker",
+      "rarity": "rare",
+      "order": 98
+    },
+    {
+      "name": "Ramen",
+      "rarity": "uncommon",
+      "order": 99
+    },
+    {
+      "name": "Walkie Talkie",
+      "rarity": "common",
+      "order": 100
+    },
+    {
+      "name": "Seltzer",
+      "rarity": "uncommon",
+      "order": 101
+    },
+    {
+      "name": "Castle",
+      "rarity": "uncommon",
+      "order": 102
+    },
+    {
+      "name": "Smiley Face",
+      "rarity": "common",
+      "order": 103
+    },
+    {
+      "name": "Campfire",
+      "rarity": "rare",
+      "order": 104
+    },
+    {
+      "name": "Golden Ticket",
+      "rarity": "common",
+      "order": 105
+    },
+    {
+      "name": "Mr. Bones",
+      "rarity": "uncommon",
+      "order": 106
+    },
+    {
+      "name": "Acrobat",
+      "rarity": "uncommon",
+      "order": 107
+    },
+    {
+      "name": "Sock and Buskin",
+      "rarity": "uncommon",
+      "order": 108
+    },
+    {
+      "name": "Swashbuckler",
+      "rarity": "common",
+      "order": 109
+    },
+    {
+      "name": "Troubadour",
+      "rarity": "uncommon",
+      "order": 110
+    },
+    {
+      "name": "Certificate",
+      "rarity": "uncommon",
+      "order": 111
+    },
+    {
+      "name": "Smeared Joker",
+      "rarity": "uncommon",
+      "order": 112
+    },
+    {
+      "name": "Throwback",
+      "rarity": "uncommon",
+      "order": 113
+    },
+    {
+      "name": "Hanging Chad",
+      "rarity": "common",
+      "order": 114
+    },
+    {
+      "name": "Rough Gem",
+      "rarity": "uncommon",
+      "order": 115
+    },
+    {
+      "name": "Bloodstone",
+      "rarity": "uncommon",
+      "order": 116
+    },
+    {
+      "name": "Arrowhead",
+      "rarity": "uncommon",
+      "order": 117
+    },
+    {
+      "name": "Onyx Agate",
+      "rarity": "uncommon",
+      "order": 118
+    },
+    {
+      "name": "Glass Joker",
+      "rarity": "uncommon",
+      "order": 119
+    },
+    {
+      "name": "Showman",
+      "rarity": "uncommon",
+      "order": 120
+    },
+    {
+      "name": "Flower Pot",
+      "rarity": "uncommon",
+      "order": 121
+    },
+    {
+      "name": "Blueprint",
+      "rarity": "rare",
+      "order": 122
+    },
+    {
+      "name": "Wee Joker",
+      "rarity": "rare",
+      "order": 123
+    },
+    {
+      "name": "Merry Andy",
+      "rarity": "uncommon",
+      "order": 124
+    },
+    {
+      "name": "Oops! All 6s",
+      "rarity": "uncommon",
+      "order": 125
+    },
+    {
+      "name": "The Idol",
+      "rarity": "uncommon",
+      "order": 126
+    },
+    {
+      "name": "Seeing Double",
+      "rarity": "uncommon",
+      "order": 127
+    },
+    {
+      "name": "Matador",
+      "rarity": "uncommon",
+      "order": 128
+    },
+    {
+      "name": "Hit the Road",
+      "rarity": "rare",
+      "order": 129
+    },
+    {
+      "name": "The Duo",
+      "rarity": "rare",
+      "order": 130
+    },
+    {
+      "name": "The Trio",
+      "rarity": "rare",
+      "order": 131
+    },
+    {
+      "name": "The Family",
+      "rarity": "rare",
+      "order": 132
+    },
+    {
+      "name": "The Order",
+      "rarity": "rare",
+      "order": 133
+    },
+    {
+      "name": "The Tribe",
+      "rarity": "rare",
+      "order": 134
+    },
+    {
+      "name": "Stuntman",
+      "rarity": "rare",
+      "order": 135
+    },
+    {
+      "name": "Invisible Joker",
+      "rarity": "rare",
+      "order": 136
+    },
+    {
+      "name": "Brainstorm",
+      "rarity": "rare",
+      "order": 137
+    },
+    {
+      "name": "Satellite",
+      "rarity": "uncommon",
+      "order": 138
+    },
+    {
+      "name": "Shoot the Moon",
+      "rarity": "common",
+      "order": 139
+    },
+    {
+      "name": "Drivers License",
+      "rarity": "rare",
+      "order": 140
+    },
+    {
+      "name": "Cartomancer",
+      "rarity": "uncommon",
+      "order": 141
+    },
+    {
+      "name": "Astronomer",
+      "rarity": "uncommon",
+      "order": 142
+    },
+    {
+      "name": "Burnt Joker",
+      "rarity": "rare",
+      "order": 143
+    },
+    {
+      "name": "Bootstraps",
+      "rarity": "uncommon",
+      "order": 144
+    },
+    {
+      "name": "Canio",
+      "rarity": "legendary",
+      "order": 145
+    },
+    {
+      "name": "Triboulet",
+      "rarity": "legendary",
+      "order": 146
+    },
+    {
+      "name": "Yorick",
+      "rarity": "legendary",
+      "order": 147
+    },
+    {
+      "name": "Chicot",
+      "rarity": "legendary",
+      "order": 148
+    },
+    {
+      "name": "Perkeo",
+      "rarity": "legendary",
+      "order": 149
+    }
+  ]
+}

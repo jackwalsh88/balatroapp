@@ -185,6 +185,14 @@
           "items": {
             "$ref": "#/$defs/card"
           }
+        },
+        "starting_total": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "How many cards the deck STARTED the run with, before any were added or removed. Erosion scores from the difference against `total`, and it cannot be assumed to be 52 - the Abandoned and Checkered decks start with a different count. Null means Erosion's contribution is unknown rather than zero."
         }
       }
     },

@@ -217,7 +217,7 @@ def test_joker_order_changes_the_result(state_factory):
         return scorer.score_play(state, [0, 1]).mult
 
     # The Duo is x2 (the hand contains a pair); Joker is +4.
-    assert score(["j_the_duo", "j_joker"]) != score(["j_joker", "j_the_duo"])
+    assert score(["j_duo", "j_joker"]) != score(["j_joker", "j_duo"])
 
 
 def test_polychrome_joker_edition_applies(state_factory):
@@ -323,3 +323,117 @@ def test_inexact_candidate_never_claims_it_misses_the_blind(state_factory):
     ))
     for play in enumerate_module.enumerate_plays(state):
         assert play["clears_blind"] is None
+
+
+# --------------------------------------------------------------------------
+# Effects sourced from game.lua: random expectation, compounding, new sources
+# --------------------------------------------------------------------------
+
+
+def test_random_effects_report_an_expected_value(state_factory):
+    """The user's call: approximation is fine for randomness, so report the mean.
+
+    It is still an exact computation - of the expectation, from the game's own
+    range - and it must be flagged so nothing presents it as a certainty.
+    """
+    state = schema.load_state(state_factory(jokers=[{"position": 0, "key": "j_misprint"}]))
+    result = scorer.score_play(state, [0, 1])
+    assert result.stochastic is True
+    assert result.exact is True, "an expectation is computed, not unknown"
+    assert result.mult == pytest.approx(2 + 11.5), "uniform 0..23 has mean 11.5"
+
+
+def test_a_deterministic_hand_is_not_marked_stochastic(state_factory):
+    state = schema.load_state(state_factory(jokers=[{"position": 0, "key": "j_joker"}]))
+    assert scorer.score_play(state, [0, 1]).stochastic is False
+
+
+def test_odds_based_randomness_weights_the_multiplier(state_factory, card):
+    """Bloodstone is 1 in 2 for X1.5, so the expectation is X1.25, not X1.5."""
+    state = schema.load_state(state_factory(
+        current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+        jokers=[{"position": 0, "key": "j_bloodstone"}],
+    ))
+    result = scorer.score_play(state, [0, 1])
+    assert result.mult == pytest.approx(2 * 1.25)
+
+
+def test_baseball_card_compounds_rather_than_adds(state_factory):
+    """X1.5 per Uncommon is 1.5**n. Two Uncommons is X2.25, not X2."""
+    state = schema.load_state(state_factory(jokers=[
+        {"position": 0, "key": "j_baseball"},
+        {"position": 1, "key": "j_burglar"},
+        {"position": 2, "key": "j_turtle_bean"},
+    ]))
+    assert scorer.score_play(state, [0, 1]).mult == pytest.approx(2 * 2.25)
+
+
+def test_economy_jokers_score_exactly_and_contribute_nothing(state_factory):
+    """A board of economy jokers is fully computable, not a floor."""
+    bare = schema.load_state(state_factory())
+    loaded = schema.load_state(state_factory(jokers=[
+        {"position": 0, "key": "j_golden"},
+        {"position": 1, "key": "j_rocket"},
+        {"position": 2, "key": "j_cloud_9"},
+    ]))
+    plain, with_economy = scorer.score_play(bare, [0, 1]), scorer.score_play(loaded, [0, 1])
+    assert with_economy.exact is True
+    assert with_economy.score == plain.score
+
+
+def test_chicot_disables_a_scoring_boss_blind(state_factory, card):
+    hand = [card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")]
+    flint = {"type": "boss", "key": "bl_flint", "requirement": 9999}
+    without = schema.load_state(state_factory(current_hand=hand, blind=flint))
+    with_chicot = schema.load_state(state_factory(
+        current_hand=hand, blind=flint, jokers=[{"position": 0, "key": "j_chicot"}]
+    ))
+    assert scorer.score_play(with_chicot, [0, 1]).score > scorer.score_play(without, [0, 1]).score
+
+
+def test_bootstraps_floors_the_division(state_factory):
+    """+2 Mult per $5: $9 must give the same as $5, not 1.8x as much."""
+    def mult(money):
+        state = schema.load_state(state_factory(
+            run={"ante": 1, "money": money},
+            jokers=[{"position": 0, "key": "j_bootstraps"}],
+        ))
+        return scorer.score_play(state, [0, 1]).mult
+
+    assert mult(5) == mult(9)
+    assert mult(10) > mult(9)
+
+
+def test_swashbuckler_excludes_its_own_sell_value(state_factory):
+    state = schema.load_state(state_factory(jokers=[
+        {"position": 0, "key": "j_swashbuckler", "sell_value": 2},
+        {"position": 1, "key": "j_juggler", "sell_value": 3},
+        {"position": 2, "key": "j_drunkard", "sell_value": 4},
+    ]))
+    assert scorer.score_play(state, [0, 1]).mult == pytest.approx(2 + 7)
+
+
+def test_a_missing_sell_value_makes_swashbuckler_unknown(state_factory):
+    """One unknown sell value makes the total unknowable, not merely smaller."""
+    state = schema.load_state(state_factory(jokers=[
+        {"position": 0, "key": "j_swashbuckler", "sell_value": 2},
+        {"position": 1, "key": "j_juggler"},
+    ]))
+    assert scorer.score_play(state, [0, 1]).exact is False
+
+
+def test_erosion_needs_the_decks_starting_size(state_factory, card):
+    """It cannot be assumed to be 52 - some decks start smaller."""
+    deck = {"total": 48, "cards": [card("2", "hearts")]}
+    without = schema.load_state(state_factory(
+        deck=deck, jokers=[{"position": 0, "key": "j_erosion"}]
+    ))
+    assert scorer.score_play(without, [0, 1]).exact is False
+
+    with_size = schema.load_state(state_factory(
+        deck={**deck, "starting_total": 52},
+        jokers=[{"position": 0, "key": "j_erosion"}],
+    ))
+    result = scorer.score_play(with_size, [0, 1])
+    assert result.exact is True
+    assert result.mult == pytest.approx(2 + 4 * 4), "4 cards removed at +4 Mult each"

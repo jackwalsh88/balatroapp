@@ -54,6 +54,7 @@ class HandFlags:
     smeared: bool = False
     pareidolia: bool = False
     splash: bool = False
+    disable_boss: bool = False
 
     @classmethod
     def from_jokers(cls, joker_states: Iterable[dict[str, Any]]) -> "HandFlags":
@@ -68,6 +69,7 @@ class HandFlags:
             smeared="smeared" in flags,
             pareidolia="pareidolia" in flags,
             splash="splash" in flags,
+            disable_boss="disable_boss" in flags,
         )
 
 

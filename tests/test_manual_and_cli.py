@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 import pytest
 
@@ -172,7 +173,8 @@ def test_bad_card_shorthand_reprompts(tmp_path):
 def test_fixtures_command_passes(capsys):
     assert cli.main(["fixtures"]) == 0
     out = capsys.readouterr().out
-    assert "16/16 passed" in out
+    passed, total = re.search(r"(\d+)/(\d+) passed", out).groups()
+    assert passed == total and int(total) > 0
     assert "hand_computed" in out
 
 

@@ -1,0 +1,3086 @@
+{
+  "_doc": {
+    "sources": {
+      "constants_keys_rarity_cost": "data/sources/game/jokerdata.lua (extracted from game.lua, Game:init_item_prototypes)",
+      "effect_text_type_activation": "data/sources/wiki/jokers.html (rendered balatrowiki.org Jokers table)"
+    },
+    "note": "Constants come from the game; meaning comes from the wiki. Numbers appearing in the wiki prose are checked against the game's config rather than trusted."
+  },
+  "count": 150,
+  "problems": [
+    "j_seance: game.lua says 'Seance', wiki says 'S\u00e9ance'",
+    "j_riff_raff: game.lua says 'Riff-raff', wiki says 'Riff-Raff'",
+    "j_caino: game.lua says 'Caino', wiki says 'Canio'"
+  ],
+  "jokers": [
+    {
+      "key": "j_joker",
+      "name": "Joker",
+      "prototype_name": "Joker",
+      "order": 1,
+      "rarity": "common",
+      "cost": 2,
+      "config": {
+        "mult": 4
+      },
+      "effect_text": "+4 Mult",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_greedy_joker",
+      "name": "Greedy Joker",
+      "prototype_name": "Greedy Joker",
+      "order": 2,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "s_mult": 3,
+          "suit": "Diamonds"
+        }
+      },
+      "effect_text": "Played cards with Diamond suit give +3 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_lusty_joker",
+      "name": "Lusty Joker",
+      "prototype_name": "Lusty Joker",
+      "order": 3,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "s_mult": 3,
+          "suit": "Hearts"
+        }
+      },
+      "effect_text": "Played cards with Heart suit give +3 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_wrathful_joker",
+      "name": "Wrathful Joker",
+      "prototype_name": "Wrathful Joker",
+      "order": 4,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "s_mult": 3,
+          "suit": "Spades"
+        }
+      },
+      "effect_text": "Played cards with Spade suit give +3 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_gluttenous_joker",
+      "name": "Gluttonous Joker",
+      "prototype_name": "Gluttonous Joker",
+      "order": 5,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "s_mult": 3,
+          "suit": "Clubs"
+        }
+      },
+      "effect_text": "Played cards with Club suit give +3 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_jolly",
+      "name": "Jolly Joker",
+      "prototype_name": "Jolly Joker",
+      "order": 6,
+      "rarity": "common",
+      "cost": 3,
+      "config": {
+        "t_mult": 8,
+        "type": "Pair"
+      },
+      "effect_text": "+8 Mult if played hand contains a Pair",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_zany",
+      "name": "Zany Joker",
+      "prototype_name": "Zany Joker",
+      "order": 7,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_mult": 12,
+        "type": "Three of a Kind"
+      },
+      "effect_text": "+12 Mult if played hand contains a Three of a Kind",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_mad",
+      "name": "Mad Joker",
+      "prototype_name": "Mad Joker",
+      "order": 8,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_mult": 10,
+        "type": "Two Pair"
+      },
+      "effect_text": "+10 Mult if played hand contains a Two Pair",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_crazy",
+      "name": "Crazy Joker",
+      "prototype_name": "Crazy Joker",
+      "order": 9,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_mult": 12,
+        "type": "Straight"
+      },
+      "effect_text": "+12 Mult if played hand contains a Straight",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_droll",
+      "name": "Droll Joker",
+      "prototype_name": "Droll Joker",
+      "order": 10,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_mult": 10,
+        "type": "Flush"
+      },
+      "effect_text": "+10 Mult if played hand contains a Flush",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_sly",
+      "name": "Sly Joker",
+      "prototype_name": "Sly Joker",
+      "order": 11,
+      "rarity": "common",
+      "cost": 3,
+      "config": {
+        "t_chips": 50,
+        "type": "Pair"
+      },
+      "effect_text": "+50 Chips if played hand contains a Pair",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_wily",
+      "name": "Wily Joker",
+      "prototype_name": "Wily Joker",
+      "order": 12,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_chips": 100,
+        "type": "Three of a Kind"
+      },
+      "effect_text": "+100 Chips if played hand contains a Three of a Kind",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_clever",
+      "name": "Clever Joker",
+      "prototype_name": "Clever Joker",
+      "order": 13,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_chips": 80,
+        "type": "Two Pair"
+      },
+      "effect_text": "+80 Chips if played hand contains a Two Pair",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_devious",
+      "name": "Devious Joker",
+      "prototype_name": "Devious Joker",
+      "order": 14,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_chips": 100,
+        "type": "Straight"
+      },
+      "effect_text": "+100 Chips if played hand contains a Straight",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_crafty",
+      "name": "Crafty Joker",
+      "prototype_name": "Crafty Joker",
+      "order": 15,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "t_chips": 80,
+        "type": "Flush"
+      },
+      "effect_text": "+80 Chips if played hand contains a Flush",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_half",
+      "name": "Half Joker",
+      "prototype_name": "Half Joker",
+      "order": 16,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "mult": 20,
+          "size": 3
+        }
+      },
+      "effect_text": "+20 Mult if played hand contains 3 or fewer cards",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_stencil",
+      "name": "Joker Stencil",
+      "prototype_name": "Joker Stencil",
+      "order": 17,
+      "rarity": "uncommon",
+      "cost": 8,
+      "config": {},
+      "effect_text": "X1 Mult for each empty Joker slot Joker Stencil included (Currently X1 )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_four_fingers",
+      "name": "Four Fingers",
+      "prototype_name": "Four Fingers",
+      "order": 18,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {},
+      "effect_text": "All Flushes and Straights can be made with 4 cards",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_mime",
+      "name": "Mime",
+      "prototype_name": "Mime",
+      "order": 19,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Retrigger all card held in hand abilities",
+      "type": "retrigger",
+      "activation": "on_held",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_credit_card",
+      "name": "Credit Card",
+      "prototype_name": "Credit Card",
+      "order": 20,
+      "rarity": "common",
+      "cost": 1,
+      "config": {
+        "extra": 20
+      },
+      "effect_text": "Go up to -$20 in debt",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_ceremonial",
+      "name": "Ceremonial Dagger",
+      "prototype_name": "Ceremonial Dagger",
+      "order": 21,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "mult": 0
+      },
+      "effect_text": "When Blind is selected, destroy Joker to the right and permanently add double its sell value to this Mult (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_banner",
+      "name": "Banner",
+      "prototype_name": "Banner",
+      "order": 22,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 30
+      },
+      "effect_text": "+30 Chips for each remaining discard",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_mystic_summit",
+      "name": "Mystic Summit",
+      "prototype_name": "Mystic Summit",
+      "order": 23,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "mult": 15,
+          "d_remaining": 0
+        }
+      },
+      "effect_text": "+15 Mult when 0 discards remaining",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_marble",
+      "name": "Marble Joker",
+      "prototype_name": "Marble Joker",
+      "order": 24,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Adds one Stone card to the deck when Blind is selected",
+      "type": "effect",
+      "activation": "On Blind Select",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_loyalty_card",
+      "name": "Loyalty Card",
+      "prototype_name": "Loyalty Card",
+      "order": 25,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "Xmult": 4,
+          "every": 5,
+          "remaining": "5 remaining"
+        }
+      },
+      "effect_text": "X4 Mult every 6 hands played 5 remaining",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_8_ball",
+      "name": "8 Ball",
+      "prototype_name": "8 Ball",
+      "order": 26,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "1 in 4 chance for each played 8 to create a Tarot card when scored (Must have room)",
+      "type": "effect",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_misprint",
+      "name": "Misprint",
+      "prototype_name": "Misprint",
+      "order": 27,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "max": 23,
+          "min": 0
+        }
+      },
+      "effect_text": "+0-23 Mult",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_dusk",
+      "name": "Dusk",
+      "prototype_name": "Dusk",
+      "order": 28,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Retrigger all played cards in final hand of the round",
+      "type": "retrigger",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_raised_fist",
+      "name": "Raised Fist",
+      "prototype_name": "Raised Fist",
+      "order": 29,
+      "rarity": "common",
+      "cost": 5,
+      "config": {},
+      "effect_text": "Adds double the rank of lowest ranked card held in hand to Mult",
+      "type": "additive_mult",
+      "activation": "on_held",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_chaos",
+      "name": "Chaos the Clown",
+      "prototype_name": "Chaos the Clown",
+      "order": 30,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "1 free Reroll per shop",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_fibonacci",
+      "name": "Fibonacci",
+      "prototype_name": "Fibonacci",
+      "order": 31,
+      "rarity": "uncommon",
+      "cost": 8,
+      "config": {
+        "extra": 8
+      },
+      "effect_text": "Each played Ace , 2 , 3 , 5 , or 8 gives +8 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_steel_joker",
+      "name": "Steel Joker",
+      "prototype_name": "Steel Joker",
+      "order": 32,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 0.2
+      },
+      "effect_text": "Gives X0.2 Mult for each Steel Card in your full deck (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": "m_steel",
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_scary_face",
+      "name": "Scary Face",
+      "prototype_name": "Scary Face",
+      "order": 33,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 30
+      },
+      "effect_text": "Played face cards give +30 Chips when scored",
+      "type": "chips",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_abstract",
+      "name": "Abstract Joker",
+      "prototype_name": "Abstract Joker",
+      "order": 34,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "+3 Mult for each Joker card (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_delayed_grat",
+      "name": "Delayed Gratification",
+      "prototype_name": "Delayed Gratification",
+      "order": 35,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "Earn $2 per discard if no discards are used by end of the round",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_hack",
+      "name": "Hack",
+      "prototype_name": "Hack",
+      "order": 36,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Retrigger each played 2 , 3 , 4 , or 5",
+      "type": "retrigger",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_pareidolia",
+      "name": "Pareidolia",
+      "prototype_name": "Pareidolia",
+      "order": 37,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {},
+      "effect_text": "All cards are considered face cards",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_gros_michel",
+      "name": "Gros Michel",
+      "prototype_name": "Gros Michel",
+      "order": 38,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "odds": 6,
+          "mult": 15
+        }
+      },
+      "effect_text": "+15 Mult 1 in 6 chance this card is destroyed at end of round",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_even_steven",
+      "name": "Even Steven",
+      "prototype_name": "Even Steven",
+      "order": 39,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "Played cards with even rank give +4 Mult when scored (10, 8, 6, 4, 2)",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_odd_todd",
+      "name": "Odd Todd",
+      "prototype_name": "Odd Todd",
+      "order": 40,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 31
+      },
+      "effect_text": "Played cards with odd rank give +31 Chips when scored (A, 9, 7, 5, 3)",
+      "type": "chips",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_scholar",
+      "name": "Scholar",
+      "prototype_name": "Scholar",
+      "order": 41,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "mult": 4,
+          "chips": 20
+        }
+      },
+      "effect_text": "Played Aces give +20 Chips and +4 Mult when scored",
+      "type": "+ +",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_business",
+      "name": "Business Card",
+      "prototype_name": "Business Card",
+      "order": 42,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "Played face cards have a 1 in 2 chance to give $2 when scored",
+      "type": "economy",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_supernova",
+      "name": "Supernova",
+      "prototype_name": "Supernova",
+      "order": 43,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Adds the number of times poker hand has been played this run to Mult",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_ride_the_bus",
+      "name": "Ride the Bus",
+      "prototype_name": "Ride the Bus",
+      "order": 44,
+      "rarity": "common",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "This Joker gains +1 Mult per consecutive hand played without a scoring face card (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_space",
+      "name": "Space Joker",
+      "prototype_name": "Space Joker",
+      "order": 45,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "1 in 4 chance to upgrade level of played poker hand",
+      "type": "effect",
+      "activation": "on_played",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_egg",
+      "name": "Egg",
+      "prototype_name": "Egg",
+      "order": 46,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "Gains $3 of sell value at end of round",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_burglar",
+      "name": "Burglar",
+      "prototype_name": "Burglar",
+      "order": 47,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "When Blind is selected, gain +3 Hands and lose all discards",
+      "type": "effect",
+      "activation": "On Blind Select",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_blackboard",
+      "name": "Blackboard",
+      "prototype_name": "Blackboard",
+      "order": 48,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "X3 Mult if all cards held in hand are Spades or Clubs",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_runner",
+      "name": "Runner",
+      "prototype_name": "Runner",
+      "order": 49,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "chips": 0,
+          "chip_mod": 15
+        }
+      },
+      "effect_text": "Gains +15 Chips if played hand contains a Straight (Currently +0 Chips )",
+      "type": "chips",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_ice_cream",
+      "name": "Ice Cream",
+      "prototype_name": "Ice Cream",
+      "order": 50,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": {
+          "chips": 100,
+          "chip_mod": 5
+        }
+      },
+      "effect_text": "+100 Chips -5 Chips for every hand played",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_dna",
+      "name": "DNA",
+      "prototype_name": "DNA",
+      "order": 51,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {},
+      "effect_text": "If first hand of round has only 1 card, add a permanent copy to deck and draw it to hand",
+      "type": "effect",
+      "activation": "on_played",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_splash",
+      "name": "Splash",
+      "prototype_name": "Splash",
+      "order": 52,
+      "rarity": "common",
+      "cost": 3,
+      "config": {},
+      "effect_text": "Every played card counts in scoring",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_blue_joker",
+      "name": "Blue Joker",
+      "prototype_name": "Blue Joker",
+      "order": 53,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "+2 Chips for each remaining card in deck (Currently +104 Chips )",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_sixth_sense",
+      "name": "Sixth Sense",
+      "prototype_name": "Sixth Sense",
+      "order": 54,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {},
+      "effect_text": "If first hand of round is a single 6 , destroy it and create a Spectral card (Must have room)",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_constellation",
+      "name": "Constellation",
+      "prototype_name": "Constellation",
+      "order": 55,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 0.1,
+        "Xmult": 1
+      },
+      "effect_text": "This Joker gains X0.1 Mult every time a Planet card is used (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_hiker",
+      "name": "Hiker",
+      "prototype_name": "Hiker",
+      "order": 56,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": 5
+      },
+      "effect_text": "Every played card permanently gains +5 Chips when scored",
+      "type": "chips",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_faceless",
+      "name": "Faceless Joker",
+      "prototype_name": "Faceless Joker",
+      "order": 57,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "dollars": 5,
+          "faces": 3
+        }
+      },
+      "effect_text": "Earn $5 if 3 or more face cards are discarded at the same time",
+      "type": "economy",
+      "activation": "on_discard",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_green_joker",
+      "name": "Green Joker",
+      "prototype_name": "Green Joker",
+      "order": 58,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "hand_add": 1,
+          "discard_sub": 1
+        }
+      },
+      "effect_text": "+1 Mult per hand played -1 Mult per discard (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_superposition",
+      "name": "Superposition",
+      "prototype_name": "Superposition",
+      "order": 59,
+      "rarity": "common",
+      "cost": 4,
+      "config": {},
+      "effect_text": "Create a Tarot card if poker hand contains an Ace and a Straight (Must have room)",
+      "type": "effect",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_todo_list",
+      "name": "To Do List",
+      "prototype_name": "To Do List",
+      "order": 60,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "dollars": 4,
+          "poker_hand": "High Card"
+        }
+      },
+      "effect_text": "Earn $4 if poker hand is a [Poker Hand] , poker hand changes at end of round",
+      "type": "economy",
+      "activation": "on_played",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_cavendish",
+      "name": "Cavendish",
+      "prototype_name": "Cavendish",
+      "order": 61,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "odds": 1000,
+          "Xmult": 3
+        }
+      },
+      "effect_text": "X3 Mult 1 in 1000 chance this card is destroyed at the end of round",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_card_sharp",
+      "name": "Card Sharp",
+      "prototype_name": "Card Sharp",
+      "order": 62,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "Xmult": 3
+        }
+      },
+      "effect_text": "X3 Mult if played poker hand has already been played this round",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_red_card",
+      "name": "Red Card",
+      "prototype_name": "Red Card",
+      "order": 63,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "This Joker gains +3 Mult when any Booster Pack is skipped (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_madness",
+      "name": "Madness",
+      "prototype_name": "Madness",
+      "order": 64,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 0.5
+      },
+      "effect_text": "When Small Blind or Big Blind is selected, gain X0.5 Mult and destroy a random Joker (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_square",
+      "name": "Square Joker",
+      "prototype_name": "Square Joker",
+      "order": 65,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "chips": 0,
+          "chip_mod": 4
+        }
+      },
+      "effect_text": "This Joker gains +4 Chips if played hand has exactly 4 cards (Currently 0 Chips )",
+      "type": "chips",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_seance",
+      "name": "S\u00e9ance",
+      "prototype_name": "Seance",
+      "order": 66,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "poker_hand": "Straight Flush"
+        }
+      },
+      "effect_text": "If poker hand is a Straight Flush , create a random Spectral card (Must have room)",
+      "type": "effect",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_riff_raff",
+      "name": "Riff-Raff",
+      "prototype_name": "Riff-raff",
+      "order": 67,
+      "rarity": "common",
+      "cost": 6,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "When Blind is selected, create 2 Common Jokers (Must have room)",
+      "type": "effect",
+      "activation": "On Blind Select",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_vampire",
+      "name": "Vampire",
+      "prototype_name": "Vampire",
+      "order": 68,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 0.1,
+        "Xmult": 1
+      },
+      "effect_text": "This Joker gains X0.1 Mult per scoring Enhanced card played, removes card Enhancement (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_shortcut",
+      "name": "Shortcut",
+      "prototype_name": "Shortcut",
+      "order": 69,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {},
+      "effect_text": "Allows Straights to be made with gaps of 1 rank (ex: 10 8 6 5 3 )",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_hologram",
+      "name": "Hologram",
+      "prototype_name": "Hologram",
+      "order": 70,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 0.25,
+        "Xmult": 1
+      },
+      "effect_text": "This Joker gains X0.25 Mult every time a playing card is added to your deck (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_vagabond",
+      "name": "Vagabond",
+      "prototype_name": "Vagabond",
+      "order": 71,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "Create a Tarot card if hand is played with $4 or less",
+      "type": "effect",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_baron",
+      "name": "Baron",
+      "prototype_name": "Baron",
+      "order": 72,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 1.5
+      },
+      "effect_text": "Each King held in hand gives X1.5 Mult",
+      "type": "multiplicative_mult",
+      "activation": "on_held",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_cloud_9",
+      "name": "Cloud 9",
+      "prototype_name": "Cloud 9",
+      "order": 73,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Earn $1 for each 9 in your full deck at end of round (Currently $4 )",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_rocket",
+      "name": "Rocket",
+      "prototype_name": "Rocket",
+      "order": 74,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "dollars": 1,
+          "increase": 2
+        }
+      },
+      "effect_text": "Earn $1 at end of round. Payout increases by $2 when Boss Blind is defeated",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_obelisk",
+      "name": "Obelisk",
+      "prototype_name": "Obelisk",
+      "order": 75,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 0.2,
+        "Xmult": 1
+      },
+      "effect_text": "This Joker gains X0.2 Mult per consecutive hand played without playing your most played poker hand (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_midas_mask",
+      "name": "Midas Mask",
+      "prototype_name": "Midas Mask",
+      "order": 76,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {},
+      "effect_text": "All played face cards become Gold cards when scored",
+      "type": "effect",
+      "activation": "on_played",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_luchador",
+      "name": "Luchador",
+      "prototype_name": "Luchador",
+      "order": 77,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {},
+      "effect_text": "Sell this card to disable the current Boss Blind",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_photograph",
+      "name": "Photograph",
+      "prototype_name": "Photograph",
+      "order": 78,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "First played face card gives X2 Mult when scored",
+      "type": "multiplicative_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_gift",
+      "name": "Gift Card",
+      "prototype_name": "Gift Card",
+      "order": 79,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Add $1 of sell value to every Joker and Consumable card at end of round",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_turtle_bean",
+      "name": "Turtle Bean",
+      "prototype_name": "Turtle Bean",
+      "order": 80,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "h_size": 5,
+          "h_mod": 1
+        }
+      },
+      "effect_text": "+5 hand size, reduces by 1 each round",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_erosion",
+      "name": "Erosion",
+      "prototype_name": "Erosion",
+      "order": 81,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "+4 Mult for each card below [the deck's starting size] in your full deck (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_reserved_parking",
+      "name": "Reserved Parking",
+      "prototype_name": "Reserved Parking",
+      "order": 82,
+      "rarity": "common",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "odds": 2,
+          "dollars": 1
+        }
+      },
+      "effect_text": "Each face card held in hand has a 1 in 2 chance to give $1",
+      "type": "economy",
+      "activation": "on_held",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_mail",
+      "name": "Mail-In Rebate",
+      "prototype_name": "Mail-In Rebate",
+      "order": 83,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 5
+      },
+      "effect_text": "Earn $5 for each discarded [rank] , rank changes every round",
+      "type": "economy",
+      "activation": "on_discard",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_to_the_moon",
+      "name": "To the Moon",
+      "prototype_name": "To the Moon",
+      "order": 84,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Earn an extra $1 of interest for every $5 you have at end of round",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_hallucination",
+      "name": "Hallucination",
+      "prototype_name": "Hallucination",
+      "order": 85,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "1 in 2 chance to create a Tarot card when any Booster Pack is opened (Must have room)",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_fortune_teller",
+      "name": "Fortune Teller",
+      "prototype_name": "Fortune Teller",
+      "order": 86,
+      "rarity": "common",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "+1 Mult per Tarot card used this run (Currently +0 )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_juggler",
+      "name": "Juggler",
+      "prototype_name": "Juggler",
+      "order": 87,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "h_size": 1
+      },
+      "effect_text": "+1 hand size",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_drunkard",
+      "name": "Drunkard",
+      "prototype_name": "Drunkard",
+      "order": 88,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "d_size": 1
+      },
+      "effect_text": "+1 discard each round",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_stone",
+      "name": "Stone Joker",
+      "prototype_name": "Stone Joker",
+      "order": 89,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 25
+      },
+      "effect_text": "Gives +25 Chips for each Stone Card in your full deck (Currently +0 Chips )",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": "m_stone",
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_golden",
+      "name": "Golden Joker",
+      "prototype_name": "Golden Joker",
+      "order": 90,
+      "rarity": "common",
+      "cost": 6,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "Earn $4 at end of round",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_lucky_cat",
+      "name": "Lucky Cat",
+      "prototype_name": "Lucky Cat",
+      "order": 91,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "Xmult": 1,
+        "extra": 0.25
+      },
+      "effect_text": "This Joker gains X0.25 Mult every time a Lucky card successfully triggers (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": "m_lucky",
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_baseball",
+      "name": "Baseball Card",
+      "prototype_name": "Baseball Card",
+      "order": 92,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 1.5
+      },
+      "effect_text": "Uncommon Jokers each give X1.5 Mult",
+      "type": "multiplicative_mult",
+      "activation": "on_other_jokers",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_bull",
+      "name": "Bull",
+      "prototype_name": "Bull",
+      "order": 93,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "+2 Chips for each $1 you have (Currently +0 Chips )",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_diet_cola",
+      "name": "Diet Cola",
+      "prototype_name": "Diet Cola",
+      "order": 94,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {},
+      "effect_text": "Sell this card to create a free Double Tag",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_trading",
+      "name": "Trading Card",
+      "prototype_name": "Trading Card",
+      "order": 95,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "If first discard of round has only 1 card, destroy it and earn $3",
+      "type": "economy",
+      "activation": "on_discard",
+      "unlock": "Available from start.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_flash",
+      "name": "Flash Card",
+      "prototype_name": "Flash Card",
+      "order": 96,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {
+        "extra": 2,
+        "mult": 0
+      },
+      "effect_text": "This Joker gains +2 Mult per reroll in the shop (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_popcorn",
+      "name": "Popcorn",
+      "prototype_name": "Popcorn",
+      "order": 97,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "mult": 20,
+        "extra": 4
+      },
+      "effect_text": "+20 Mult -4 Mult per round played",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_trousers",
+      "name": "Spare Trousers",
+      "prototype_name": "Spare Trousers",
+      "order": 98,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "This Joker gains +2 Mult if played hand contains a Two Pair (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_ancient",
+      "name": "Ancient Joker",
+      "prototype_name": "Ancient Joker",
+      "order": 99,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 1.5
+      },
+      "effect_text": "Each played card with [suit] gives X1.5 Mult when scored, suit changes at end of round",
+      "type": "multiplicative_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_ramen",
+      "name": "Ramen",
+      "prototype_name": "Ramen",
+      "order": 100,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "Xmult": 2,
+        "extra": 0.01
+      },
+      "effect_text": "X2 Mult , loses X0.01 Mult per card discarded",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_walkie_talkie",
+      "name": "Walkie Talkie",
+      "prototype_name": "Walkie Talkie",
+      "order": 101,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": {
+          "chips": 10,
+          "mult": 4
+        }
+      },
+      "effect_text": "Each played 10 or 4 gives +10 Chips and +4 Mult when scored",
+      "type": "+ +",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_selzer",
+      "name": "Seltzer",
+      "prototype_name": "Seltzer",
+      "order": 102,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 10
+      },
+      "effect_text": "Retrigger all cards played for the next 10 hands",
+      "type": "retrigger",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_castle",
+      "name": "Castle",
+      "prototype_name": "Castle",
+      "order": 103,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "chips": 0,
+          "chip_mod": 3
+        }
+      },
+      "effect_text": "This Joker gains +3 Chips per discarded [suit] card, suit changes every round (Currently +0 Chips )",
+      "type": "chips",
+      "activation": "mixed",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_smiley",
+      "name": "Smiley Face",
+      "prototype_name": "Smiley Face",
+      "order": 104,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 5
+      },
+      "effect_text": "Played face cards give +5 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_campfire",
+      "name": "Campfire",
+      "prototype_name": "Campfire",
+      "order": 105,
+      "rarity": "rare",
+      "cost": 9,
+      "config": {
+        "extra": 0.25
+      },
+      "effect_text": "This Joker gains X0.25 Mult for each card sold , resets when Boss Blind is defeated (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Available from start.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": true
+    },
+    {
+      "key": "j_ticket",
+      "name": "Golden Ticket",
+      "prototype_name": "Golden Ticket",
+      "order": 106,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 4
+      },
+      "effect_text": "Played Gold cards earn $4 when scored",
+      "type": "economy",
+      "activation": "on_scored",
+      "unlock": "Play a 5 card hand that contains only Gold cards",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": "m_gold",
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_mr_bones",
+      "name": "Mr. Bones",
+      "prototype_name": "Mr. Bones",
+      "order": 107,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {},
+      "effect_text": "Prevents Death if chips scored are at least 25% of required chips self destructs",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Lose 5 runs",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_acrobat",
+      "name": "Acrobat",
+      "prototype_name": "Acrobat",
+      "order": 108,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "X3 Mult on final hand of round",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Play 200 hands",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_sock_and_buskin",
+      "name": "Sock and Buskin",
+      "prototype_name": "Sock and Buskin",
+      "order": 109,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Retrigger all played face cards",
+      "type": "retrigger",
+      "activation": "on_scored",
+      "unlock": "Play a total of 300 face cards",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_swashbuckler",
+      "name": "Swashbuckler",
+      "prototype_name": "Swashbuckler",
+      "order": 110,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "mult": 1
+      },
+      "effect_text": "Adds the sell value of all other owned Jokers to Mult (Currently +1 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Sell a total of 20 Joker cards",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_troubadour",
+      "name": "Troubadour",
+      "prototype_name": "Troubadour",
+      "order": 111,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": {
+          "h_size": 2,
+          "h_plays": -1
+        }
+      },
+      "effect_text": "+2 hand size, -1 hand each round",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Win 5 consecutive rounds by playing only 1 hand",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_certificate",
+      "name": "Certificate",
+      "prototype_name": "Certificate",
+      "order": 112,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {},
+      "effect_text": "When round begins, add a random playing card with a random seal to your hand",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Have a Gold playing card with a Gold Seal",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_smeared",
+      "name": "Smeared Joker",
+      "prototype_name": "Smeared Joker",
+      "order": 113,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {},
+      "effect_text": "Hearts and Diamonds count as the same suit, Spades and Clubs count as the same suit",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Have at least 3 Wild Card in your deck",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_throwback",
+      "name": "Throwback",
+      "prototype_name": "Throwback",
+      "order": 114,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 0.25
+      },
+      "effect_text": "X0.25 Mult for each Blind skipped this run (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Continue a saved run from the main menu",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_hanging_chad",
+      "name": "Hanging Chad",
+      "prototype_name": "Hanging Chad",
+      "order": 115,
+      "rarity": "common",
+      "cost": 4,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "Retrigger first played card used in scoring 2 additional times",
+      "type": "retrigger",
+      "activation": "on_scored",
+      "unlock": "Beat a Boss Blind with a High Card",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_rough_gem",
+      "name": "Rough Gem",
+      "prototype_name": "Rough Gem",
+      "order": 116,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Played cards with Diamond suit earn $1 when scored",
+      "type": "economy",
+      "activation": "on_scored",
+      "unlock": "Have at least 30 cards with Diamond suit in your deck",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_bloodstone",
+      "name": "Bloodstone",
+      "prototype_name": "Bloodstone",
+      "order": 117,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": {
+          "odds": 2,
+          "Xmult": 1.5
+        }
+      },
+      "effect_text": "1 in 2 chance for played cards with Heart suit to give X1.5 Mult when scored",
+      "type": "multiplicative_mult",
+      "activation": "on_scored",
+      "unlock": "Have at least 30 cards with Heart suit in your deck",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_arrowhead",
+      "name": "Arrowhead",
+      "prototype_name": "Arrowhead",
+      "order": 118,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 50
+      },
+      "effect_text": "Played cards with Spade suit give +50 Chips when scored",
+      "type": "chips",
+      "activation": "on_scored",
+      "unlock": "Have at least 30 cards with Spade suit in your deck",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_onyx_agate",
+      "name": "Onyx Agate",
+      "prototype_name": "Onyx Agate",
+      "order": 119,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 7
+      },
+      "effect_text": "Played cards with Club suit give +7 Mult when scored",
+      "type": "additive_mult",
+      "activation": "on_scored",
+      "unlock": "Have at least 30 cards with Club suit in your deck",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_glass",
+      "name": "Glass Joker",
+      "prototype_name": "Glass Joker",
+      "order": 120,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 0.75,
+        "Xmult": 1
+      },
+      "effect_text": "This Joker gains X0.75 Mult for every Glass Card that is destroyed (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Have at least 5 Glass Cards in your deck",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": "m_glass",
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_ring_master",
+      "name": "Showman",
+      "prototype_name": "Showman",
+      "order": 121,
+      "rarity": "uncommon",
+      "cost": 5,
+      "config": {},
+      "effect_text": "Joker , Tarot , Planet , and Spectral cards may appear multiple times",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Reach Ante level 4",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_flower_pot",
+      "name": "Flower Pot",
+      "prototype_name": "Flower Pot",
+      "order": 122,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "X3 Mult if poker hand contains a Diamond card, Club card, Heart card, and Spade card",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Reach Ante level 8",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_blueprint",
+      "name": "Blueprint",
+      "prototype_name": "Blueprint",
+      "order": 123,
+      "rarity": "rare",
+      "cost": 10,
+      "config": {},
+      "effect_text": "Copies ability of Joker to the right",
+      "type": "effect",
+      "activation": "",
+      "unlock": "Win a run",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_wee",
+      "name": "Wee Joker",
+      "prototype_name": "Wee Joker",
+      "order": 124,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": {
+          "chips": 0,
+          "chip_mod": 8
+        }
+      },
+      "effect_text": "This Joker gains +8 Chips when each played 2 is scored (Currently +0 Chips )",
+      "type": "chips",
+      "activation": "mixed",
+      "unlock": "Win a run in 18 or fewer rounds",
+      "blueprint_compat": true,
+      "perishable_compat": false,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_merry_andy",
+      "name": "Merry Andy",
+      "prototype_name": "Merry Andy",
+      "order": 125,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "d_size": 3,
+        "h_size": -1
+      },
+      "effect_text": "+3 discards each round, -1 hand size",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Win a run in 12 or fewer rounds",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_oops",
+      "name": "Oops! All 6s",
+      "prototype_name": "Oops! All 6s",
+      "order": 126,
+      "rarity": "uncommon",
+      "cost": 4,
+      "config": {},
+      "effect_text": "Doubles all listed probabilities (ex: 1 in 3 -> 2 in 3 )",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "In one hand, earn at least 10,000 chips",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_idol",
+      "name": "The Idol",
+      "prototype_name": "The Idol",
+      "order": 127,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "Each played [rank] of [suit] gives X2 Mult when scored Card changes every round",
+      "type": "multiplicative_mult",
+      "activation": "on_scored",
+      "unlock": "In one hand, earn at least 1,000,000 chips",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_seeing_double",
+      "name": "Seeing Double",
+      "prototype_name": "Seeing Double",
+      "order": 128,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "X2 Mult if played hand has a scoring Club card and a scoring card of any other suit",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Play a hand that contains four 7 of Clubs",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_matador",
+      "name": "Matador",
+      "prototype_name": "Matador",
+      "order": 129,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": 8
+      },
+      "effect_text": "Earn $8 if played hand triggers the Boss Blind ability",
+      "type": "economy",
+      "activation": "independent",
+      "unlock": "Defeat a Boss Blind in 1 hand without using any discards",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_hit_the_road",
+      "name": "Hit the Road",
+      "prototype_name": "Hit the Road",
+      "order": 130,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 0.5
+      },
+      "effect_text": "This Joker gains X0.5 Mult for every Jack discarded this round (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Discard 5 Jacks at the same time.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_duo",
+      "name": "The Duo",
+      "prototype_name": "The Duo",
+      "order": 131,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "Xmult": 2,
+        "type": "Pair"
+      },
+      "effect_text": "X2 Mult if played hand contains a Pair",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Win a run without playing a Pair .",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_trio",
+      "name": "The Trio",
+      "prototype_name": "The Trio",
+      "order": 132,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "Xmult": 3,
+        "type": "Three of a Kind"
+      },
+      "effect_text": "X3 Mult if played hand contains a Three of a Kind",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Win a run without playing a Three of a Kind .",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_family",
+      "name": "The Family",
+      "prototype_name": "The Family",
+      "order": 133,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "Xmult": 4,
+        "type": "Four of a Kind"
+      },
+      "effect_text": "X4 Mult if played hand contains a Four of a Kind",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Win a run without playing a Four of a Kind .",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_order",
+      "name": "The Order",
+      "prototype_name": "The Order",
+      "order": 134,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "Xmult": 3,
+        "type": "Straight"
+      },
+      "effect_text": "X3 Mult if played hand contains a Straight",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Win a run without playing a Straight .",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_tribe",
+      "name": "The Tribe",
+      "prototype_name": "The Tribe",
+      "order": 135,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "Xmult": 2,
+        "type": "Flush"
+      },
+      "effect_text": "X2 Mult if played hand contains a Flush",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Win a run without playing a Flush .",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_stuntman",
+      "name": "Stuntman",
+      "prototype_name": "Stuntman",
+      "order": 136,
+      "rarity": "rare",
+      "cost": 7,
+      "config": {
+        "extra": {
+          "h_size": 2,
+          "chip_mod": 250
+        }
+      },
+      "effect_text": "+250 Chips , -2 hand size",
+      "type": "chips",
+      "activation": "independent",
+      "unlock": "Earn at least 100 million (100,000,000) Chips in a single hand.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_invisible",
+      "name": "Invisible Joker",
+      "prototype_name": "Invisible Joker",
+      "order": 137,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "After 2 rounds, sell this card to Duplicate a random Joker (Currently 0 /2) (Removes Negative from copy)",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Win a run without ever having more than 4 Jokers",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": false,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_brainstorm",
+      "name": "Brainstorm",
+      "prototype_name": "Brainstorm",
+      "order": 138,
+      "rarity": "rare",
+      "cost": 10,
+      "config": {},
+      "effect_text": "Copies the ability of leftmost Joker",
+      "type": "effect",
+      "activation": "",
+      "unlock": "Discard a Royal Flush .",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_satellite",
+      "name": "Satellite",
+      "prototype_name": "Satellite",
+      "order": 139,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "Earn $1 at end of round per unique Planet card used this run",
+      "type": "economy",
+      "activation": "passive",
+      "unlock": "Have at least $400 .",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_shoot_the_moon",
+      "name": "Shoot the Moon",
+      "prototype_name": "Shoot the Moon",
+      "order": 140,
+      "rarity": "common",
+      "cost": 5,
+      "config": {
+        "extra": 13
+      },
+      "effect_text": "Each Queen held in hand gives +13 Mult",
+      "type": "additive_mult",
+      "activation": "on_held",
+      "unlock": "Play every Heart card in your deck in one round.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_drivers_license",
+      "name": "Driver's License",
+      "prototype_name": "Driver's License",
+      "order": 141,
+      "rarity": "rare",
+      "cost": 7,
+      "config": {
+        "extra": 3
+      },
+      "effect_text": "X3 Mult if you have at least 16 Enhanced cards in your full deck (Currently 0 )",
+      "type": "multiplicative_mult",
+      "activation": "independent",
+      "unlock": "Enhance 16 cards in your deck",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_cartomancer",
+      "name": "Cartomancer",
+      "prototype_name": "Cartomancer",
+      "order": 142,
+      "rarity": "uncommon",
+      "cost": 6,
+      "config": {},
+      "effect_text": "Create a Tarot card when Blind is selected (Must have room)",
+      "type": "effect",
+      "activation": "On Blind Select",
+      "unlock": "Discover every Tarot card.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_astronomer",
+      "name": "Astronomer",
+      "prototype_name": "Astronomer",
+      "order": 143,
+      "rarity": "uncommon",
+      "cost": 8,
+      "config": {},
+      "effect_text": "All Planet cards and Celestial Packs in the shop are free",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Discover every Planet card",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_burnt",
+      "name": "Burnt Joker",
+      "prototype_name": "Burnt Joker",
+      "order": 144,
+      "rarity": "rare",
+      "cost": 8,
+      "config": {
+        "h_size": 0,
+        "extra": 4
+      },
+      "effect_text": "Upgrade the level of the first discarded poker hand each round",
+      "type": "effect",
+      "activation": "on_discard",
+      "unlock": "Sell 50 cards.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_bootstraps",
+      "name": "Bootstraps",
+      "prototype_name": "Bootstraps",
+      "order": 145,
+      "rarity": "uncommon",
+      "cost": 7,
+      "config": {
+        "extra": {
+          "mult": 2,
+          "dollars": 5
+        }
+      },
+      "effect_text": "+2 Mult for every $5 you have (Currently +0 Mult )",
+      "type": "additive_mult",
+      "activation": "independent",
+      "unlock": "Have at least 2 Polychrome Jokers at the same time.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_caino",
+      "name": "Canio",
+      "prototype_name": "Caino",
+      "order": 146,
+      "rarity": "legendary",
+      "cost": 20,
+      "config": {
+        "extra": 1
+      },
+      "effect_text": "This Joker gains X1 Mult when a face card is destroyed (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Find this Joker from the Soul card.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_triboulet",
+      "name": "Triboulet",
+      "prototype_name": "Triboulet",
+      "order": 147,
+      "rarity": "legendary",
+      "cost": 20,
+      "config": {
+        "extra": 2
+      },
+      "effect_text": "Played Kings and Queens each give X2 Mult when scored",
+      "type": "multiplicative_mult",
+      "activation": "on_scored",
+      "unlock": "Find this Joker from the Soul card.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_yorick",
+      "name": "Yorick",
+      "prototype_name": "Yorick",
+      "order": 148,
+      "rarity": "legendary",
+      "cost": 20,
+      "config": {
+        "extra": {
+          "xmult": 1,
+          "discards": 23
+        }
+      },
+      "effect_text": "This Joker gains X1 Mult every 23 [23] cards discarded (Currently X1 Mult )",
+      "type": "multiplicative_mult",
+      "activation": "mixed",
+      "unlock": "Find this Joker from the Soul card.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_chicot",
+      "name": "Chicot",
+      "prototype_name": "Chicot",
+      "order": 149,
+      "rarity": "legendary",
+      "cost": 20,
+      "config": {},
+      "effect_text": "Disables effect of every Boss Blind",
+      "type": "effect",
+      "activation": "On Blind Select",
+      "unlock": "Find this Joker from the Soul card.",
+      "blueprint_compat": false,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    },
+    {
+      "key": "j_perkeo",
+      "name": "Perkeo",
+      "prototype_name": "Perkeo",
+      "order": 150,
+      "rarity": "legendary",
+      "cost": 20,
+      "config": {},
+      "effect_text": "Creates a Negative copy of 1 random consumable card in your possession at the end of the shop",
+      "type": "effect",
+      "activation": "passive",
+      "unlock": "Find this Joker from the Soul card.",
+      "blueprint_compat": true,
+      "perishable_compat": true,
+      "eternal_compat": true,
+      "enhancement_gate": null,
+      "unlocked_by_default": false
+    }
+  ]
+}

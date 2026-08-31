@@ -1,7 +1,7 @@
 {
-  "name": "joker_stencil_slot_open",
+  "name": "flower_pot_needs_all_four_suits",
   "provenance": "hand_computed",
-  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "arithmetic": "Flower Pot is X3 if the SCORING cards include a Diamond, Club, Heart and Spade. A Straight scores all five cards, and 2H 3D 4C 5S 6H covers all four suits. Straight L1 = 30 x 4; card chips 2+3+4+5+6 = 20 -> 50 chips; mult 4 * 3 = 12. floor(50 * 12) = 600.",
   "state_before": {
     "schema_version": 1,
     "seq": 1,
@@ -27,22 +27,7 @@
     "jokers": [
       {
         "position": 0,
-        "key": "j_stencil",
-        "sell_value": 3
-      },
-      {
-        "position": 1,
-        "key": "j_joker",
-        "sell_value": 3
-      },
-      {
-        "position": 2,
-        "key": "j_gros_michel",
-        "sell_value": 3
-      },
-      {
-        "position": 3,
-        "key": "j_smiley",
+        "key": "j_flower_pot",
         "sell_value": 3
       }
     ],
@@ -50,16 +35,24 @@
     "hand_levels": {},
     "current_hand": [
       {
-        "rank": "K",
+        "rank": "2",
         "suit": "hearts"
       },
       {
-        "rank": "K",
+        "rank": "3",
         "suit": "diamonds"
       },
       {
         "rank": "4",
         "suit": "clubs"
+      },
+      {
+        "rank": "5",
+        "suit": "spades"
+      },
+      {
+        "rank": "6",
+        "suit": "hearts"
       }
     ],
     "blind": {
@@ -72,9 +65,12 @@
   },
   "cards_played": [
     0,
-    1
+    1,
+    2,
+    3,
+    4
   ],
-  "expected_chips": 30,
-  "expected_mult": 43,
-  "expected_score": 1290
+  "expected_chips": 50,
+  "expected_mult": 12,
+  "expected_score": 600
 }

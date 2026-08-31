@@ -1,0 +1,115 @@
+{{for|the common Joker that gives +4 Mult|Joker}}
+
+'''Jokers''' are the face of ''[[Balatro]]'s'' gameplay. They hold a significant importance in score generation and provide a multitude of other perks and utilities, such as giving money or creating consumable items like [[Tarot cards]], [[Planet cards|Planets]], and in some cases [[Spectral cards]], or in the specific case of {{J|Riff-Raff|1}}, other Jokers. Jokers are not played alongside standard cards or included in [[Decks]], but rather can be purchased in [[the Shop]] or sometimes obtained through other means. They are held in the player's dedicated Joker slots until sold or destroyed.
+
+Every non-challenge run, except those on {{d|Black}} and {{d|Painted}}, will begin with 5 empty Joker slots. [[Spectral cards]], [[Editions]] (as explained below), or deck effects like those previously mentioned may allow the player to gain or lose some of these Joker slots. Every Joker is unique and can be used in many ways to create synergy with other Jokers' effects, deck composition, consumables, or all three. Jokers are almost always a requirement to meet the required score of blinds, especially in higher antes, where the required score to defeat each Blind grows exponentially.
+
+As of update {{CurrentVersion}}, there are 150 total Jokers in Balatro. 105 of these are readily accessible upon the player's very first run, but the remaining 45 must be unlocked through the completion of certain conditions, some of which can only be done over the course of multiple runs.
+
+The appearance rates of the four Joker rarities are: [[Common Jokers|Common]] – 70%. [[Uncommon Jokers|Uncommon]] – 25%. [[Rare Jokers|Rare]] – 5%. [[Legendary Jokers|Legendary]] – only available through {{Spectral|The Soul}}, which has 0.3% chance of appearing in [[Booster Packs|Spectral/Arcana Packs]].
+
+After winning a run by beating the Boss blind of [[Blinds and Antes|ante]] 8, the Jokers the player has at that time will receive a [[Stickers|Sticker]] colour of the [[Stakes|Stake]] it was used to win on. The colour in the [[collection]] will be of the highest stake the Joker was used. For example, after beating Orange Stake, a {{J|Hiker}} with no sticker will receive the {{sticker|orange|image=Hiker.png|name=Orange Stake sticker|link=Stickers}}, while beating Red Stake with a {{J|Swashbuckler}} with the {{sticker|purple|image=Swashbuckler.png|name=Purple Stake sticker|link=Stickers}} will not give it a {{sticker|red|image=Swashbuckler.png|name=Red Stake sticker|link=Stickers}}. Instead, it will preserve the Purple Stake sticker.
+
+== Modifiers ==
+{{Main|Card modifiers}} [[File:Editions.png|thumb|Various editions as displayed in the [[Collection]].]]
+All Jokers start at the Base [[Edition]], which can then be enhanced with one of the four different editions, resulting in higher shop costs but adding an additional effect listed below:
+
+*{{Edition|Base}} (standard card)
+*{{Edition|Foil}} ({{Chips|+50}})
+*{{Edition|Holographic}} ({{Mult|+10}})
+*{{Edition|Polychrome}} ({{Xmult|1.5}})
+*{{Edition|Negative}} ({{hl|edition|+1}} Joker slot)
+
+In higher [[stakes]], Jokers can also appear with the {{sticker|Eternal|}}, {{sticker|Perishable}}, and/or {{sticker|Rental}} [[stickers]]. These stickers, unlike Stake stickers, affect how Jokers behave. The appearance rate of these modifiers can be found [[Card modifiers#Appearance rates|here]].
+
+== Rarities ==
+Jokers have 4 different rarities, denoting how likely they are to appear in a given run: [[Common Jokers|Common]] ({{Count|Jokers|Common Jokers}}), [[Uncommon Jokers|Uncommon]] ({{Count|Jokers|Uncommon Jokers}}), [[Rare Jokers|Rare]] ({{Count|Jokers|Rare Jokers}}), and [[Legendary Jokers|Legendary]] ({{Count|Jokers|Legendary Jokers}}). In general, higher rarity jokers are more powerful, but this is not always the case.
+
+When the game randomly generates Jokers, either in the shop or using other joker generation methods, there is a 70% chance of generating a Common Joker, a 25% chance of generating an Uncommon Joker, and a 5% chance of generating a Rare Joker. Legendary Jokers can't appear in the shop, but only through {{Spectral|The Soul}} {{hl|sblue|Spectral}} card.
+
+== Important Joker Terms ==
+Jokers have a number of key terms that are vital in understanding how they work. These terms are marked with different colors, and by looking at them the player can gain a better understanding of how the joker functions, in case the wording is not clear to them:
+* '''When Scored''': The effect triggers when a card is scored. If a card that is played can trigger this Joker, but is not scored, either from not being part of the scored poker hand or from being debuffed by a Boss Blind, the effect will not trigger.
+* '''Contains''': The hand has the referenced hand as a part of it. For example, a Three of a Kind "contains" a Pair, despite scoring as a Three of a Kind. A Four of a Kind played with five cards of the same suit "contains" a Flush, and will trigger Flush Joker effects. Refer to the hand information in-game for a more detailed breakdown on which hands contain others. Notably, a Four of a Kind is not considered to "contain" Two Pair, since Two Pair requires two different ranks to be counted, which means that a Four of a Kind will not trigger {{J|Mad Joker}} or {{J|Clever Joker}}, and it will not scale {{J|Spare Trousers}}. The same can be said for Five of a Kind and Full House, or Flush Five and Flush House.
+* '''Is''': In contrast, "poker hand is a pair" means the whole hand is classified as a pair, and the cards played don't constitute a higher-ranked hand.
+* '''When Blind is Selected''': The effect triggers when you select a Blind. It will not trigger if the Blind is skipped. In the case of {{J|Madness}}, it only triggers on the {{Blind|Small Blind}} and {{Blind|Big Blind}}, hence showing "'''When Small Blind or Big Blind is Selected'''".
+* '''In Deck''': The effect depends on the remaining cards in your deck, not including cards in hand, played, or discarded.
+* '''In Full Deck''': This counts some attribute of your complete deck, referencing all cards whether they were drawn, played, discarded, or are held in hand. For the specific case of {{J|Erosion}}, this counts how many cards have been removed from the original deck.
+* '''Add''': Adds a playing card to your deck permanently.
+* '''Destroy''': Remove the target card permanently. If a Joker is destroyed, no money or bonuses are gained that selling it would give.
+* '''Create''': Creates a certain type of card, be it a consumable or Joker. This action always requires room for the card in question to take up, with the sole exception of {{J|Perkeo}} being able to create {{Edition|Negative}} consumables.
+* '''Gains''': Adds a (usually) permanent effect to the target card. This is usually referring to the Joker with the effect, though not always, as seen with {{J|Hiker}}.
+* '''Retrigger''': This Joker will score a card again under certain conditions outlined by the Joker. This extra score will activate all effects that take place when the card scores, including effects from other Jokers, enhancements, editions, seals (besides {{Seal|Red}}), and chips from the card itself. Note that {{J|Mime}} only retriggers cards held in hand, and so it will not retrigger editions or chips from the card itself, as the card is not being played and scoring.
+* '''Debuffed''': This Joker and its edition can no longer trigger. It retains its full sell value (and can still be used by Swashbuckler/Temperance/etc...). It can still be targeted by random effects such as {{J|Madness|1}} or {{Tarot|The Wheel of Fortune}}, but not by the {{Blind|Crimson Heart}} Boss blind. Joker effects that trigger on certain other Jokers, like {{J|Baseball Card}} does, still trigger even if the other Joker is debuffed. If you win a run with a debuffed Joker, it will still receive the corresponding stake sticker.
+(Also see [[Activation Type|Activation type]] and [[Guide: Activation Sequence|Activation sequence]] for additional information.)
+
+==List of Jokers==
+Available Jokers are shown as Not Discovered in the player's [[Collection]] until they are obtained at least once in an unseeded run. Most locked Jokers in the Collection show the unlock condition, and in some cases will show how close the player is to fulfilling that condition if the condition is accumulative. The five secret Legendary Jokers, unlocked when obtained through {{Spectral|The Soul}} [[Spectral card]], show up as "?????" in the Collection when not unlocked. Details about each Joker, such as their interactions, synergies, strategies, and exceptions, can be found on that Joker's respective page.
+
+The Balatro Wiki sorts Jokers into seven types, depending on their function. In the table below, the Joker type is denoted using the following symbols:
+{| class="wikitable"
+|[[:Category:Chips Jokers|{{hl|blue|+c}}]] Chips Jokers
+|[[:Category:Additive Mult Jokers|{{hl|red|+m}}]] Additive Mult Jokers
+|[[:Category:Multiplicative Mult Jokers|{{hl|xmult|Xm}}]] Multiplicative Mult Jokers
+|[[:Category:Chips and Additive Mult Jokers|{{hl|blue|+}}{{hl|red|+}}]] Chips & Additive Mult Jokers
+|-
+|[[:Category:Effect Jokers|{{hl|purple|!!}}]] Effect Jokers
+|[[:Category:Retrigger Jokers|{{hl|green|...}}]] Retrigger Jokers
+|[[:Category:Economy Jokers|{{hl|yellow|+$}}]] Economy Jokers
+|
+|}
+
+<!--
+The following table uses DPL, see https://community.fandom.com/wiki/Help:DynamicPageList.
+Yes, the DPL code is a gigantic mess and unreadable. I tried.
+
+This means that all information shown is automatically taken from each Joker page's Template:Joker info.
+Modify an individual Joker page's infobox to automatically modify this table (can take up to an hour).
+-->
+<dpl>
+ allowcachedresults = true
+ category = Jokers by number
+ notcategory = Unknown Jokers
+ namespace =
+ titleregexp = ^[:alpha:]+$
+ uses = Template:Joker info
+ include = {Joker info}:number:image:effect:buyprice:rarity:unlock:type:activation
+ table = class="wikitable sortable" style="text-align:center",-, <abbr title="Number">Nr<abbr>, Joker, Effect, data-sort-type="currency"|Cost, Rarity, Unlock Requirement, Type, <abbr title="Activation">Act</abbr>
+ tablerow = %%,  <!-- Image & Joker --> [[File:%%|frameless|80px|link=%TITLE%]] <br> [[%TITLE%]],  <!-- Effect (\n to prevent DPL/table interference) --> \n%%,  <!-- Cost --> {{#switch: %% | 20 (cannot be found in shop) = data-sort-value="$20"{{!}}<abbr title="$20 but cannot be bought in shop">N/A</abbr> | {{hl|yellow|$%%}} }},  <!-- Rarity --> data-sort-value="{{#switch: %% | Common = 1 | Uncommon = 2 | Rare = 3 | Legendary = 4 | "0Error!"}}"| {{rarity|%%}},  <!-- Unlock --> \n{{#if: %% | %% | Available from start.}},  <!-- Type --> [[:category:%% Jokers |{{#switch:%% | Chips = {{hl|blue|+c}} | Additive Mult = {{hl|red|+m}} | Multiplicative Mult = {{hl|xmult|Xm}} | Economy = {{hl|yellow|+$}} | Chips and Additive Mult = {{hl|blue|+}}{{hl|red|+}} | Retrigger = {{hl|green|...}} | Effect = {{hl|purple|!!}} | %%}}]],  <!-- Activation --> data-sort-value="{{#switch: %% | On Played = 1 | On Scored = 2 | On Held = 3 | Independent = 4 | Mixed = 5 | On Other Jokers = 6 | On Discard = 7 | N/A (Passive) = 8 | "0Error!"}}"|{{#switch:%% | N/A (Passive) = N/A | Independent = <abbr title="%%">Indep.</abbr> | %%}}
+ tablesortcol = 1
+</dpl>
+
+==Usage Notes==
+* Jokers are usually obtained through [[the Shop]] or [[Booster Packs|Buffoon Packs]]. Other means include:
+** Using the {{Tarot|Judgement}} [[Tarot card]], {{Spectral|The Soul}} or {{Spectral|Wraith}} [[Spectral card]] to create a Joker.
+** {{J|Riff-Raff}} can create up to 2 common Jokers for each blind selected.
+** {{Spectral|Ankh}} can create a copy of a random Joker, at the cost of destroying all other destructible Jokers. This means that {{Hl|sblue|Ankh}} can't destroy {{Sticker|Eternal}} Jokers.
+** The {{Tag|Top-up}} can create up to 2 common Jokers if you have space. The {{Tag|Uncommon}} and {{Tag|Rare}} generate a random Joker of their respective rarity when entering [[the Shop]] or rerolling.
+* A duplicate Joker cannot spawn during the run if it already exists on screen, unless the player has {{J|Showman}}.
+** Exceptions to this are duplicating an already owned Joker by using {{Spectral|Ankh}} or {{J|Invisible Joker}}.
+** If all unlocked Jokers of a specific rarity exist on the screen, every subsequent Joker instance of that rarity seen in the Shop or created using Joker generation (such as {{Tarot|Judgement}}) will be replaced by {{j|Joker}} (though this will never happen with Uncommon Jokers due to {{J|Showman}}).
+* Retroactively adding modifiers to Jokers can only be done through {{Tarot|The Wheel of Fortune}}, {{Spectral|Ectoplasm}}, or {{Spectral|Hex}}.
+** {{V|Hone}} and {{V|Glow Up}} make it more likely to find Jokers with editions in the [[The Shop|Shop]].
+** Skipping a Blind for the {{Tag|Holographic}}, {{Tag|Polychrome}}, {{Tag|Negative}}, or {{Tag|Foil}} can guarantee an edition on a Joker in the next Shop.
+* Joker slots begin at 5 most of the time, but there are exceptions and various ways to modify this.
+** Purchasing {{V|Blank}}, and then {{V|Antimatter}} will let you gain +1 joker slot.
+** {{D|Painted}} only starts with 4 joker slots. The {{D|Cruelty}} and {{D|Blast Off}} Challenge Decks reduce joker slots as well, to 3 and 4 respectively.
+** {{D|Black}} has an additional joker slot, for a total of 6. The {{D|Five-Card Draw}} Challenge Deck also increases joker slots, to 7.
+** Having {{Edition|Negative}} Jokers allows the player to have a Joker that gives an extra joker slot, essentially not taking up a slot.
+* The {{D|Jokerless}} Challenge Deck bans all methods of obtaining jokers and sets joker slots to 0, making it impossible to use any. The {{D|Typecast}} Challenge Deck also sets joker slots to 0, but only after [[Ante 4]].
+* The {{D|Bram Poker}} challenge prevents Jokers from appearing in the shop, although they can still be obtained by methods like {{Tarot|Judgement}}.
+* Jokers, like every other purchasable consumable or playing card, only need to be purchased once to be "discovered", even if the action is cancelled by quitting and reloading the save.
+** This can be taken advantage of by selling run-winning Jokers, then buying undiscovered ones, quitting to the Main Menu, and loading the run again to undo the purchase while still having new Jokers discovered for their collection.
+
+== Trivia ==
+* With the exception of [[Legendary Jokers]], all Joker art includes the word "Joker" (though it is obscured on {{J|Smeared Joker}}).
+* Originally Balatro was only going to have 120 Jokers. This changed after a miscommunication with [[Playstack]] and LocalThunk discussing 150 Jokers, resulting in LocalThunk creating 30 more.<ref>{{ShortQuote|I once told Playstack (my publisher) that the full version of Balatro would have 120 Jokers. In a meeting later that week they mentioned something about '150 Jokers' and instead of correcting them I just made 30 more Jokers lmao|[[LocalThunk]]|[https://x.com/LocalThunk/status/1851133286363574286 on X/Twitter]}}</ref>
+* Some jokers not present in the public release of Balatro have been revealed later, such as [[Obsolete content|Chaos Theory, the Toker, and Homework Eating Dog]].
+* Most of the chip jokers have blue lips instead of the more default red lips.
+* The average price of all Jokers is $6.14. If legendary Jokers are excluded, this falls to roughly $5.662.
+
+==References==
+<references />
+
+[[Category:Jokers| ]]
+[[Category:Balatro]]

@@ -95,7 +95,13 @@ def _print_chain(state: dict[str, Any], result: Any) -> None:
     print(f"SCORING CHAIN for {played} ({detail.hand_type.replace('_', ' ')})")
     for step in detail.steps:
         print(f"  {step}")
-    print(f"  = floor({detail.chips:g} x {detail.mult:g}) = {detail.score}")
+    joiner = "~" if detail.stochastic else "="
+    print(f"  {joiner} floor({detail.chips:g} x {detail.mult:g}) {joiner} {detail.score}")
+    if detail.stochastic:
+        print(
+            "  ~ EXPECTED value: a random effect is in play, so this is the mean "
+            "computed from the game's own odds, not a certainty."
+        )
     if not detail.exact:
         print(
             f"  ! NOT EXACT. Unmodelled: {', '.join(detail.unmodelled)}. "
@@ -177,6 +183,8 @@ def cmd_fixtures(args: argparse.Namespace) -> int:
         for label, got, want in checks:
             if abs(got - want) > 1e-6:
                 problems.append(f"{label} {got:g} != {want:g}")
+        if "expected_stochastic" in fixture and result.stochastic != fixture["expected_stochastic"]:
+            problems.append(f"stochastic {result.stochastic} != {fixture['expected_stochastic']}")
         if "expected_exact" in fixture and result.exact != fixture["expected_exact"]:
             problems.append(f"exact {result.exact} != {fixture['expected_exact']}")
         if "expected_unmodelled" in fixture and result.unmodelled != fixture["expected_unmodelled"]:

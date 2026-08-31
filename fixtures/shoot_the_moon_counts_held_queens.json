@@ -1,7 +1,7 @@
 {
-  "name": "joker_stencil_slot_open",
+  "name": "shoot_the_moon_counts_held_queens",
   "provenance": "hand_computed",
-  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "arithmetic": "Shoot the Moon gives +13 Mult per Queen HELD IN HAND (config extra = 13). Two Queens are held, not played: 2 * 13 = +26. Pair L1 = 10 x 2; KH(10) + KD(10) -> 30 chips; mult 2 + 26 = 28. floor(30 * 28) = 840.",
   "state_before": {
     "schema_version": 1,
     "seq": 1,
@@ -27,22 +27,7 @@
     "jokers": [
       {
         "position": 0,
-        "key": "j_stencil",
-        "sell_value": 3
-      },
-      {
-        "position": 1,
-        "key": "j_joker",
-        "sell_value": 3
-      },
-      {
-        "position": 2,
-        "key": "j_gros_michel",
-        "sell_value": 3
-      },
-      {
-        "position": 3,
-        "key": "j_smiley",
+        "key": "j_shoot_the_moon",
         "sell_value": 3
       }
     ],
@@ -58,8 +43,12 @@
         "suit": "diamonds"
       },
       {
-        "rank": "4",
+        "rank": "Q",
         "suit": "clubs"
+      },
+      {
+        "rank": "Q",
+        "suit": "spades"
       }
     ],
     "blind": {
@@ -75,6 +64,6 @@
     1
   ],
   "expected_chips": 30,
-  "expected_mult": 43,
-  "expected_score": 1290
+  "expected_mult": 28,
+  "expected_score": 840
 }

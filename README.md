@@ -60,17 +60,42 @@ retriggers, held-in-hand effects, left-to-right joker evaluation, and the boss
 blinds that alter scoring (debuffed suits, debuffed faces, halved base, level
 down).
 
-### The honesty flag is the important part
+### All 150 jokers, from the game's own data
 
-All **150** vanilla jokers are in the table by name and rarity, so a joker is
-never an unrecognised key. **77** have modelled effects; the remaining 67 are
-awaiting effect data from `balatrowiki.org` (see
-[`data/sources/wiki/README.md`](data/sources/wiki/README.md)). Anything not
-modelled is **not silently scored as zero.**
+Keys, rarity, cost and **every numeric constant** come from `game.lua`'s
+`Game:init_item_prototypes()`; effect text, type and activation come from the
+balatrowiki.org Jokers table. Both are committed under `data/sources/`, so
+every constant is auditable against a file rather than against recall.
 
-Anything the scorer cannot compute — a joker with no effect data yet, a
-Blueprint copy chain (ordering unverified, spec §9), or a scaling joker whose
-counter the adapter did not read — sets `exact: false` and lands in
+**150 known, 142 modelled.** Of the 142, 45 are economy and utility jokers
+modelled as `effects: []` — a positive statement that they contribute nothing
+to a hand's score, which is why a board full of them still scores *exactly*
+rather than degrading to a floor.
+
+Keys come from the game and are **not derivable from names**: it shortens many
+(`j_duo`, `j_abstract`, `j_smiley`) and misspells one (`j_gluttenous_joker`).
+A test asserts they still disagree, so nobody later "tidies" them into
+consistency and breaks the mod adapter.
+
+Randomness is modelled with the game's own probabilities and reported as an
+**expected value** — an exact computation of the mean, flagged `stochastic` so
+output reads `~` rather than `=`:
+
+```
+Misprint: +11.5 mult -> 30 x 13.5
+~ floor(30 x 13.5) ~ 405
+~ EXPECTED value: a random effect is in play, so this is the mean computed
+  from the game's own odds, not a certainty.
+```
+
+The remaining **8** are unmodelled, and each names the field the canonical
+state is missing rather than being a mystery: Blueprint and Brainstorm
+(ordering unverified, spec §9), Card Sharp (per-round hand history), Ancient
+Joker and The Idol (per-round suit/rank), Hiker (per-card accumulated chips),
+Midas Mask (mutates cards mid-scoring), and Oops! All 6s (a probability
+multiplier over every other joker).
+
+Anything the scorer cannot compute sets `exact: false` and lands in
 `unmodelled`:
 
 ```
@@ -151,6 +176,7 @@ Different bugs, different fixes, and without this they are indistinguishable.
 | `src/balatro_advisor/validator/` | The §5d checks |
 | `src/balatro_advisor/adapters/` | `manual.py` — CLI entry with fuzzy joker matching and delta-only prompts |
 | `src/balatro_advisor/data/` | Jokers, blinds, vouchers, hand levels, verified mechanics |
+| `data/sources/` | Raw inputs committed verbatim: `game/jokerdata.lua`, `wiki/jokers.html`, and the merged result |
 | `fixtures/` | Replay fixtures, each carrying its hand-written derivation |
 
 ## Honest gaps
@@ -162,13 +188,14 @@ the scorer. That proves the scorer is self-consistent and does not regress. It
 way. Closing this needs the mod adapter, which §0 blocks. See
 [`fixtures/README.md`](fixtures/README.md).
 
-**67 of 150 jokers have no effect data yet.** All 150 are *known* — correct
-name, correct rarity, verified against an independent enumeration — but only 77
-are *modelled*. The gap closes when the wiki pages land in
-`data/sources/wiki/`; until then those jokers make a hand non-exact rather than
-being guessed at. The 77 already modelled came from recall and have not
-themselves been checked against a source, which is why the import verifies all
-150 rather than only the 67.
+**8 of 150 jokers are unmodelled**, each for a stated structural reason rather
+than for want of data — see the joker section above. Closing most of them is a
+schema change with a known shape, not research.
+
+The 77 jokers originally modelled from recall were audited against `game.lua`
+when it arrived: **every numeric constant matched, and 13 keys were wrong.**
+That is the ratio worth remembering — the arithmetic survived recall, the
+identifiers did not.
 
 **The live API path has not been exercised.** It is written against the SDK
 reference, but no credential was available in the environment where this was
@@ -195,7 +222,7 @@ Ordered by spec §8's build order. Steps 1–8 and 10 are done.
 ## Development
 
 ```bash
-pytest                          # 164 tests, no network required
+pytest                          # 207 tests, no network required
 python tools/build_fixtures.py  # regenerate fixtures from their derivations
 balatro-advisor fixtures        # the regression gate for any scorer change
 ```

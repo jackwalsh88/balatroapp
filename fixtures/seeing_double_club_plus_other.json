@@ -1,7 +1,7 @@
 {
-  "name": "joker_stencil_slot_open",
+  "name": "seeing_double_club_plus_other",
   "provenance": "hand_computed",
-  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "arithmetic": "Seeing Double is X2 if the scoring cards include a Club AND a card of any other suit. KC and KH satisfy both halves. Pair L1 = 10 x 2; +20 chips -> 30 chips; mult 2 * 2 = 4. floor(30 * 4) = 120.",
   "state_before": {
     "schema_version": 1,
     "seq": 1,
@@ -27,22 +27,7 @@
     "jokers": [
       {
         "position": 0,
-        "key": "j_stencil",
-        "sell_value": 3
-      },
-      {
-        "position": 1,
-        "key": "j_joker",
-        "sell_value": 3
-      },
-      {
-        "position": 2,
-        "key": "j_gros_michel",
-        "sell_value": 3
-      },
-      {
-        "position": 3,
-        "key": "j_smiley",
+        "key": "j_seeing_double",
         "sell_value": 3
       }
     ],
@@ -51,15 +36,15 @@
     "current_hand": [
       {
         "rank": "K",
-        "suit": "hearts"
+        "suit": "clubs"
       },
       {
         "rank": "K",
-        "suit": "diamonds"
+        "suit": "hearts"
       },
       {
         "rank": "4",
-        "suit": "clubs"
+        "suit": "diamonds"
       }
     ],
     "blind": {
@@ -75,6 +60,6 @@
     1
   ],
   "expected_chips": 30,
-  "expected_mult": 43,
-  "expected_score": 1290
+  "expected_mult": 4,
+  "expected_score": 120
 }

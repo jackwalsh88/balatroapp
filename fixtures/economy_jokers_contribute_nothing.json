@@ -1,7 +1,7 @@
 {
-  "name": "joker_stencil_slot_open",
+  "name": "economy_jokers_contribute_nothing",
   "provenance": "hand_computed",
-  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "arithmetic": "Golden Joker, Rocket and Cloud 9 are all economy jokers: they earn money at end of round and add no chips or mult. The hand scores exactly as it would with no jokers at all. Pair L1 = 10 x 2; +20 chips -> 30 chips. floor(30 * 2) = 60. Crucially this is EXACT, not a floor - a board full of economy jokers is fully computable.",
   "state_before": {
     "schema_version": 1,
     "seq": 1,
@@ -27,22 +27,17 @@
     "jokers": [
       {
         "position": 0,
-        "key": "j_stencil",
+        "key": "j_golden",
         "sell_value": 3
       },
       {
         "position": 1,
-        "key": "j_joker",
+        "key": "j_rocket",
         "sell_value": 3
       },
       {
         "position": 2,
-        "key": "j_gros_michel",
-        "sell_value": 3
-      },
-      {
-        "position": 3,
-        "key": "j_smiley",
+        "key": "j_cloud_9",
         "sell_value": 3
       }
     ],
@@ -75,6 +70,7 @@
     1
   ],
   "expected_chips": 30,
-  "expected_mult": 43,
-  "expected_score": 1290
+  "expected_mult": 2,
+  "expected_score": 60,
+  "expected_exact": true
 }

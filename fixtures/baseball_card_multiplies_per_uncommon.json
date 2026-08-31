@@ -1,7 +1,8 @@
 {
-  "name": "joker_stencil_slot_open",
+  "name": "baseball_card_multiplies_per_uncommon",
   "provenance": "hand_computed",
-  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "counterintuitive": "X1.5 for EACH Uncommon joker compounds - it is 1.5^n, not 1 + 0.5n. With two Uncommons that is X2.25, not X2. An implementation that adds rather than compounds passes with one Uncommon on the board and fails here.",
+  "arithmetic": "Baseball Card is Rare so it does not count itself. Burglar and Turtle Bean are both Uncommon and neither has a scoring effect, so they contribute only to the count: 1.5^2 = 2.25. Pair L1 = 10 x 2; +20 chips -> 30 chips; mult 2 * 2.25 = 4.5. floor(30 * 4.5) = 135.",
   "state_before": {
     "schema_version": 1,
     "seq": 1,
@@ -27,22 +28,17 @@
     "jokers": [
       {
         "position": 0,
-        "key": "j_stencil",
+        "key": "j_baseball",
         "sell_value": 3
       },
       {
         "position": 1,
-        "key": "j_joker",
+        "key": "j_burglar",
         "sell_value": 3
       },
       {
         "position": 2,
-        "key": "j_gros_michel",
-        "sell_value": 3
-      },
-      {
-        "position": 3,
-        "key": "j_smiley",
+        "key": "j_turtle_bean",
         "sell_value": 3
       }
     ],
@@ -75,6 +71,6 @@
     1
   ],
   "expected_chips": 30,
-  "expected_mult": 43,
-  "expected_score": 1290
+  "expected_mult": 4.5,
+  "expected_score": 135
 }

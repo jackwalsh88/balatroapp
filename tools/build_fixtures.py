@@ -147,7 +147,7 @@ fixtures = [
             current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
             jokers=[
                 joker(0, "j_stencil"), joker(1, "j_joker"),
-                joker(2, "j_gros_michel"), joker(3, "j_smiley_face"),
+                joker(2, "j_gros_michel"), joker(3, "j_smiley"),
             ],
         ),
         "cards_played": [0, 1],
@@ -174,7 +174,7 @@ fixtures = [
             current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
             jokers=[
                 joker(0, "j_stencil"), joker(1, "j_joker"),
-                joker(2, "j_gros_michel"), joker(3, "j_smiley_face"),
+                joker(2, "j_gros_michel"), joker(3, "j_smiley"),
                 joker(4, "j_joker"),
             ],
         ),
@@ -400,6 +400,207 @@ fixtures = [
         ),
         "cards_played": None,
         "expected_chips": None, "expected_mult": None, "expected_score": None,
+    },
+    {
+        "name": "misprint_expected_value",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Misprint gives a uniformly random +0 to +23 Mult (game.lua config "
+            "extra = {min = 0, max = 23}), so its expected contribution is "
+            "(0+23)/2 = 11.5. Pair L1 = 10 x 2; KH(10) + KD(10) -> 30 chips; "
+            "mult 2 + 11.5 = 13.5. floor(30 * 13.5) = 405. The score is an "
+            "EXPECTATION, exactly computed from the game's own range, and the "
+            "candidate is flagged stochastic."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[joker(0, "j_misprint")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 13.5, "expected_score": 405,
+        "expected_stochastic": True,
+    },
+    {
+        "name": "bloodstone_expected_value",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Bloodstone is a 1 in 2 chance of X1.5 Mult per scored Heart "
+            "(config extra = {odds = 2, Xmult = 1.5}). Expected multiplier per "
+            "Heart = 0.5*1.5 + 0.5*1 = 1.25. Only KH is a Heart. "
+            "Pair L1 = 10 x 2; +20 chips -> 30 chips; mult 2 * 1.25 = 2.5. "
+            "floor(30 * 2.5) = 75."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[joker(0, "j_bloodstone")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 2.5, "expected_score": 75,
+        "expected_stochastic": True,
+    },
+    {
+        "name": "baseball_card_multiplies_per_uncommon",
+        "provenance": "hand_computed",
+        "counterintuitive": (
+            "X1.5 for EACH Uncommon joker compounds - it is 1.5^n, not "
+            "1 + 0.5n. With two Uncommons that is X2.25, not X2. An "
+            "implementation that adds rather than compounds passes with one "
+            "Uncommon on the board and fails here."
+        ),
+        "arithmetic": (
+            "Baseball Card is Rare so it does not count itself. Burglar and "
+            "Turtle Bean are both Uncommon and neither has a scoring effect, "
+            "so they contribute only to the count: 1.5^2 = 2.25. "
+            "Pair L1 = 10 x 2; +20 chips -> 30 chips; mult 2 * 2.25 = 4.5. "
+            "floor(30 * 4.5) = 135."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[joker(0, "j_baseball"), joker(1, "j_burglar"), joker(2, "j_turtle_bean")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 4.5, "expected_score": 135,
+    },
+    {
+        "name": "flower_pot_needs_all_four_suits",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Flower Pot is X3 if the SCORING cards include a Diamond, Club, "
+            "Heart and Spade. A Straight scores all five cards, and "
+            "2H 3D 4C 5S 6H covers all four suits. Straight L1 = 30 x 4; card "
+            "chips 2+3+4+5+6 = 20 -> 50 chips; mult 4 * 3 = 12. "
+            "floor(50 * 12) = 600."
+        ),
+        "state_before": state(
+            current_hand=[
+                card("2", "hearts"), card("3", "diamonds"), card("4", "clubs"),
+                card("5", "spades"), card("6", "hearts"),
+            ],
+            jokers=[joker(0, "j_flower_pot")],
+        ),
+        "cards_played": [0, 1, 2, 3, 4],
+        "expected_chips": 50, "expected_mult": 12, "expected_score": 600,
+    },
+    {
+        "name": "seeing_double_club_plus_other",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Seeing Double is X2 if the scoring cards include a Club AND a card "
+            "of any other suit. KC and KH satisfy both halves. "
+            "Pair L1 = 10 x 2; +20 chips -> 30 chips; mult 2 * 2 = 4. "
+            "floor(30 * 4) = 120."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "clubs"), card("K", "hearts"), card("4", "diamonds")],
+            jokers=[joker(0, "j_seeing_double")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 4, "expected_score": 120,
+    },
+    {
+        "name": "chicot_disables_the_boss_effect",
+        "provenance": "hand_computed",
+        "counterintuitive": (
+            "Chicot adds no chips and no mult of its own, yet more than doubles "
+            "the score - by switching off The Flint's halving of the base. Pair "
+            "it with boss_flint_halves_base, which is the same board without "
+            "Chicot and scores 25."
+        ),
+        "arithmetic": (
+            "The Flint would halve Pair L1 from 10 x 2 to 5 x 1. Chicot "
+            "disables the Boss Blind effect entirely, so the base stays 10 x 2. "
+            "KH(10) + KD(10) -> 30 chips. floor(30 * 2) = 60, against 25 for "
+            "the same hand without Chicot."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[joker(0, "j_chicot")],
+            blind={"type": "boss", "key": "bl_flint", "name": "The Flint",
+                   "requirement": 22000, "current_score": 0,
+                   "effect_description": "Base Chips and Mult are halved"},
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 2, "expected_score": 60,
+    },
+    {
+        "name": "shoot_the_moon_counts_held_queens",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Shoot the Moon gives +13 Mult per Queen HELD IN HAND (config "
+            "extra = 13). Two Queens are held, not played: 2 * 13 = +26. "
+            "Pair L1 = 10 x 2; KH(10) + KD(10) -> 30 chips; mult 2 + 26 = 28. "
+            "floor(30 * 28) = 840."
+        ),
+        "state_before": state(
+            current_hand=[
+                card("K", "hearts"), card("K", "diamonds"),
+                card("Q", "clubs"), card("Q", "spades"),
+            ],
+            jokers=[joker(0, "j_shoot_the_moon")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 28, "expected_score": 840,
+    },
+    {
+        "name": "swashbuckler_excludes_its_own_sell_value",
+        "provenance": "hand_computed",
+        "counterintuitive": (
+            "Swashbuckler adds the sell value of all OTHER jokers. Including "
+            "its own is an easy off-by-one that inflates every hand by its own "
+            "price, and no other fixture would catch it."
+        ),
+        "arithmetic": (
+            "Juggler ($3) and Drunkard ($4) are worth $7 between them; "
+            "Swashbuckler's own $2 is excluded. Neither of the others has a "
+            "scoring effect. Pair L1 = 10 x 2; +20 chips -> 30 chips; "
+            "mult 2 + 7 = 9. floor(30 * 9) = 270."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[
+                {"position": 0, "key": "j_swashbuckler", "sell_value": 2},
+                {"position": 1, "key": "j_juggler", "sell_value": 3},
+                {"position": 2, "key": "j_drunkard", "sell_value": 4},
+            ],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 9, "expected_score": 270,
+    },
+    {
+        "name": "bootstraps_floors_the_money_division",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Bootstraps is +2 Mult for every $5 (config extra = {mult = 2, "
+            "dollars = 5}). $49 gives floor(49/5) = 9 lots, not 9.8: "
+            "9 * 2 = +18 Mult. Pair L1 = 10 x 2; +20 chips -> 30 chips; "
+            "mult 2 + 18 = 20. floor(30 * 20) = 600."
+        ),
+        "state_before": state(
+            run={"money": 49},
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[joker(0, "j_bootstraps")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 20, "expected_score": 600,
+    },
+    {
+        "name": "economy_jokers_contribute_nothing",
+        "provenance": "hand_computed",
+        "arithmetic": (
+            "Golden Joker, Rocket and Cloud 9 are all economy jokers: they earn "
+            "money at end of round and add no chips or mult. The hand scores "
+            "exactly as it would with no jokers at all. Pair L1 = 10 x 2; "
+            "+20 chips -> 30 chips. floor(30 * 2) = 60. "
+            "Crucially this is EXACT, not a floor - a board full of economy "
+            "jokers is fully computable."
+        ),
+        "state_before": state(
+            current_hand=[card("K", "hearts"), card("K", "diamonds"), card("4", "clubs")],
+            jokers=[joker(0, "j_golden"), joker(1, "j_rocket"), joker(2, "j_cloud_9")],
+        ),
+        "cards_played": [0, 1],
+        "expected_chips": 30, "expected_mult": 2, "expected_score": 60,
+        "expected_exact": True,
     },
 ]
 

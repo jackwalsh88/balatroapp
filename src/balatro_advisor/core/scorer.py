@@ -43,6 +43,10 @@ class ScoreResult:
     triggers: list[str] = field(default_factory=list)
     gold_forfeited: int = 0
     steel_forfeited: int = 0
+    stochastic: bool = False
+    """True when a random effect contributed. The score is then an EXPECTED
+    value, exactly computed from the game's own probabilities, rather than a
+    number the hand will certainly produce. Output says '~' rather than '='."""
     steps: list[str] = field(default_factory=list)
 
     def as_candidate(self, cards: list[int], clears_blind: bool | None) -> dict[str, Any]:
@@ -58,6 +62,7 @@ class ScoreResult:
             "steel_forfeited": self.steel_forfeited,
             "triggers": list(self.triggers),
             "exact": self.exact,
+            "stochastic": self.stochastic,
             "unmodelled": list(self.unmodelled),
         }
 
@@ -75,6 +80,13 @@ class ScoringContext:
     steel_in_deck: int | None
     enhanced_in_deck: int | None
     hand_levels: dict[str, Any]
+    stone_in_deck: int | None = None
+    uncommon_joker_count: int = 0
+    all_joker_sell_total: float | None = None
+    current_joker_sell_value: float | None = None
+    """Set per joker during evaluation, so 'other jokers' can exclude self."""
+    deck_starting_total: int | None = None
+    deck_total: int | None = None
     hand_played_count: int | None = None
     """How many times the hand type being scored has been played this run.
     Depends on the classification, so it is filled in per candidate play."""
@@ -101,13 +113,32 @@ class ScoringContext:
             return self.enhanced_in_deck
         if name == "hand_played_count":
             return self.hand_played_count
+        if name == "stone_in_deck":
+            return self.stone_in_deck
+        if name == "uncommon_joker_count":
+            return self.uncommon_joker_count
+        if name == "other_joker_sell_total":
+            # Swashbuckler adds the sell value of all OTHER jokers, so its own
+            # value comes back out. Including itself would overcount by its
+            # own price every hand.
+            if self.all_joker_sell_total is None:
+                return None
+            return self.all_joker_sell_total - (self.current_joker_sell_value or 0.0)
+        if name == "money_div_5":
+            # Bootstraps is "+2 Mult for every $5", i.e. floor division, not a
+            # linear rate: $9 gives the same as $5.
+            return self.money // 5
+        if name == "cards_removed_from_deck":
+            if self.deck_starting_total is None or self.deck_total is None:
+                return None
+            return max(0, self.deck_starting_total - self.deck_total)
         return None
 
 
 def _context(state: dict[str, Any]) -> ScoringContext:
     run, res = state["run"], state["resources"]
     deck = state.get("deck")
-    deck_remaining = steel = enhanced = None
+    deck_remaining = steel = enhanced = stone = None
     if deck:
         cards = deck.get("cards") or []
         if deck.get("remaining") is not None:
@@ -116,9 +147,20 @@ def _context(state: dict[str, Any]) -> ScoringContext:
             deck_remaining = sum(1 for c in cards if c.get("location") == "deck")
         if cards:
             steel = sum(1 for c in cards if c.get("enhancement") == "steel")
+            stone = sum(1 for c in cards if c.get("enhancement") == "stone")
             enhanced = sum(
                 1 for c in cards if c.get("enhancement") not in (None, "none")
             )
+
+    held_jokers = state.get("jokers") or []
+    uncommon = sum(
+        1 for j in held_jokers
+        if (data.joker(j["key"]) or {}).get("rarity") == "uncommon"
+    )
+    sell_values = [j.get("sell_value") for j in held_jokers]
+    # Swashbuckler sums the OTHER jokers' sell values; a single missing value
+    # makes the total unknowable rather than merely smaller.
+    sell_total = None if any(v is None for v in sell_values) else float(sum(sell_values))
     return ScoringContext(
         money=run["money"],
         hands_remaining=res["hands_remaining"],
@@ -129,6 +171,11 @@ def _context(state: dict[str, Any]) -> ScoringContext:
         steel_in_deck=steel,
         enhanced_in_deck=enhanced,
         hand_levels=state.get("hand_levels") or {},
+        stone_in_deck=stone,
+        uncommon_joker_count=uncommon,
+        all_joker_sell_total=sell_total,
+        deck_starting_total=(deck or {}).get("starting_total"),
+        deck_total=(deck or {}).get("total"),
     )
 
 
@@ -205,6 +252,31 @@ def _independent_holds(
         return False
     if "hands_remaining" in pred and ctx.hands_remaining != pred["hands_remaining"]:
         return False
+    if "min_enhanced_in_deck" in pred:
+        if ctx.enhanced_in_deck is None:
+            return False
+        if ctx.enhanced_in_deck < pred["min_enhanced_in_deck"]:
+            return False
+    if pred.get("all_suits_in_scoring"):
+        # Flower Pot: needs a Diamond, Club, Heart AND Spade among the scoring
+        # cards. Wild cards satisfy any of them.
+        covered = set()
+        for idx in cls.scoring:
+            covered |= _card_suits(played[idx], flags.smeared)
+        if not set(data.SUITS) <= covered:
+            return False
+    if "scoring_suit_plus_other" in pred:
+        # Seeing Double: a scoring Club, plus a scoring card of any other suit.
+        wanted = pred["scoring_suit_plus_other"]
+        has_wanted = has_other = False
+        for idx in cls.scoring:
+            suits = _card_suits(played[idx], flags.smeared)
+            if wanted in suits:
+                has_wanted = True
+            if suits - {wanted}:
+                has_other = True
+        if not (has_wanted and has_other):
+            return False
     if "all_held_suit" in pred:
         wanted = set(pred["all_held_suit"])
         if not held:
@@ -217,12 +289,40 @@ def _independent_holds(
     return True
 
 
+def _expected(spec: dict[str, Any], stat: str) -> float:
+    """Expected value of a random effect, from the game's own probability.
+
+    Two shapes, both taken verbatim from game.lua config:
+
+      {"min": 0, "max": 23}   uniform - Misprint's +0..23 Mult
+      {"odds": 2, "value": v} 1-in-odds chance of v - Bloodstone's 1 in 2 X1.5
+
+    The user's call is that a good approximation is fine for randomness, so the
+    reported score is this expectation. It is still an exact computation - of
+    the mean rather than of a certainty - and it sets `stochastic`, so nothing
+    downstream presents it as a number the hand will definitely produce.
+    """
+    if "min" in spec and "max" in spec:
+        mean = (spec["min"] + spec["max"]) / 2
+        return mean if stat != "xmult" else 1.0 + mean
+    p = 1.0 / spec["odds"]
+    value = spec["value"]
+    if stat == "xmult":
+        # Multiplicative: p of v, (1-p) of 1.
+        return p * value + (1 - p) * 1.0
+    return p * value
+
+
 def _resolve(spec: Any, ctx: ScoringContext, counter: float | None) -> float | None:
     """A literal number, or {from, scale, base}. None means unknowable."""
     if spec is None:
         return None
     if isinstance(spec, (int, float)):
         return float(spec)
+    if "pow" in spec:
+        # Repeated multiplier: X1.5 for EACH uncommon joker is 1.5**n.
+        count = ctx.source(spec["from"], counter)
+        return None if count is None else float(spec["pow"]) ** int(count)
     value = ctx.source(spec["from"], counter)
     if value is None:
         return None
@@ -298,9 +398,18 @@ def score_play(
     unmodelled: list[str] = []
     triggers: list[str] = []
     steps: list[str] = []
+    stochastic = False
+    random_seen: list[bool] = []
 
     blind_entry = data.blind((state.get("blind") or {}).get("key"))
     effect = (blind_entry or {}).get("scoring_effect")
+    if flags.disable_boss and effect:
+        # Chicot disables the Boss Blind's effect outright, which for a scoring
+        # boss (debuffs, halved base) is worth a great deal.
+        steps.append(
+            f"Chicot: {blind_entry['name']}'s effect is disabled"
+        )
+        effect = None
     debuff_suit = (blind_entry or {}).get("scoring_arg") if effect == "debuff_suit" else None
 
     base_chips, base_mult, level = _base_values(state, cls.hand_type)
@@ -354,6 +463,15 @@ def score_play(
                 pred = dict(eff.get("if") or {})
                 if "hands_remaining" in pred and ctx.hands_remaining != pred.pop("hands_remaining"):
                     continue
+                if pred.pop("counter_positive", False):
+                    # Seltzer retriggers only while its remaining-hands counter
+                    # is above zero. An unread counter is unknown, not zero.
+                    counter = (js.get("internal_state") or {}).get("counter")
+                    if counter is None:
+                        unmodelled.append(js["key"])
+                        continue
+                    if counter <= 0:
+                        continue
                 if pred.get("first_only") and position != 0:
                     continue
                 pred.pop("first_only", None)
@@ -403,7 +521,7 @@ def score_play(
             )
             _apply_card_effects(
                 acc, entries, card, "on_scored", position, first_match_pos,
-                ctx, flags, triggers, unmodelled,
+                ctx, flags, triggers, unmodelled, random_seen,
             )
 
     # ---- cards held in hand ----------------------------------------------
@@ -416,7 +534,7 @@ def score_play(
                 acc.add(xmult=enh_table["steel"]["xmult"], why=f"held {_card_label(card)} steel")
             _apply_card_effects(
                 acc, entries, card, "on_held", position, first_match_pos,
-                ctx, flags, triggers, unmodelled,
+                ctx, flags, triggers, unmodelled, random_seen,
             )
 
     # ---- jokers, left to right -------------------------------------------
@@ -424,6 +542,7 @@ def score_play(
         if entry is None or entry.get("unmodelled"):
             continue
         counter = (js.get("internal_state") or {}).get("counter")
+        ctx.current_joker_sell_value = js.get("sell_value")
         for eff in entry.get("effects", []):
             if eff.get("when") != "independent":
                 continue
@@ -439,9 +558,7 @@ def score_play(
                 triggers.append(entry["name"])
                 continue
 
-            chips = _resolve(eff.get("chips"), ctx, counter)
-            mult = _resolve(eff.get("mult"), ctx, counter)
-            xmult = _resolve(eff.get("xmult"), ctx, counter)
+            chips, mult, xmult, is_random = _effect_values(eff, ctx, counter)
             if _needs_unknown(eff, chips, mult, xmult):
                 unmodelled.append(js["key"])
                 steps.append(
@@ -449,6 +566,8 @@ def score_play(
                     f"provide (counter or deck composition), contribution unknown"
                 )
                 continue
+            if is_random:
+                stochastic = True
 
             acc.add(
                 chips=chips or 0.0,
@@ -474,6 +593,7 @@ def score_play(
         steps.append("Observatory is redeemed and consumables are held: its X1.5 is not modelled")
 
     exact = not unmodelled
+    stochastic = stochastic or bool(random_seen)
     score = math.floor(round(acc.chips * acc.mult, 6))
 
     return ScoreResult(
@@ -489,8 +609,35 @@ def score_play(
         triggers=triggers,
         gold_forfeited=gold_forfeited,
         steel_forfeited=steel_forfeited,
+        stochastic=stochastic,
         steps=steps,
     )
+
+
+def _effect_values(
+    eff: dict[str, Any], ctx: ScoringContext, counter: float | None
+) -> tuple[float | None, float | None, float | None, bool]:
+    """Resolve an effect's chips/mult/xmult, folding in any random node.
+
+    Returns (chips, mult, xmult, is_random).
+    """
+    chips = _resolve(eff.get("chips"), ctx, counter)
+    mult = _resolve(eff.get("mult"), ctx, counter)
+    xmult = _resolve(eff.get("xmult"), ctx, counter)
+
+    random_spec = eff.get("random")
+    if not random_spec:
+        return chips, mult, xmult, False
+
+    stat = random_spec["stat"]
+    value = _expected(random_spec, stat)
+    if stat == "chips":
+        chips = (chips or 0.0) + value
+    elif stat == "mult":
+        mult = (mult or 0.0) + value
+    else:
+        xmult = (xmult or 1.0) * value
+    return chips, mult, xmult, True
 
 
 def _needs_unknown(
@@ -514,6 +661,7 @@ def _apply_card_effects(
     flags: HandFlags,
     triggers: list[str],
     unmodelled: list[str],
+    random_seen: list[bool],
 ) -> None:
     for slot, (js, entry) in enumerate(entries):
         if entry is None or entry.get("unmodelled"):
@@ -533,12 +681,12 @@ def _apply_card_effects(
                 if claimed != position:
                     continue
 
-            chips = _resolve(eff.get("chips"), ctx, counter)
-            mult = _resolve(eff.get("mult"), ctx, counter)
-            xmult = _resolve(eff.get("xmult"), ctx, counter)
+            chips, mult, xmult, is_random = _effect_values(eff, ctx, counter)
             if _needs_unknown(eff, chips, mult, xmult):
                 unmodelled.append(js["key"])
                 continue
+            if is_random:
+                random_seen.append(True)
             acc.add(
                 chips=chips or 0.0,
                 mult=mult or 0.0,

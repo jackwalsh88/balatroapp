@@ -44,6 +44,8 @@ def test_fixture_scores_as_derived(name, fixture):
 
     if "expected_exact" in fixture:
         assert result.exact is fixture["expected_exact"], derivation
+    if "expected_stochastic" in fixture:
+        assert result.stochastic is fixture["expected_stochastic"], derivation
     if "expected_unmodelled" in fixture:
         assert result.unmodelled == fixture["expected_unmodelled"]
     if "expected_gold_forfeited" in fixture:

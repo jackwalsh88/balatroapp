@@ -1,7 +1,8 @@
 {
-  "name": "joker_stencil_slot_open",
+  "name": "chicot_disables_the_boss_effect",
   "provenance": "hand_computed",
-  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "counterintuitive": "Chicot adds no chips and no mult of its own, yet more than doubles the score - by switching off The Flint's halving of the base. Pair it with boss_flint_halves_base, which is the same board without Chicot and scores 25.",
+  "arithmetic": "The Flint would halve Pair L1 from 10 x 2 to 5 x 1. Chicot disables the Boss Blind effect entirely, so the base stays 10 x 2. KH(10) + KD(10) -> 30 chips. floor(30 * 2) = 60, against 25 for the same hand without Chicot.",
   "state_before": {
     "schema_version": 1,
     "seq": 1,
@@ -27,22 +28,7 @@
     "jokers": [
       {
         "position": 0,
-        "key": "j_stencil",
-        "sell_value": 3
-      },
-      {
-        "position": 1,
-        "key": "j_joker",
-        "sell_value": 3
-      },
-      {
-        "position": 2,
-        "key": "j_gros_michel",
-        "sell_value": 3
-      },
-      {
-        "position": 3,
-        "key": "j_smiley",
+        "key": "j_chicot",
         "sell_value": 3
       }
     ],
@@ -63,11 +49,12 @@
       }
     ],
     "blind": {
-      "type": "small",
-      "key": "bl_small",
-      "name": "Small Blind",
-      "requirement": 3000,
-      "current_score": 0
+      "type": "boss",
+      "key": "bl_flint",
+      "name": "The Flint",
+      "requirement": 22000,
+      "current_score": 0,
+      "effect_description": "Base Chips and Mult are halved"
     }
   },
   "cards_played": [
@@ -75,6 +62,6 @@
     1
   ],
   "expected_chips": 30,
-  "expected_mult": 43,
-  "expected_score": 1290
+  "expected_mult": 2,
+  "expected_score": 60
 }

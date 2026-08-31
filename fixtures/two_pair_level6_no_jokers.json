@@ -1,0 +1,88 @@
+{
+  "name": "two_pair_level6_no_jokers",
+  "provenance": "hand_computed",
+  "arithmetic": "Two Pair at level 6 is 120 chips x 7 mult (data/hand_levels.json: 20 + 5*20 = 120, 2 + 5*1 = 7; this reproduces the spec's own section 2 example exactly). Four scoring cards K,K,J,J at 10 chips each add 40. 160 x 7 = 1120.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "playing",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 45,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 3,
+      "discards_remaining": 2,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [],
+    "consumables": [],
+    "hand_levels": {
+      "two_pair": {
+        "level": 6,
+        "chips": 120,
+        "mult": 7,
+        "played": 9
+      }
+    },
+    "current_hand": [
+      {
+        "rank": "K",
+        "suit": "hearts"
+      },
+      {
+        "rank": "K",
+        "suit": "diamonds"
+      },
+      {
+        "rank": "J",
+        "suit": "spades"
+      },
+      {
+        "rank": "J",
+        "suit": "hearts"
+      },
+      {
+        "rank": "3",
+        "suit": "clubs"
+      },
+      {
+        "rank": "7",
+        "suit": "spades"
+      },
+      {
+        "rank": "9",
+        "suit": "diamonds"
+      },
+      {
+        "rank": "2",
+        "suit": "hearts"
+      }
+    ],
+    "blind": {
+      "type": "small",
+      "key": "bl_small",
+      "name": "Small Blind",
+      "requirement": 3000,
+      "current_score": 0
+    }
+  },
+  "cards_played": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "expected_chips": 160,
+  "expected_mult": 7,
+  "expected_score": 1120
+}

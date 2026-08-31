@@ -1,0 +1,104 @@
+{
+  "name": "unmodellable_joker_is_not_scored_as_zero",
+  "provenance": "hand_computed",
+  "counterintuitive": "The assertion here is not a number, it is the honesty flag. Blueprint's copy semantics are listed as unverified in spec section 9, so the scorer must mark the whole candidate non-exact rather than quietly treating Blueprint as contributing nothing. A scorer that returns a confident 1760 here is wrong in exactly the way section 1 describes.",
+  "arithmetic": "The modelled part is Two Pair L6 = 120 x 7, plus 40 chips from K,K,J,J, plus the +4 Mult from the plain Joker sitting beside Blueprint: 160 x 11 = 1760. Blueprint itself is unmodelled, so exact is false, unmodelled lists j_blueprint, and 1760 is a FLOOR rather than a score - Blueprint is copying the Joker to its right and is certainly adding something, but this project does not claim to know how much.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "playing",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 45,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 3,
+      "discards_remaining": 2,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [
+      {
+        "position": 0,
+        "key": "j_blueprint",
+        "sell_value": 3
+      },
+      {
+        "position": 1,
+        "key": "j_joker",
+        "sell_value": 3
+      }
+    ],
+    "consumables": [],
+    "hand_levels": {
+      "two_pair": {
+        "level": 6,
+        "chips": 120,
+        "mult": 7,
+        "played": 9
+      }
+    },
+    "current_hand": [
+      {
+        "rank": "K",
+        "suit": "hearts"
+      },
+      {
+        "rank": "K",
+        "suit": "diamonds"
+      },
+      {
+        "rank": "J",
+        "suit": "spades"
+      },
+      {
+        "rank": "J",
+        "suit": "hearts"
+      },
+      {
+        "rank": "3",
+        "suit": "clubs"
+      },
+      {
+        "rank": "7",
+        "suit": "spades"
+      },
+      {
+        "rank": "9",
+        "suit": "diamonds"
+      },
+      {
+        "rank": "2",
+        "suit": "hearts"
+      }
+    ],
+    "blind": {
+      "type": "small",
+      "key": "bl_small",
+      "name": "Small Blind",
+      "requirement": 3000,
+      "current_score": 0
+    }
+  },
+  "cards_played": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "expected_chips": 160,
+  "expected_mult": 11,
+  "expected_score": 1760,
+  "expected_exact": false,
+  "expected_unmodelled": [
+    "j_blueprint"
+  ]
+}

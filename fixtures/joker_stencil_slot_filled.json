@@ -1,0 +1,86 @@
+{
+  "name": "joker_stencil_slot_filled",
+  "provenance": "hand_computed",
+  "counterintuitive": "The same board after buying one more +4 Mult Joker. Filling the last slot converts Stencil from X2 to X1 and the score DROPS from 1290 to 1050 - a purchase that is strictly negative. This is the spec's section 5 'opportunity cost of joker slots' case; pair it with joker_stencil_slot_open.",
+  "arithmetic": "Identical to joker_stencil_slot_open except a fifth joker fills the last slot. Stencil now sees 0 empty slots + itself = X1. 2 + 5 + 5 = 12 mult; X1 -> 12; Joker +4 -> 16; Gros Michel +15 -> 31; the new Joker +4 -> 35. 30 x 35 = 1050, which is 240 LESS than before the purchase.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "playing",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 45,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 3,
+      "discards_remaining": 2,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [
+      {
+        "position": 0,
+        "key": "j_stencil",
+        "sell_value": 3
+      },
+      {
+        "position": 1,
+        "key": "j_joker",
+        "sell_value": 3
+      },
+      {
+        "position": 2,
+        "key": "j_gros_michel",
+        "sell_value": 3
+      },
+      {
+        "position": 3,
+        "key": "j_smiley_face",
+        "sell_value": 3
+      },
+      {
+        "position": 4,
+        "key": "j_joker",
+        "sell_value": 3
+      }
+    ],
+    "consumables": [],
+    "hand_levels": {},
+    "current_hand": [
+      {
+        "rank": "K",
+        "suit": "hearts"
+      },
+      {
+        "rank": "K",
+        "suit": "diamonds"
+      },
+      {
+        "rank": "4",
+        "suit": "clubs"
+      }
+    ],
+    "blind": {
+      "type": "small",
+      "key": "bl_small",
+      "name": "Small Blind",
+      "requirement": 3000,
+      "current_score": 0
+    }
+  },
+  "cards_played": [
+    0,
+    1
+  ],
+  "expected_chips": 30,
+  "expected_mult": 35,
+  "expected_score": 1050
+}

@@ -1,0 +1,80 @@
+{
+  "name": "joker_stencil_slot_open",
+  "provenance": "hand_computed",
+  "arithmetic": "Pair L1 = 10 x 2. Scoring cards KH(10) + KD(10) -> 30 chips. Smiley Face gives +5 mult per scored face card: 2 + 5 + 5 = 12. Then jokers left to right: Joker Stencil is X1 per empty slot with its own slot counted, 4 jokers in 5 slots -> 1 empty + itself = X2 -> 24; Joker +4 -> 28; Gros Michel +15 -> 43. 30 x 43 = 1290.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "playing",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 45,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 3,
+      "discards_remaining": 2,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [
+      {
+        "position": 0,
+        "key": "j_stencil",
+        "sell_value": 3
+      },
+      {
+        "position": 1,
+        "key": "j_joker",
+        "sell_value": 3
+      },
+      {
+        "position": 2,
+        "key": "j_gros_michel",
+        "sell_value": 3
+      },
+      {
+        "position": 3,
+        "key": "j_smiley_face",
+        "sell_value": 3
+      }
+    ],
+    "consumables": [],
+    "hand_levels": {},
+    "current_hand": [
+      {
+        "rank": "K",
+        "suit": "hearts"
+      },
+      {
+        "rank": "K",
+        "suit": "diamonds"
+      },
+      {
+        "rank": "4",
+        "suit": "clubs"
+      }
+    ],
+    "blind": {
+      "type": "small",
+      "key": "bl_small",
+      "name": "Small Blind",
+      "requirement": 3000,
+      "current_score": 0
+    }
+  },
+  "cards_played": [
+    0,
+    1
+  ],
+  "expected_chips": 30,
+  "expected_mult": 43,
+  "expected_score": 1290
+}

@@ -1,0 +1,67 @@
+{
+  "name": "pack_open_jumbo_allows_one_pick",
+  "provenance": "hand_computed",
+  "arithmetic": null,
+  "note": "Pack-open phase. The point of this fixture is choices_allowed = 1 on a Jumbo pack. Spec sections 2 and 5d record that Jumbo/Mega pick counts were stated backwards during manual testing; advice recommending two picks here must fail validation.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "pack_open",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 45,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 3,
+      "discards_remaining": 2,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [
+      {
+        "position": 0,
+        "key": "j_blue_joker",
+        "sell_value": 3
+      }
+    ],
+    "consumables": [],
+    "hand_levels": {},
+    "current_hand": [],
+    "blind": null,
+    "pack_open": {
+      "key": "p_celestial_jumbo",
+      "name": "Jumbo Celestial Pack",
+      "choices_allowed": 1,
+      "cards": [
+        {
+          "key": "c_uranus",
+          "name": "Uranus"
+        },
+        {
+          "key": "c_mars",
+          "name": "Mars"
+        },
+        {
+          "key": "c_jupiter",
+          "name": "Jupiter"
+        },
+        {
+          "key": "c_saturn",
+          "name": "Saturn"
+        }
+      ]
+    }
+  },
+  "cards_played": null,
+  "expected_chips": null,
+  "expected_mult": null,
+  "expected_score": null
+}

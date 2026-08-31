@@ -1,0 +1,39 @@
+{
+  "_comment": "Base (level 1) chips/mult per poker hand, and the per-level increment. Verified against the spec's own worked examples: two_pair L6 = 20+5*20 = 120 chips, 2+5*1 = 7 mult; pair L3 = 10+2*15 = 40 chips, 2+2*1 = 4 mult; high_card L2 = 5+10 = 15 chips, 1+1 = 2 mult. All three match section 2 exactly.",
+  "hands": {
+    "high_card":        { "base_chips": 5,   "base_mult": 1,  "chips_per_level": 10, "mult_per_level": 1, "min_cards": 1 },
+    "pair":             { "base_chips": 10,  "base_mult": 2,  "chips_per_level": 15, "mult_per_level": 1, "min_cards": 2 },
+    "two_pair":         { "base_chips": 20,  "base_mult": 2,  "chips_per_level": 20, "mult_per_level": 1, "min_cards": 4 },
+    "three_of_a_kind":  { "base_chips": 30,  "base_mult": 3,  "chips_per_level": 20, "mult_per_level": 2, "min_cards": 3 },
+    "straight":         { "base_chips": 30,  "base_mult": 4,  "chips_per_level": 30, "mult_per_level": 3, "min_cards": 5 },
+    "flush":            { "base_chips": 35,  "base_mult": 4,  "chips_per_level": 15, "mult_per_level": 2, "min_cards": 5 },
+    "full_house":       { "base_chips": 40,  "base_mult": 4,  "chips_per_level": 25, "mult_per_level": 2, "min_cards": 5 },
+    "four_of_a_kind":   { "base_chips": 60,  "base_mult": 7,  "chips_per_level": 30, "mult_per_level": 3, "min_cards": 4 },
+    "straight_flush":   { "base_chips": 100, "base_mult": 8,  "chips_per_level": 40, "mult_per_level": 4, "min_cards": 5 },
+    "five_of_a_kind":   { "base_chips": 120, "base_mult": 12, "chips_per_level": 35, "mult_per_level": 3, "min_cards": 5 },
+    "flush_house":      { "base_chips": 140, "base_mult": 14, "chips_per_level": 40, "mult_per_level": 4, "min_cards": 5 },
+    "flush_five":       { "base_chips": 160, "base_mult": 16, "chips_per_level": 50, "mult_per_level": 3, "min_cards": 5 }
+  },
+  "rank_chips": {
+    "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+    "J": 10, "Q": 10, "K": 10, "A": 11
+  },
+  "enhancements": {
+    "none":  {},
+    "bonus": { "chips": 30 },
+    "mult":  { "mult": 4 },
+    "glass": { "xmult": 2 },
+    "steel": { "xmult": 1.5, "held_in_hand": true },
+    "stone": { "chips": 50, "always_scores": true, "no_rank": true },
+    "gold":  { "money_if_held_at_round_end": 3 },
+    "wild":  { "counts_as_every_suit": true },
+    "lucky": { "random": true, "note": "1 in 5 for +20 mult, 1 in 15 for $20. Random, so never scored as a fact - see scorer." }
+  },
+  "editions": {
+    "base":         {},
+    "foil":         { "chips": 50 },
+    "holographic":  { "mult": 10 },
+    "polychrome":   { "xmult": 1.5 },
+    "negative":     { "joker_slots": 1, "note": "Joker editions only. Adds a slot, no scoring effect." }
+  }
+}

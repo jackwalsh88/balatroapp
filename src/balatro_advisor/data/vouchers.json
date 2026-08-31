@@ -1,0 +1,33 @@
+{
+  "_doc": "Voucher table. `affects_scoring` marks the few vouchers the scorer would need to know about; everything else is economy, shop or draw and matters to the advisor's judgment rather than to the arithmetic.",
+  "vouchers": [
+    { "key": "v_overstock_norm", "name": "Overstock", "cost": 10, "affects_scoring": false, "description": "Adds a fourth card slot to the shop." },
+    { "key": "v_overstock_plus", "name": "Overstock Plus", "cost": 10, "affects_scoring": false, "description": "Adds a fifth card slot to the shop." },
+    { "key": "v_clearance_sale", "name": "Clearance Sale", "cost": 10, "affects_scoring": false, "description": "All shop items are 25% cheaper." },
+    { "key": "v_liquidation", "name": "Liquidation", "cost": 10, "affects_scoring": false, "description": "All shop items are 50% cheaper." },
+    { "key": "v_hone", "name": "Hone", "cost": 10, "affects_scoring": false, "description": "Foil, Holographic and Polychrome cards appear twice as often." },
+    { "key": "v_glow_up", "name": "Glow Up", "cost": 10, "affects_scoring": false, "description": "Foil, Holographic and Polychrome cards appear four times as often." },
+    { "key": "v_reroll_surplus", "name": "Reroll Surplus", "cost": 10, "affects_scoring": false, "description": "Rerolls cost $2 less." },
+    { "key": "v_reroll_glut", "name": "Reroll Glut", "cost": 10, "affects_scoring": false, "description": "Rerolls cost another $2 less." },
+    { "key": "v_crystal_ball", "name": "Crystal Ball", "cost": 10, "affects_scoring": false, "description": "Adds a consumable slot." },
+    { "key": "v_omen_globe", "name": "Omen Globe", "cost": 10, "affects_scoring": false, "description": "Spectral cards may appear in Arcana Packs." },
+    { "key": "v_telescope", "name": "Telescope", "cost": 10, "affects_scoring": false, "description": "Celestial Packs always contain the Planet card for your most-played poker hand." },
+    { "key": "v_observatory", "name": "Observatory", "cost": 10, "affects_scoring": true, "description": "Planet cards held in your consumable slots multiply the Mult of their poker hand by 1.5.", "scorer_note": "Needs the held-consumable list and the played hand type. Declared but not applied by core/scorer - a state with this voucher marks affected candidates non-exact rather than guessing." },
+    { "key": "v_grabber", "name": "Grabber", "cost": 10, "affects_scoring": false, "description": "Permanently gain +1 hand per round." },
+    { "key": "v_nacho_tong", "name": "Nacho Tong", "cost": 10, "affects_scoring": false, "description": "Permanently gain another +1 hand per round." },
+    { "key": "v_wasteful", "name": "Wasteful", "cost": 10, "affects_scoring": false, "description": "Permanently gain +1 discard per round." },
+    { "key": "v_recyclomancy", "name": "Recyclomancy", "cost": 10, "affects_scoring": false, "description": "Permanently gain another +1 discard per round." },
+    { "key": "v_seed_money", "name": "Seed Money", "cost": 10, "affects_scoring": false, "description": "Raises the interest cap to $10 per round." },
+    { "key": "v_money_tree", "name": "Money Tree", "cost": 10, "affects_scoring": false, "description": "Raises the interest cap to $20 per round." },
+    { "key": "v_blank", "name": "Blank", "cost": 10, "affects_scoring": false, "description": "Does nothing at all." },
+    { "key": "v_antimatter", "name": "Antimatter", "cost": 10, "affects_scoring": false, "description": "Permanently gain +1 Joker slot." },
+    { "key": "v_magic_trick", "name": "Magic Trick", "cost": 10, "affects_scoring": false, "description": "Playing cards can be bought from the shop." },
+    { "key": "v_illusion", "name": "Illusion", "cost": 10, "affects_scoring": false, "description": "Playing cards in the shop may have an enhancement, edition or seal." },
+    { "key": "v_hieroglyph", "name": "Hieroglyph", "cost": 10, "affects_scoring": false, "description": "Reduces the ante by 1, and you gain one fewer hand per round." },
+    { "key": "v_petroglyph", "name": "Petroglyph", "cost": 10, "affects_scoring": false, "description": "Reduces the ante by another 1, and you gain one fewer discard per round." },
+    { "key": "v_directors_cut", "name": "Director's Cut", "cost": 10, "affects_scoring": false, "description": "Lets you reroll the Boss Blind once per ante for $10." },
+    { "key": "v_retcon", "name": "Retcon", "cost": 10, "affects_scoring": false, "description": "Lets you reroll the Boss Blind as often as you like for $10 each." },
+    { "key": "v_paint_brush", "name": "Paint Brush", "cost": 10, "affects_scoring": false, "description": "Increases hand size by 1." },
+    { "key": "v_palette", "name": "Palette", "cost": 10, "affects_scoring": false, "description": "Increases hand size by another 1." }
+  ]
+}

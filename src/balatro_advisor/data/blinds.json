@@ -1,0 +1,40 @@
+{
+  "_doc": {
+    "purpose": "Blind table. `scoring_effect` is the field the scorer actually consumes - spec section 9 flags boss effects that alter scoring (as opposed to drawing) as needing explicit modelling, and this is where that modelling is declared.",
+    "scoring_effect_kinds": {
+      "debuff_suit": "Cards of the named suit score nothing and their enhancements/editions do not fire.",
+      "debuff_face": "Face cards score nothing.",
+      "halve_base": "The hand's base chips and mult are both halved before anything else applies.",
+      "null": "No scoring effect. The blind changes drawing, hand limits or economy only, which the scorer does not model but the advisor is told about via effect_description."
+    },
+    "requirement_note": "requirement_multiplier is relative to the ante's base score. Small = 1x, Big = 1.5x, most bosses = 2x. The adapter should still write the game's literal `requirement`; this field exists for sanity-checking a manually entered one."
+  },
+  "blinds": [
+    { "key": "bl_small", "name": "Small Blind", "type": "small", "requirement_multiplier": 1.0, "scoring_effect": null, "description": "No effect." },
+    { "key": "bl_big", "name": "Big Blind", "type": "big", "requirement_multiplier": 1.5, "scoring_effect": null, "description": "No effect." },
+
+    { "key": "bl_hook",    "name": "The Hook",    "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "Discards 2 random cards from your hand after every hand you play." },
+    { "key": "bl_ox",      "name": "The Ox",      "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "Playing your most-played poker hand sets your money to $0." },
+    { "key": "bl_house",   "name": "The House",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "The first hand of the round is drawn face down." },
+    { "key": "bl_wall",    "name": "The Wall",    "type": "boss", "requirement_multiplier": 4.0, "scoring_effect": null, "description": "An extra large blind - the score requirement is doubled again." },
+    { "key": "bl_wheel",   "name": "The Wheel",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "1 in 7 cards are drawn face down." },
+    { "key": "bl_arm",     "name": "The Arm",     "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "level_down", "description": "Decreases the level of the poker hand you play." },
+    { "key": "bl_club",    "name": "The Club",    "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "debuff_suit", "scoring_arg": "clubs", "description": "All Club cards are debuffed and score nothing." },
+    { "key": "bl_fish",    "name": "The Fish",    "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "Cards are drawn face down after each hand you play." },
+    { "key": "bl_psychic", "name": "The Psychic", "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "constraint": "min_played_cards_5", "description": "You must play exactly 5 cards." },
+    { "key": "bl_goad",    "name": "The Goad",    "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "debuff_suit", "scoring_arg": "spades", "description": "All Spade cards are debuffed and score nothing." },
+    { "key": "bl_water",   "name": "The Water",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "You start the round with 0 discards." },
+    { "key": "bl_window",  "name": "The Window",  "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "debuff_suit", "scoring_arg": "diamonds", "description": "All Diamond cards are debuffed and score nothing." },
+    { "key": "bl_manacle", "name": "The Manacle", "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "Your hand size is reduced by 1." },
+    { "key": "bl_eye",     "name": "The Eye",     "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "No poker hand type may be played more than once this round." },
+    { "key": "bl_mouth",   "name": "The Mouth",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "Only one poker hand type may be played this round." },
+    { "key": "bl_plant",   "name": "The Plant",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "debuff_face", "description": "All face cards are debuffed and score nothing." },
+    { "key": "bl_serpent", "name": "The Serpent", "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "You always draw exactly 3 cards after playing or discarding." },
+    { "key": "bl_pillar",  "name": "The Pillar",  "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "Cards already played this ante are debuffed." },
+    { "key": "bl_needle",  "name": "The Needle",  "type": "boss", "requirement_multiplier": 1.0, "scoring_effect": null, "description": "You get only one hand to beat this blind." },
+    { "key": "bl_head",    "name": "The Head",    "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "debuff_suit", "scoring_arg": "hearts", "description": "All Heart cards are debuffed and score nothing." },
+    { "key": "bl_tooth",   "name": "The Tooth",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "You lose $1 for every card you play." },
+    { "key": "bl_flint",   "name": "The Flint",   "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": "halve_base", "description": "The base Chips and Mult of your played hand are halved." },
+    { "key": "bl_mark",    "name": "The Mark",    "type": "boss", "requirement_multiplier": 2.0, "scoring_effect": null, "description": "All face cards are drawn face down." }
+  ]
+}

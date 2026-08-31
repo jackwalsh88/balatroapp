@@ -1,0 +1,109 @@
+{
+  "_doc": {
+    "purpose": "Spec 5d: verified rules, each with a source. The validator uses this to catch confident invention. A mechanic asserted in advice that is not in this file is FLAGGED for review, not blocked - the goal is catching invention, not constraining discussion.",
+    "status_values": {
+      "verified": "Checked against a source named in `source`. Safe for the advisor to assert.",
+      "unresolved": "Genuinely not known. Asserting this in EITHER direction is a validation failure, not a flag. Spec section 9 lists these as things to resolve by reading the game's own logic once the mod runs - not from a wiki, and not from the model's prior."
+    },
+    "how_to_extend": "Add an entry only with a source. `source: \"assumed\"` is not a source. An entry whose source is a model's recollection belongs at status `unresolved`."
+  },
+
+  "mechanics": [
+    {
+      "id": "pack_picks_jumbo_mega",
+      "status": "verified",
+      "statement": "Jumbo packs hold more cards than a standard pack but still allow only ONE pick. Mega packs allow TWO picks. Pack size and pick count are independent.",
+      "keywords": ["jumbo", "mega", "pack", "picks", "choices_allowed"],
+      "source": "spec section 2 schema notes and section 5d - recorded because this was stated backwards during manual testing.",
+      "known_error": "Stated in reverse by hand: 'Jumbo allows two, Mega allows one'. Wrong. This is why choices_allowed is read from the game and never inferred from pack size."
+    },
+    {
+      "id": "consumable_holding_vs_pool",
+      "status": "unresolved",
+      "statement": "Whether holding a consumable excludes it from the shop and pack pool is NOT KNOWN.",
+      "keywords": ["pool", "shop pool", "consumable", "holding", "excluded", "duplicate"],
+      "source": "spec section 9 - disputed during manual testing, could not be verified from the wikis.",
+      "resolution_path": "Read the game's pool logic directly once the mod is running. That is the authoritative source; the wikis are not.",
+      "advisor_rule": "Must not be asserted in either direction. It affects hold-versus-sell advice, so the advisor may say the effect is unknown and reason around it - it may not claim it is true or claim it is false."
+    },
+    {
+      "id": "retrigger_ordering_blueprint_brainstorm",
+      "status": "unresolved",
+      "statement": "The evaluation order of Blueprint/Brainstorm copy chains, and how retriggers interact with them, is NOT KNOWN.",
+      "keywords": ["blueprint", "brainstorm", "copy", "retrigger", "chain", "order"],
+      "source": "spec section 9 - to be verified against the game rather than assumed.",
+      "advisor_rule": "Blueprint and Brainstorm are marked unmodelled in data/jokers.json. Any candidate play involving them is non-exact and its score must not be quoted as a fact."
+    },
+    {
+      "id": "gold_enhancement_payout",
+      "status": "verified",
+      "statement": "A Gold enhanced card pays $3 only if it is still HELD IN HAND at the end of the round. Playing it forfeits that payout.",
+      "keywords": ["gold", "payout", "held", "end of round", "forfeit"],
+      "source": "spec section 5 required advisor behaviours - 'Gold enhancements pay only if held in hand at end of round; playing them forfeits the payout. Report the amount.'"
+    },
+    {
+      "id": "steel_held_in_hand",
+      "status": "verified",
+      "statement": "A Steel card multiplies Mult by 1.5 while HELD IN HAND. It does nothing when played as part of the scoring hand.",
+      "keywords": ["steel", "held", "x1.5", "in hand"],
+      "source": "data/hand_levels.json enhancements table; consistent with the spec's treatment of Gold/Steel value forfeited as a tiebreak in section 4."
+    },
+    {
+      "id": "joker_evaluation_order",
+      "status": "verified",
+      "statement": "Jokers are evaluated left to right by slot position. Order matters for multiplicative effects.",
+      "keywords": ["joker order", "left to right", "position", "evaluation"],
+      "source": "spec section 3.2 - 'it must then reimplement the full joker ruleset, including edition bonuses, retrigger order, and left-to-right joker evaluation.'"
+    },
+    {
+      "id": "joker_stencil_counts_itself",
+      "status": "verified",
+      "statement": "Joker Stencil gives X1 Mult per empty Joker slot, and its own slot counts as empty. With five slots all full it produces X1 - that is, nothing.",
+      "keywords": ["stencil", "empty slot", "xmult", "opportunity cost"],
+      "source": "spec section 2 schema notes - 'Joker Stencil showing xmult: 1 while five slots are full is correct'."
+    },
+    {
+      "id": "stone_cards_no_rank",
+      "status": "verified",
+      "statement": "Stone cards have no rank and no suit. They always score, they do not appear in rank tallies, and deck.total may legitimately exceed the sum of rank counts.",
+      "keywords": ["stone", "rank", "tally", "always scores"],
+      "source": "spec section 2 schema notes."
+    },
+    {
+      "id": "wild_cards_multi_suit",
+      "status": "verified",
+      "statement": "A Wild card counts as every suit at once. Suit totals may legitimately exceed the ranked card count; this is not a validation failure.",
+      "keywords": ["wild", "suit", "every suit", "flush"],
+      "source": "spec section 2 schema notes."
+    },
+    {
+      "id": "eternal_cannot_be_sold",
+      "status": "verified",
+      "statement": "A Joker with the Eternal sticker cannot be sold or destroyed. Buying one is irreversible.",
+      "keywords": ["eternal", "sell", "irreversible", "sticker"],
+      "source": "spec section 5 required advisor behaviours and section 5d legality checks - 'Sale target exists and does not carry the eternal sticker.'"
+    },
+    {
+      "id": "perishable_expires",
+      "status": "verified",
+      "statement": "A Joker with the Perishable sticker stops working after a set number of rounds. It turns a marginal buy into a bad one.",
+      "keywords": ["perishable", "expires", "sticker", "rounds"],
+      "source": "spec section 5 required advisor behaviours."
+    },
+    {
+      "id": "lucky_card_is_random",
+      "status": "verified",
+      "statement": "A Lucky card is a random trigger (1 in 5 for +20 Mult, 1 in 15 for $20). It therefore has no exact score contribution.",
+      "keywords": ["lucky", "random", "1 in 5", "chance"],
+      "source": "data/hand_levels.json enhancements table.",
+      "advisor_rule": "The scorer reports the no-trigger floor and marks the candidate non-exact. The advisor may discuss the chance qualitatively but must not quote an expected score as if computed."
+    },
+    {
+      "id": "hand_level_scaling",
+      "status": "verified",
+      "statement": "Each poker hand has base chips/mult at level 1 and a fixed increment per level. The increments are in data/hand_levels.json and reproduce all three worked examples in the spec exactly.",
+      "keywords": ["level", "hand level", "planet", "scaling"],
+      "source": "Derived from and checked against spec section 2 (two_pair L6 = 120/7, pair L3 = 40/4, high_card L2 = 15/2)."
+    }
+  ]
+}

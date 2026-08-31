@@ -1,0 +1,904 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jackwalsh88/balatroapp/schema/state.schema.json",
+  "title": "Balatro canonical state",
+  "description": "The single canonical state document produced by every input adapter (mod, vision, manual). This file is the authoritative definition; the prose in docs/spec.md references it and must not duplicate it.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "seq",
+    "source",
+    "phase",
+    "run",
+    "resources",
+    "jokers"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic counter incremented by the writer on every write. The reader compares against the last value seen to know whether state is fresh. Never use captured_at for freshness."
+    },
+    "source": {
+      "enum": [
+        "mod",
+        "vision",
+        "manual"
+      ]
+    },
+    "captured_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Informational only. Not a freshness signal - see seq."
+    },
+    "phase": {
+      "enum": [
+        "shop",
+        "blind_select",
+        "playing",
+        "pack_open"
+      ]
+    },
+    "run": {
+      "type": "object",
+      "required": [
+        "ante",
+        "money"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ante": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ante_max": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "round": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "money": {
+          "type": "integer"
+        },
+        "deck_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "stake": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "vouchers_redeemed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "required": [
+        "hands_remaining",
+        "discards_remaining"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hands_remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "discards_remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hand_size": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "joker_slots_total": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 5
+        },
+        "consumable_slots_total": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 2
+        }
+      }
+    },
+    "jokers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/joker"
+      }
+    },
+    "consumables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/consumable"
+      },
+      "default": []
+    },
+    "hand_levels": {
+      "type": "object",
+      "description": "Keyed by hand type. Absent hand types fall back to the static table in data/hand_levels.json at level 1.",
+      "propertyNames": {
+        "$ref": "#/$defs/hand_type"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/hand_level"
+      },
+      "default": {}
+    },
+    "deck": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "cards"
+      ],
+      "additionalProperties": false,
+      "description": "Full deck composition. May be null when the adapter cannot see it (a board screenshot does not show the deck); the advisor must degrade gracefully rather than guess.",
+      "properties": {
+        "total": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "remaining": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/card"
+          }
+        }
+      }
+    },
+    "current_hand": {
+      "type": "array",
+      "description": "Cards in hand right now. Same card objects as deck.cards, location 'hand'.",
+      "items": {
+        "$ref": "#/$defs/card"
+      },
+      "default": []
+    },
+    "blind": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "small",
+            "big",
+            "boss"
+          ]
+        },
+        "key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requirement": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "current_score": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "effect_description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "face_down_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "shop": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reroll_cost": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/shop_item"
+          },
+          "default": []
+        },
+        "voucher": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "key",
+            "price"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "price": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "packs": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "price"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "price": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "pack_open": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "key",
+        "choices_allowed",
+        "cards"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "choices_allowed": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Read from the game, never inferred from pack size. Jumbo packs hold more cards but still allow one pick; Mega allows two."
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "candidate_plays": {
+      "type": "array",
+      "description": "Optional. When the writer (the Lua mod) can compute scores itself, it emits them here and core/scorer is bypassed. Absent means the Python scorer must compute them.",
+      "items": {
+        "$ref": "#/$defs/candidate_play"
+      }
+    },
+    "discard_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/discard_candidate"
+      }
+    }
+  },
+  "$defs": {
+    "hand_type": {
+      "enum": [
+        "high_card",
+        "pair",
+        "two_pair",
+        "three_of_a_kind",
+        "straight",
+        "flush",
+        "full_house",
+        "four_of_a_kind",
+        "straight_flush",
+        "five_of_a_kind",
+        "flush_house",
+        "flush_five"
+      ]
+    },
+    "hand_level": {
+      "type": "object",
+      "required": [
+        "level",
+        "chips",
+        "mult"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "chips": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mult": {
+          "type": "number",
+          "minimum": 0
+        },
+        "played": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "edition": {
+      "enum": [
+        "base",
+        "foil",
+        "holographic",
+        "polychrome",
+        "negative"
+      ]
+    },
+    "card_edition": {
+      "enum": [
+        "base",
+        "foil",
+        "holographic",
+        "polychrome"
+      ]
+    },
+    "enhancement": {
+      "enum": [
+        "none",
+        "gold",
+        "steel",
+        "glass",
+        "bonus",
+        "mult",
+        "wild",
+        "lucky",
+        "stone"
+      ]
+    },
+    "seal": {
+      "enum": [
+        "none",
+        "red",
+        "blue",
+        "gold",
+        "purple"
+      ]
+    },
+    "suit": {
+      "enum": [
+        "hearts",
+        "diamonds",
+        "clubs",
+        "spades"
+      ]
+    },
+    "rank": {
+      "enum": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "J",
+        "Q",
+        "K",
+        "A"
+      ],
+      "description": "Stone cards have no rank and set this to null. They will not appear in rank tallies, so deck.total may exceed the sum of rank counts."
+    },
+    "card": {
+      "type": "object",
+      "required": [
+        "rank",
+        "suit"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Stable per-card identity where the adapter can supply one. Lets the same physical card be tracked across states."
+        },
+        "rank": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/rank"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "suit": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/suit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Null for stone cards. A wild card keeps its printed suit here and counts as every suit for flush purposes - suit totals may legitimately exceed the ranked card count."
+        },
+        "enhancement": {
+          "$ref": "#/$defs/enhancement",
+          "default": "none"
+        },
+        "edition": {
+          "$ref": "#/$defs/card_edition",
+          "default": "base"
+        },
+        "seal": {
+          "$ref": "#/$defs/seal",
+          "default": "none"
+        },
+        "location": {
+          "enum": [
+            "deck",
+            "hand",
+            "played",
+            "discarded"
+          ],
+          "default": "deck"
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "low"
+          ],
+          "default": "high",
+          "description": "Vision adapter marks uncertain reads low; the advisor must not treat a low-confidence field as fact."
+        }
+      }
+    },
+    "joker": {
+      "type": "object",
+      "required": [
+        "position",
+        "key"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Left-to-right slot index. Joker evaluation order is by this field."
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "edition": {
+          "$ref": "#/$defs/edition",
+          "default": "base"
+        },
+        "stickers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "eternal",
+              "perishable",
+              "rental"
+            ]
+          },
+          "default": []
+        },
+        "sell_value": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "internal_state": {
+          "type": "object",
+          "additionalProperties": true,
+          "default": {},
+          "properties": {
+            "counter": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "description": "The joker's own accumulated value where it has one (Ride the Bus mult, Green Joker mult, Rocket money). Read from the game; never inferred."
+            }
+          }
+        },
+        "current_contribution": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "description": "What this joker is producing RIGHT NOW, not what its description says. Joker Stencil reporting xmult 1 while five slots are full is correct and is exactly the fact the advisor must be handed rather than asked to infer.",
+          "properties": {
+            "chips": {
+              "type": "number",
+              "default": 0
+            },
+            "mult": {
+              "type": "number",
+              "default": 0
+            },
+            "xmult": {
+              "type": "number",
+              "default": 1
+            }
+          }
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "low"
+          ],
+          "default": "high"
+        }
+      }
+    },
+    "consumable": {
+      "type": "object",
+      "required": [
+        "key"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "type": {
+          "enum": [
+            "planet",
+            "tarot",
+            "spectral"
+          ]
+        },
+        "sell_value": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "shop_item": {
+      "type": "object",
+      "required": [
+        "slot",
+        "kind",
+        "key",
+        "price"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "slot": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "kind": {
+          "enum": [
+            "joker",
+            "consumable",
+            "playing_card"
+          ]
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "price": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "edition": {
+          "$ref": "#/$defs/edition",
+          "default": "base"
+        },
+        "stickers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "eternal",
+              "perishable",
+              "rental"
+            ]
+          },
+          "default": []
+        }
+      }
+    },
+    "candidate_play": {
+      "type": "object",
+      "required": [
+        "cards",
+        "hand_type",
+        "chips",
+        "mult",
+        "score"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cards": {
+          "type": "array",
+          "description": "Indices into current_hand.",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 1,
+          "maxItems": 5
+        },
+        "hand_type": {
+          "$ref": "#/$defs/hand_type"
+        },
+        "chips": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mult": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "clears_blind": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "gold_forfeited": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "exact": {
+          "type": "boolean",
+          "default": true,
+          "description": "False when some effect in play could not be modelled exactly. A non-exact score must never be quoted to the user as a fact."
+        },
+        "unmodelled": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Keys of jokers/effects the scorer could not model. Non-empty implies exact=false."
+        },
+        "steel_forfeited": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Steel cards given up by playing them. A Steel card multiplies Mult by 1.5 only while HELD in hand, so playing one forfeits that entirely. Part of the section 4 tiebreak alongside gold_forfeited."
+        }
+      }
+    },
+    "discard_candidate": {
+      "type": "object",
+      "required": [
+        "discard",
+        "keep",
+        "floor_score"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "discard": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 1,
+          "maxItems": 5
+        },
+        "keep": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "floor_score": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Best play available from the kept cards alone with no draw - the guaranteed outcome if every draw misses."
+        },
+        "floor_hand_type": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hand_type"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_score": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Monte Carlo mean over sampled draws. Null in v1 - draw evaluation is deliberately deferred."
+        },
+        "p_clears_blind": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "samples": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "exact": {
+          "type": "boolean",
+          "default": true
+        },
+        "unmodelled": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "floor_play": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "description": "Indices (into current_hand) of the best play available from the kept cards. Tells the advisor what the floor actually consists of, not just its value."
+        }
+      }
+    }
+  }
+}

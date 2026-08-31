@@ -1,0 +1,96 @@
+{
+  "name": "shop_with_eternal_and_perishable",
+  "provenance": "hand_computed",
+  "arithmetic": null,
+  "note": "Shop phase. Exercises ingest, validation and the advisor rather than the scorer: an Eternal joker cannot be sold, a Perishable one expires, and the $9 Cavendish is unaffordable at $6. There is no hand to score.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "shop",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 6,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 0,
+      "discards_remaining": 0,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [
+      {
+        "position": 0,
+        "key": "j_gros_michel",
+        "sell_value": 3,
+        "stickers": [
+          "eternal"
+        ]
+      },
+      {
+        "position": 1,
+        "key": "j_joker",
+        "sell_value": 3
+      }
+    ],
+    "consumables": [],
+    "hand_levels": {},
+    "current_hand": [],
+    "blind": null,
+    "shop": {
+      "reroll_cost": 5,
+      "items": [
+        {
+          "slot": 0,
+          "kind": "joker",
+          "key": "j_cavendish",
+          "name": "Cavendish",
+          "price": 9,
+          "edition": "base",
+          "stickers": []
+        },
+        {
+          "slot": 1,
+          "kind": "joker",
+          "key": "j_blue_joker",
+          "name": "Blue Joker",
+          "price": 5,
+          "edition": "base",
+          "stickers": [
+            "perishable"
+          ]
+        },
+        {
+          "slot": 2,
+          "kind": "consumable",
+          "key": "c_sun",
+          "name": "The Sun",
+          "price": 3
+        }
+      ],
+      "voucher": {
+        "key": "v_blank",
+        "name": "Blank",
+        "price": 10
+      },
+      "packs": [
+        {
+          "key": "p_celestial_jumbo",
+          "name": "Jumbo Celestial Pack",
+          "price": 6
+        }
+      ]
+    }
+  },
+  "cards_played": null,
+  "expected_chips": null,
+  "expected_mult": null,
+  "expected_score": null
+}

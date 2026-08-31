@@ -1,0 +1,349 @@
+{
+  "_doc": {
+    "purpose": "Static joker table. Every entry carries a plain-English `description` because beginner mode (spec 5a) must be able to say what a joker does without the player remembering. Entries additionally carry a declarative `effects` list where the joker's scoring contribution can be modelled exactly.",
+    "honesty_rule": "A joker with `unmodelled: true`, or one whose effect needs a `counter` the adapter did not supply, does not silently score as zero. It makes the whole candidate play `exact: false` and lands in `unmodelled`, and the advisor is told it may not quote that number. Guessing a joker value is the exact failure the architecture exists to prevent (spec section 1).",
+    "counter_convention": "`internal_state.counter` is the number the game itself displays on the joker right now. For an Xmult scaling joker (Obelisk, Hologram, Vampire, ...) that displayed number IS the current Xmult, so the effect reads `{\"from\": \"counter\"}` with no scaling constant. This deliberately keeps per-joker growth rates out of this file: a growth constant transcribed wrong is an invented number, and the adapter can always read the true current value from the game.",
+    "effect_grammar": {
+      "when": "independent | on_scored | on_held | retrigger_scored | retrigger_held",
+      "if": "predicate. For on_scored/on_held: suit, rank, rank_class (face|number|even|odd|ace), enhancement, seal, first_only. For independent: hand_contains, max_played, discards_remaining, hands_remaining, all_held_suit.",
+      "chips|mult|xmult": "a number, or {from: <source>, scale: s, base: b} meaning base + scale * source",
+      "sources": "counter, deck_remaining, money, hands_remaining, discards_remaining, joker_count, empty_joker_slots_incl_self, hand_played_count, steel_in_deck, enhanced_in_deck",
+      "times": "for retrigger_* only: how many extra times the matching card fires"
+    },
+    "flags": "Some jokers change hand DETECTION rather than scoring (four_fingers, shortcut, smeared, pareidolia, splash). Those carry a `flag` instead of `effects`."
+  },
+
+  "jokers": [
+    { "key": "j_joker", "name": "Joker", "rarity": "common", "cost": 2,
+      "description": "Gives +4 Mult.",
+      "effects": [{ "when": "independent", "mult": 4 }] },
+
+    { "key": "j_greedy_joker", "name": "Greedy Joker", "rarity": "common", "cost": 5,
+      "description": "Each played Diamond gives +3 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "suit": ["diamonds"] }, "mult": 3 }] },
+
+    { "key": "j_lusty_joker", "name": "Lusty Joker", "rarity": "common", "cost": 5,
+      "description": "Each played Heart gives +3 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "suit": ["hearts"] }, "mult": 3 }] },
+
+    { "key": "j_wrathful_joker", "name": "Wrathful Joker", "rarity": "common", "cost": 5,
+      "description": "Each played Spade gives +3 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "suit": ["spades"] }, "mult": 3 }] },
+
+    { "key": "j_gluttonous_joker", "name": "Gluttonous Joker", "rarity": "common", "cost": 5,
+      "description": "Each played Club gives +3 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "suit": ["clubs"] }, "mult": 3 }] },
+
+    { "key": "j_jolly", "name": "Jolly Joker", "rarity": "common", "cost": 3,
+      "description": "Gives +8 Mult if your played hand contains a Pair.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["pair"] }, "mult": 8 }] },
+
+    { "key": "j_zany", "name": "Zany Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +12 Mult if your played hand contains a Three of a Kind.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["three_of_a_kind"] }, "mult": 12 }] },
+
+    { "key": "j_mad", "name": "Mad Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +10 Mult if your played hand contains a Two Pair.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["two_pair"] }, "mult": 10 }] },
+
+    { "key": "j_crazy", "name": "Crazy Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +12 Mult if your played hand contains a Straight.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["straight"] }, "mult": 12 }] },
+
+    { "key": "j_droll", "name": "Droll Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +10 Mult if your played hand contains a Flush.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["flush"] }, "mult": 10 }] },
+
+    { "key": "j_sly", "name": "Sly Joker", "rarity": "common", "cost": 3,
+      "description": "Gives +50 Chips if your played hand contains a Pair.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["pair"] }, "chips": 50 }] },
+
+    { "key": "j_wily", "name": "Wily Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +100 Chips if your played hand contains a Three of a Kind.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["three_of_a_kind"] }, "chips": 100 }] },
+
+    { "key": "j_clever", "name": "Clever Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +80 Chips if your played hand contains a Two Pair.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["two_pair"] }, "chips": 80 }] },
+
+    { "key": "j_devious", "name": "Devious Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +100 Chips if your played hand contains a Straight.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["straight"] }, "chips": 100 }] },
+
+    { "key": "j_crafty", "name": "Crafty Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +80 Chips if your played hand contains a Flush.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["flush"] }, "chips": 80 }] },
+
+    { "key": "j_half", "name": "Half Joker", "rarity": "common", "cost": 5,
+      "description": "Gives +20 Mult if your played hand has 3 or fewer cards.",
+      "effects": [{ "when": "independent", "if": { "max_played": 3 }, "mult": 20 }] },
+
+    { "key": "j_stencil", "name": "Joker Stencil", "rarity": "uncommon", "cost": 8,
+      "description": "Multiplies your Mult by 1 for each empty Joker slot you have. Joker Stencil's own slot counts as empty.",
+      "effects": [{ "when": "independent", "xmult": { "from": "empty_joker_slots_incl_self" } }] },
+
+    { "key": "j_four_fingers", "name": "Four Fingers", "rarity": "uncommon", "cost": 7,
+      "description": "Flushes and Straights can be made with only 4 cards instead of 5.",
+      "flag": "four_fingers" },
+
+    { "key": "j_mime", "name": "Mime", "rarity": "uncommon", "cost": 5,
+      "description": "Triggers the ability of every card held in hand a second time.",
+      "effects": [{ "when": "retrigger_held", "times": 1 }] },
+
+    { "key": "j_credit_card", "name": "Credit Card", "rarity": "common", "cost": 1,
+      "description": "Lets you go up to -$20 in debt. Has no effect on scoring.",
+      "effects": [] },
+
+    { "key": "j_banner", "name": "Banner", "rarity": "common", "cost": 5,
+      "description": "Gives +30 Chips for each discard you still have remaining.",
+      "effects": [{ "when": "independent", "chips": { "from": "discards_remaining", "scale": 30 } }] },
+
+    { "key": "j_mystic_summit", "name": "Mystic Summit", "rarity": "common", "cost": 5,
+      "description": "Gives +15 Mult when you have 0 discards remaining.",
+      "effects": [{ "when": "independent", "if": { "discards_remaining": 0 }, "mult": 15 }] },
+
+    { "key": "j_misprint", "name": "Misprint", "rarity": "common", "cost": 4,
+      "description": "Gives a random amount of Mult between +0 and +23.",
+      "unmodelled": true, "reason": "Random per trigger. There is no exact value to compute." },
+
+    { "key": "j_raised_fist", "name": "Raised Fist", "rarity": "common", "cost": 5,
+      "description": "Adds double the rank of the lowest-ranked card held in your hand to Mult.",
+      "effects": [{ "when": "independent", "special": "raised_fist" }] },
+
+    { "key": "j_fibonacci", "name": "Fibonacci", "rarity": "uncommon", "cost": 8,
+      "description": "Each played Ace, 2, 3, 5, or 8 gives +8 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank": ["A", "2", "3", "5", "8"] }, "mult": 8 }] },
+
+    { "key": "j_steel_joker", "name": "Steel Joker", "rarity": "uncommon", "cost": 7,
+      "description": "Multiplies Mult by an extra 0.2 for each Steel Card in your full deck.",
+      "effects": [{ "when": "independent", "xmult": { "from": "steel_in_deck", "scale": 0.2, "base": 1 } }] },
+
+    { "key": "j_scary_face", "name": "Scary Face", "rarity": "common", "cost": 4,
+      "description": "Each played face card (Jack, Queen or King) gives +30 Chips when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank_class": "face" }, "chips": 30 }] },
+
+    { "key": "j_abstract_joker", "name": "Abstract Joker", "rarity": "common", "cost": 4,
+      "description": "Gives +3 Mult for each Joker card you are holding.",
+      "effects": [{ "when": "independent", "mult": { "from": "joker_count", "scale": 3 } }] },
+
+    { "key": "j_gros_michel", "name": "Gros Michel", "rarity": "common", "cost": 5,
+      "description": "Gives +15 Mult. At the end of each round there is a 1 in 6 chance this card is destroyed.",
+      "effects": [{ "when": "independent", "mult": 15 }] },
+
+    { "key": "j_even_steven", "name": "Even Steven", "rarity": "common", "cost": 4,
+      "description": "Each played card with an even rank (10, 8, 6, 4, 2) gives +4 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank_class": "even" }, "mult": 4 }] },
+
+    { "key": "j_odd_todd", "name": "Odd Todd", "rarity": "common", "cost": 4,
+      "description": "Each played card with an odd rank (Ace, 9, 7, 5, 3) gives +31 Chips when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank_class": "odd" }, "chips": 31 }] },
+
+    { "key": "j_scholar", "name": "Scholar", "rarity": "common", "cost": 4,
+      "description": "Each played Ace gives +20 Chips and +4 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank": ["A"] }, "chips": 20, "mult": 4 }] },
+
+    { "key": "j_supernova", "name": "Supernova", "rarity": "common", "cost": 5,
+      "description": "Adds the number of times you have played this poker hand this run to Mult.",
+      "effects": [{ "when": "independent", "mult": { "from": "hand_played_count" } }] },
+
+    { "key": "j_ride_the_bus", "name": "Ride the Bus", "rarity": "common", "cost": 6,
+      "description": "Gains +1 Mult for every consecutive hand played that contains no face card. Resets when a face card is scored.",
+      "effects": [{ "when": "independent", "mult": { "from": "counter" } }] },
+
+    { "key": "j_green_joker", "name": "Green Joker", "rarity": "common", "cost": 4,
+      "description": "Gains +1 Mult per hand played, and loses 1 Mult per discard.",
+      "effects": [{ "when": "independent", "mult": { "from": "counter" } }] },
+
+    { "key": "j_photograph", "name": "Photograph", "rarity": "common", "cost": 5,
+      "description": "The first face card (Jack, Queen or King) you play doubles your Mult when it scores.",
+      "effects": [{ "when": "on_scored", "if": { "rank_class": "face", "first_only": true }, "xmult": 2 }] },
+
+    { "key": "j_baron", "name": "Baron", "rarity": "rare", "cost": 8,
+      "description": "Each King you are holding in hand multiplies your Mult by 1.5.",
+      "effects": [{ "when": "on_held", "if": { "rank": ["K"] }, "xmult": 1.5 }] },
+
+    { "key": "j_blue_joker", "name": "Blue Joker", "rarity": "common", "cost": 5,
+      "description": "Gives +2 Chips for every card still remaining in your deck.",
+      "effects": [{ "when": "independent", "chips": { "from": "deck_remaining", "scale": 2 } }] },
+
+    { "key": "j_bull", "name": "Bull", "rarity": "uncommon", "cost": 6,
+      "description": "Gives +2 Chips for each dollar you have.",
+      "effects": [{ "when": "independent", "chips": { "from": "money", "scale": 2 } }] },
+
+    { "key": "j_smeared_joker", "name": "Smeared Joker", "rarity": "uncommon", "cost": 7,
+      "description": "Hearts and Diamonds count as the same suit, and Spades and Clubs count as the same suit.",
+      "flag": "smeared" },
+
+    { "key": "j_pareidolia", "name": "Pareidolia", "rarity": "uncommon", "cost": 5,
+      "description": "Every card counts as a face card.",
+      "flag": "pareidolia" },
+
+    { "key": "j_splash", "name": "Splash", "rarity": "common", "cost": 3,
+      "description": "Every played card counts toward the score, not just the ones making up the poker hand.",
+      "flag": "splash" },
+
+    { "key": "j_shortcut", "name": "Shortcut", "rarity": "uncommon", "cost": 7,
+      "description": "Straights can be made with gaps of one rank (for example 10, 8, 6, 5, 3).",
+      "flag": "shortcut" },
+
+    { "key": "j_blackboard", "name": "Blackboard", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies your Mult by 3 if every card left in your hand is a Spade or a Club.",
+      "effects": [{ "when": "independent", "if": { "all_held_suit": ["spades", "clubs"] }, "xmult": 3 }] },
+
+    { "key": "j_hack", "name": "Hack", "rarity": "uncommon", "cost": 6,
+      "description": "Triggers each played 2, 3, 4 or 5 a second time.",
+      "effects": [{ "when": "retrigger_scored", "if": { "rank": ["2", "3", "4", "5"] }, "times": 1 }] },
+
+    { "key": "j_sock_and_buskin", "name": "Sock and Buskin", "rarity": "uncommon", "cost": 6,
+      "description": "Triggers each played face card a second time.",
+      "effects": [{ "when": "retrigger_scored", "if": { "rank_class": "face" }, "times": 1 }] },
+
+    { "key": "j_hanging_chad", "name": "Hanging Chad", "rarity": "common", "cost": 4,
+      "description": "Triggers the first card of your scored hand two extra times.",
+      "effects": [{ "when": "retrigger_scored", "if": { "first_only": true }, "times": 2 }] },
+
+    { "key": "j_dusk", "name": "Dusk", "rarity": "uncommon", "cost": 5,
+      "description": "Triggers every played card a second time, but only on the final hand of the round.",
+      "effects": [{ "when": "retrigger_scored", "if": { "hands_remaining": 1 }, "times": 1 }] },
+
+    { "key": "j_the_duo", "name": "The Duo", "rarity": "rare", "cost": 8,
+      "description": "Multiplies your Mult by 2 if your played hand contains a Pair.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["pair"] }, "xmult": 2 }] },
+
+    { "key": "j_the_trio", "name": "The Trio", "rarity": "rare", "cost": 8,
+      "description": "Multiplies your Mult by 3 if your played hand contains a Three of a Kind.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["three_of_a_kind"] }, "xmult": 3 }] },
+
+    { "key": "j_the_family", "name": "The Family", "rarity": "rare", "cost": 8,
+      "description": "Multiplies your Mult by 4 if your played hand contains a Four of a Kind.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["four_of_a_kind"] }, "xmult": 4 }] },
+
+    { "key": "j_the_order", "name": "The Order", "rarity": "rare", "cost": 8,
+      "description": "Multiplies your Mult by 3 if your played hand contains a Straight.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["straight"] }, "xmult": 3 }] },
+
+    { "key": "j_the_tribe", "name": "The Tribe", "rarity": "rare", "cost": 8,
+      "description": "Multiplies your Mult by 2 if your played hand contains a Flush.",
+      "effects": [{ "when": "independent", "if": { "hand_contains": ["flush"] }, "xmult": 2 }] },
+
+    { "key": "j_triboulet", "name": "Triboulet", "rarity": "legendary", "cost": 20,
+      "description": "Each played King or Queen multiplies your Mult by 2 when it scores.",
+      "effects": [{ "when": "on_scored", "if": { "rank": ["K", "Q"] }, "xmult": 2 }] },
+
+    { "key": "j_smiley_face", "name": "Smiley Face", "rarity": "common", "cost": 4,
+      "description": "Each played face card gives +5 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank_class": "face" }, "mult": 5 }] },
+
+    { "key": "j_walkie_talkie", "name": "Walkie Talkie", "rarity": "common", "cost": 4,
+      "description": "Each played 10 or 4 gives +10 Chips and +4 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "rank": ["10", "4"] }, "chips": 10, "mult": 4 }] },
+
+    { "key": "j_arrowhead", "name": "Arrowhead", "rarity": "uncommon", "cost": 7,
+      "description": "Each played Spade gives +50 Chips when scored.",
+      "effects": [{ "when": "on_scored", "if": { "suit": ["spades"] }, "chips": 50 }] },
+
+    { "key": "j_onyx_agate", "name": "Onyx Agate", "rarity": "uncommon", "cost": 7,
+      "description": "Each played Club gives +7 Mult when scored.",
+      "effects": [{ "when": "on_scored", "if": { "suit": ["clubs"] }, "mult": 7 }] },
+
+    { "key": "j_stuntman", "name": "Stuntman", "rarity": "rare", "cost": 7,
+      "description": "Gives +250 Chips, but reduces your hand size by 2.",
+      "effects": [{ "when": "independent", "chips": 250 }] },
+
+    { "key": "j_cavendish", "name": "Cavendish", "rarity": "common", "cost": 4,
+      "description": "Multiplies your Mult by 3. At the end of each round there is a 1 in 1000 chance this card is destroyed.",
+      "effects": [{ "when": "independent", "xmult": 3 }] },
+
+    { "key": "j_ice_cream", "name": "Ice Cream", "rarity": "common", "cost": 5,
+      "description": "Gives +100 Chips, and loses 5 Chips after every hand you play.",
+      "effects": [{ "when": "independent", "chips": { "from": "counter" } }] },
+
+    { "key": "j_popcorn", "name": "Popcorn", "rarity": "common", "cost": 5,
+      "description": "Gives +20 Mult, and loses 4 Mult after every round.",
+      "effects": [{ "when": "independent", "mult": { "from": "counter" } }] },
+
+    { "key": "j_wee_joker", "name": "Wee Joker", "rarity": "rare", "cost": 8,
+      "description": "Gains +8 Chips every time a 2 is played and scores.",
+      "effects": [{ "when": "independent", "chips": { "from": "counter" } }] },
+
+    { "key": "j_castle", "name": "Castle", "rarity": "uncommon", "cost": 6,
+      "description": "Gains +3 Chips for each discarded card of a particular suit. The suit changes every round.",
+      "effects": [{ "when": "independent", "chips": { "from": "counter" } }] },
+
+    { "key": "j_obelisk", "name": "Obelisk", "rarity": "rare", "cost": 8,
+      "description": "Multiplies Mult by an extra 0.2 for every consecutive hand you play that is not your most-played poker hand. Resets when you play your most-played hand.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_hologram", "name": "Hologram", "rarity": "uncommon", "cost": 7,
+      "description": "Multiplies Mult by an extra 0.25 every time you add a playing card to your deck.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_vampire", "name": "Vampire", "rarity": "uncommon", "cost": 7,
+      "description": "Multiplies Mult by an extra 0.1 for each scored card with an enhancement, and removes that enhancement.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_lucky_cat", "name": "Lucky Cat", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies Mult by an extra 0.25 every time a Lucky card successfully triggers.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_madness", "name": "Madness", "rarity": "uncommon", "cost": 7,
+      "description": "When you select a Small or Big Blind, multiplies Mult by an extra 0.5 and destroys a random Joker.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_constellation", "name": "Constellation", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies Mult by an extra 0.1 every time you use a Planet card.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_campfire", "name": "Campfire", "rarity": "rare", "cost": 9,
+      "description": "Multiplies Mult by an extra 0.25 for each card you sell. Resets when a Boss Blind is defeated.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_throwback", "name": "Throwback", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies Mult by an extra 0.25 for each Blind you have skipped this run.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_glass_joker", "name": "Glass Joker", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies Mult by an extra 0.75 for every Glass Card that has been destroyed.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_ramen", "name": "Ramen", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies Mult by 2, but loses 0.01 of that multiplier for every card you discard.",
+      "effects": [{ "when": "independent", "xmult": { "from": "counter" } }] },
+
+    { "key": "j_blueprint", "name": "Blueprint", "rarity": "rare", "cost": 10,
+      "description": "Copies the ability of the Joker directly to its right.",
+      "unmodelled": true, "reason": "Copy semantics, and Blueprint/Brainstorm chain ordering, are listed as unverified in spec section 9. Modelling them from assumption is exactly what that section forbids." },
+
+    { "key": "j_brainstorm", "name": "Brainstorm", "rarity": "rare", "cost": 10,
+      "description": "Copies the ability of the leftmost Joker.",
+      "unmodelled": true, "reason": "See j_blueprint. Chain ordering unverified (spec section 9)." },
+
+    { "key": "j_card_sharp", "name": "Card Sharp", "rarity": "uncommon", "cost": 6,
+      "description": "Multiplies your Mult by 3 if this poker hand has already been played this round.",
+      "unmodelled": true, "reason": "Needs per-round hand history, which the canonical state does not carry." },
+
+    { "key": "j_ancient_joker", "name": "Ancient Joker", "rarity": "rare", "cost": 8,
+      "description": "Each played card of a particular suit multiplies your Mult by 1.5. The suit changes every round.",
+      "unmodelled": true, "reason": "The active suit is per-round state the canonical schema does not carry." },
+
+    { "key": "j_bloodstone", "name": "Bloodstone", "rarity": "uncommon", "cost": 7,
+      "description": "Each played Heart has a 1 in 2 chance to multiply your Mult by 1.5.",
+      "unmodelled": true, "reason": "Random per trigger." },
+
+    { "key": "j_8_ball", "name": "8 Ball", "rarity": "common", "cost": 5,
+      "description": "Each played 8 has a 1 in 4 chance to create a Tarot card. No scoring effect.",
+      "effects": [] },
+
+    { "key": "j_business_card", "name": "Business Card", "rarity": "common", "cost": 4,
+      "description": "Each played face card has a 1 in 2 chance to give $2. No scoring effect.",
+      "effects": [] },
+
+    { "key": "j_rough_gem", "name": "Rough Gem", "rarity": "uncommon", "cost": 7,
+      "description": "Each played Diamond gives $1 when scored. No scoring effect.",
+      "effects": [] },
+
+    { "key": "j_delayed_gratification", "name": "Delayed Gratification", "rarity": "common", "cost": 4,
+      "description": "Gives $2 per discard if you use no discards by the end of the round. No scoring effect.",
+      "effects": [] }
+  ]
+}

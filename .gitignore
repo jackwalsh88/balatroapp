@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Runtime artifacts. The cache is reproducible and the log is per-player data;
+# neither belongs in version control.
+cache/
+logs/
+.balatro-session.json
+.pytest_cache/

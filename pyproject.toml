@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "balatro-advisor"
+version = "0.1.0"
+description = "Reads Balatro game state, computes scores exactly, and advises on them."
+requires-python = ">=3.10"
+dependencies = [
+    "jsonschema>=4.0",
+]
+
+[project.optional-dependencies]
+# The advisor runs without this: the offline stub provider takes over when no
+# model is reachable, and the whole test suite runs on it.
+llm = ["anthropic>=1.0"]
+dev = ["pytest>=8.0", "anthropic>=1.0"]
+
+[project.scripts]
+balatro-advisor = "balatro_advisor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+balatro_advisor = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -1,0 +1,83 @@
+{
+  "name": "lower_hand_outscores_higher",
+  "provenance": "hand_computed",
+  "counterintuitive": "The Flush is the better poker hand and the worse play. A level 8 Pair (115 x 9) beats a level 1 Flush (35 x 4) by nearly 5x, because hand LEVEL dominates hand RANK once one hand has been levelled. An implementation that ranks by poker-hand strength instead of by computed score passes every other fixture and fails this one.",
+  "arithmetic": "Pair at level 8 = 10 + 7*15 = 115 chips, 2 + 7*1 = 9 mult. Scoring cards AH(11) + AS(11) = 22. 137 x 9 = 1233. Flush at level 1 = 35 chips, 4 mult. Scoring cards AH(11) 5H(5) 8H(8) 9H(9) 2H(2) = 35. 70 x 4 = 280. The Pair wins 1233 to 280.",
+  "state_before": {
+    "schema_version": 1,
+    "seq": 1,
+    "source": "manual",
+    "captured_at": null,
+    "phase": "playing",
+    "run": {
+      "ante": 5,
+      "ante_max": 8,
+      "round": 13,
+      "money": 45,
+      "deck_name": "Blue Deck",
+      "stake": "white",
+      "vouchers_redeemed": []
+    },
+    "resources": {
+      "hands_remaining": 3,
+      "discards_remaining": 2,
+      "hand_size": 8,
+      "joker_slots_total": 5,
+      "consumable_slots_total": 2
+    },
+    "jokers": [],
+    "consumables": [],
+    "hand_levels": {
+      "pair": {
+        "level": 8,
+        "chips": 115,
+        "mult": 9,
+        "played": 22
+      }
+    },
+    "current_hand": [
+      {
+        "rank": "A",
+        "suit": "hearts"
+      },
+      {
+        "rank": "A",
+        "suit": "spades"
+      },
+      {
+        "rank": "5",
+        "suit": "hearts"
+      },
+      {
+        "rank": "8",
+        "suit": "hearts"
+      },
+      {
+        "rank": "9",
+        "suit": "hearts"
+      },
+      {
+        "rank": "2",
+        "suit": "hearts"
+      }
+    ],
+    "blind": {
+      "type": "small",
+      "key": "bl_small",
+      "name": "Small Blind",
+      "requirement": 3000,
+      "current_score": 0
+    }
+  },
+  "cards_played": [
+    0,
+    1
+  ],
+  "expected_chips": 137,
+  "expected_mult": 9,
+  "expected_score": 1233,
+  "also_assert_top_ranked_play": [
+    0,
+    1
+  ]
+}

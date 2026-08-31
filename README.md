@@ -66,10 +66,12 @@ All **150** vanilla jokers are in the table by name and rarity, so a joker is
 never an unrecognised key. **77** have modelled effects; the remaining 67 are
 awaiting effect data from `balatrowiki.org` (see
 [`data/sources/wiki/README.md`](data/sources/wiki/README.md)). Anything not
-modelled is **not silently scored as zero.** Anything the scorer cannot compute — an unknown
-joker, a Blueprint copy chain (ordering unverified, spec §9), a random trigger
-like Misprint or a Lucky card, or a scaling joker whose counter the adapter did
-not read — sets `exact: false` and lands in `unmodelled`:
+modelled is **not silently scored as zero.**
+
+Anything the scorer cannot compute — a joker with no effect data yet, a
+Blueprint copy chain (ordering unverified, spec §9), or a scaling joker whose
+counter the adapter did not read — sets `exact: false` and lands in
+`unmodelled`:
 
 ```
 = floor(160 x 11) = 1760

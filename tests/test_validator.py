@@ -334,5 +334,127 @@ def test_legal_but_strategically_terrible_advice_still_passes(playing, candidate
         playing, candidates,
     )
     # Throwing the hand away is a catastrophic recommendation and entirely
-    # legal. Nothing here objects to it, and nothing here should.
+    # legal. Nothing here BLOCKS it, and nothing here should - spec 5d puts
+    # judgment in the decision log, not the validator.
     assert report.ok
+    # It is still surfaced, because the scorer can see a strictly better play.
+    assert any(f.check == "consistency.dominated_play" for f in report.flags)
+
+
+# -- the scorer checking the model ------------------------------------------
+#
+# These use the deterministic scorer as an oracle against the model's CLAIMS,
+# not just its numbers. They matter most on the cheap open-weights tier, where
+# a confident wrong sentence is the likely failure.
+
+
+def test_claiming_the_blind_is_cleared_when_it_is_not(state_factory):
+    state = schema.load_state(state_factory(
+        blind={"type": "small", "key": "bl_small", "requirement": 999999}
+    ))
+    cands = enumerate_module.enumerate_plays(state)
+    report = check(
+        advice(reasoning="This comfortably clears the blind."), state, cands
+    )
+    assert any(f.check == "consistency.false_clear_claim" for f in report.failures)
+
+
+def test_saying_it_does_NOT_clear_is_not_mistaken_for_claiming_it_does(state_factory):
+    """Negation awareness. Without it the honest answer trips the check."""
+    state = schema.load_state(state_factory(
+        blind={"type": "small", "key": "bl_small", "requirement": 999999}
+    ))
+    cands = enumerate_module.enumerate_plays(state)
+    for phrasing in (
+        "This does not clear the blind, but it is the best start.",
+        "It won't clear the blind on its own.",
+        "This falls short of the requirement.",
+    ):
+        report = check(advice(reasoning=phrasing), state, cands)
+        assert not any(
+            f.check == "consistency.false_clear_claim" for f in report.failures
+        ), phrasing
+
+
+def test_a_true_clear_claim_passes(playing, candidates):
+    top = candidates[0]
+    assert top["clears_blind"] is True
+    report = check(
+        advice(
+            decision=f"Play cards {top['cards']}.",
+            reasoning="This clears the blind.",
+            action={"kind": "play", "cards": top["cards"]},
+        ),
+        playing, candidates,
+    )
+    assert not any("false_clear" in f.check for f in report.failures)
+
+
+def test_calling_a_lesser_play_the_highest_scoring_one(playing, candidates):
+    worst = min(candidates, key=lambda c: c["score"])
+    report = check(
+        advice(
+            decision=f"Play cards {worst['cards']}.",
+            reasoning=f"At {worst['score']} this is the highest-scoring play available.",
+            action={"kind": "play", "cards": worst["cards"]},
+        ),
+        playing, candidates,
+    )
+    assert any(f.check == "consistency.false_superlative" for f in report.failures)
+
+
+def test_the_superlative_is_fine_when_it_is_true(playing, candidates):
+    top = max(candidates, key=lambda c: c["score"])
+    report = check(
+        advice(
+            decision=f"Play cards {top['cards']}.",
+            reasoning=f"At {top['score']} this is the highest-scoring play available.",
+            action={"kind": "play", "cards": top["cards"]},
+        ),
+        playing, candidates,
+    )
+    assert not any("false_superlative" in f.check for f in report.failures)
+
+
+def test_a_dominated_play_is_flagged_not_blocked(playing, candidates):
+    """Spec 5d keeps judgment out of the validator, so this informs rather than blocks."""
+    worst = min(candidates, key=lambda c: c["score"])
+    report = check(
+        advice(
+            decision=f"Play cards {worst['cards']}.",
+            reasoning=f"It scores {worst['score']} and does not clear the blind.",
+            action={"kind": "play", "cards": worst["cards"]},
+        ),
+        playing, candidates,
+    )
+    assert report.ok, "a legal play must never be blocked on strategy grounds"
+    assert any(f.check == "consistency.dominated_play" for f in report.flags)
+
+
+def test_a_stated_tradeoff_suppresses_the_dominated_flag(playing, candidates):
+    """Taking a lower score to keep cards in hand is a real strategy, not an error."""
+    worst = min(candidates, key=lambda c: c["score"])
+    report = check(
+        advice(
+            decision=f"Play cards {worst['cards']}.",
+            reasoning=(
+                f"It scores {worst['score']} and does not clear the blind, but it "
+                f"keeps the Steel card in hand for the next hand."
+            ),
+            action={"kind": "play", "cards": worst["cards"]},
+        ),
+        playing, candidates,
+    )
+    assert not any(f.check == "consistency.dominated_play" for f in report.flags)
+
+
+def test_the_top_ranked_play_is_never_flagged_as_dominated(playing, candidates):
+    top = candidates[0]
+    report = check(
+        advice(
+            decision=f"Play cards {top['cards']}.",
+            action={"kind": "play", "cards": top["cards"]},
+        ),
+        playing, candidates,
+    )
+    assert not any(f.check == "consistency.dominated_play" for f in report.flags)

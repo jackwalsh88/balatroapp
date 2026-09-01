@@ -108,12 +108,32 @@ class Advisor:
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}, got {mode!r}")
 
-        candidates = enumerate_module.enumerate_plays(state, limit=_MAX_CANDIDATES)
+        # The prompt gets a shortlist - 218 candidates would swamp it - but the
+        # VALIDATOR gets every legal play. Validating against the shortlist
+        # silently forbids the model from ever recommending a lower-ranked
+        # play, which is a real strategy (keeping a Steel card in hand scores
+        # less now and more next hand) and would be rejected as "not
+        # enumerated" rather than considered.
+        all_candidates = enumerate_module.enumerate_plays(state)
+        shortlist = all_candidates[:_MAX_CANDIDATES]
         discards = enumerate_module.enumerate_discards(state, limit=_MAX_DISCARDS)
 
         advice, cache_hit, regenerated, fell_back, report = self._decide(
-            state, candidates, discards, question
+            state, shortlist, all_candidates, discards, question
         )
+
+        # Log the shortlist, plus the recommended play when it came from
+        # outside it, so predicted-vs-actual can still be resolved.
+        logged = list(shortlist)
+        action = advice.get("action") or {}
+        if action.get("kind") == "play":
+            cards = sorted(action.get("cards") or [])
+            if not any(sorted(c["cards"]) == cards for c in logged):
+                chosen = next(
+                    (c for c in all_candidates if sorted(c["cards"]) == cards), None
+                )
+                if chosen:
+                    logged.append(chosen)
 
         result = AdviceResult(
             decision=advice.get("decision", ""),
@@ -122,7 +142,7 @@ class Advisor:
             uncertain=advice.get("uncertain", ""),
             mode=mode,
             action=advice.get("action") or {"kind": "none"},
-            candidates=candidates,
+            candidates=logged,
             discards=discards,
             cache_hit=cache_hit,
             regenerated=regenerated,
@@ -144,7 +164,7 @@ class Advisor:
                 "alternatives": result.alternatives,
                 "uncertain": result.uncertain,
             }},
-            candidates=candidates,
+            candidates=logged,
             cache_hit=cache_hit,
             validation=result.findings + result.flags,
             provider=self.provider.name,
@@ -156,7 +176,8 @@ class Advisor:
     def _decide(
         self,
         state: dict[str, Any],
-        candidates: list[dict[str, Any]],
+        shortlist: list[dict[str, Any]],
+        all_candidates: list[dict[str, Any]],
         discards: list[dict[str, Any]],
         question: str | None,
     ) -> tuple[dict[str, Any], bool, bool, bool, validator.Report]:
@@ -171,9 +192,9 @@ class Advisor:
         if cache_hit:
             advice = parse.parse_advice(cached)
         else:
-            advice = self._call_stage1(state, candidates, discards, question)
+            advice = self._call_stage1(state, shortlist, discards, question)
 
-        report = self._validate(advice, state, candidates, discards)
+        report = self._validate(advice, state, all_candidates, discards)
 
         if report.ok:
             if not cache_hit:
@@ -182,16 +203,16 @@ class Advisor:
 
         # Regenerate once, with the failed checks appended as constraints.
         retry = self._call_stage1(
-            state, candidates, discards, question,
+            state, shortlist, discards, question,
             constraints=report.constraint_text(),
         )
-        retry_report = self._validate(retry, state, candidates, discards)
+        retry_report = self._validate(retry, state, all_candidates, discards)
         if retry_report.ok:
             self.cache.put(key, "decision", retry["raw"])
             return retry, cache_hit, True, False, retry_report
 
         # Failed twice. Never show it.
-        return self._fallback(candidates), cache_hit, True, True, retry_report
+        return self._fallback(shortlist), cache_hit, True, True, retry_report
 
     def _call_stage1(
         self,

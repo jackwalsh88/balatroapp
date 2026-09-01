@@ -306,11 +306,54 @@ def _check_arithmetic(
 # Consistency - the advice matches its own reasoning
 # --------------------------------------------------------------------------
 
+# Claiming the blind is beaten. The opposite of the shortfall check below: that
+# one catches silence about a shortfall, this catches asserting the reverse.
+_CLAIMS_IT_CLEARS = re.compile(
+    r"\b(clears?|beats?|meets?|exceeds?)\s+(the\s+)?(blind|requirement|target)\b"
+    r"|\benough to (clear|beat|meet)\b|\bwill clear\b|\bgets? you (there|over)\b",
+    re.I,
+)
+
+# Language that explains trading score away on purpose. Its presence turns a
+# dominated-play finding from an error into a judgment call.
+_TRADEOFF = re.compile(
+    r"\b(keep|keeps|keeping|hold|holds|holding|preserv\w+|sav\w+|next hand|"
+    r"later hand|remaining hand|steel|gold|set ?up|cycle|discard|draw)\b",
+    re.I,
+)
+
+# Superlatives specifically about SCORE. Deliberately narrow: "the best play"
+# can mean best strategically, but "the highest-scoring play" is a factual
+# claim the scorer can settle.
+_SCORE_SUPERLATIVE = re.compile(
+    r"\b(highest[- ]scoring|scores? the most|highest score|best score|"
+    r"top[- ]scoring|biggest score|most points|maximi[sz]es the score)\b",
+    re.I,
+)
+
 _ACKNOWLEDGES_SHORTFALL = re.compile(
     r"\b(not clear|won'?t clear|does not clear|doesn'?t clear|short of|falls short|"
     r"still need|next hand|remaining hand|two hands|chip away)\b",
     re.I,
 )
+
+
+# Negation, checked per sentence. Without it "does not clear the blind" reads
+# as a claim that it does - the exact failure this check exists to catch,
+# inverted.
+_NEGATED = re.compile(
+    r"\b(not|never|fails? to|unable|cannot|can'?t|won'?t|doesn'?t|does n'?t|"
+    r"short of|falls short|instead of)\b|n't\b",
+    re.I,
+)
+
+
+def _asserts(pattern: re.Pattern, text: str) -> bool:
+    """True when some sentence makes the claim WITHOUT negating it."""
+    for sentence in re.split(r"(?<=[.!?;])\s+", text):
+        if pattern.search(sentence) and not _NEGATED.search(sentence):
+            return True
+    return False
 
 
 def _check_consistency(
@@ -336,6 +379,64 @@ def _check_consistency(
                     f"the recommended play scores {match['score']} against a requirement "
                     f"of {(state.get('blind') or {}).get('requirement')} and does not clear "
                     f"the blind, but the advice does not say so",
+                )
+
+    # -- claims the scorer can settle outright --------------------------
+    if action.get("kind") == "play":
+        cards = sorted(action.get("cards") or [])
+        match = next((c for c in candidates if sorted(c["cards"]) == cards), None)
+        prose_all = " ".join(
+            str(advice.get(k) or "") for k in ("decision", "reasoning", "alternatives")
+        )
+
+        if match is not None:
+            # 1. Asserting the blind is cleared when the scorer says it is not.
+            if match.get("clears_blind") is False and _asserts(_CLAIMS_IT_CLEARS, prose_all):
+                report.fail(
+                    "consistency.false_clear_claim",
+                    f"the advice says this clears the blind, but {match['score']} is "
+                    f"short of the {(state.get('blind') or {}).get('requirement')} "
+                    f"required",
+                )
+
+            # 2. Calling it the highest-scoring play when it is not.
+            if _asserts(_SCORE_SUPERLATIVE, prose_all):
+                best = max(candidates, key=lambda c: c["score"])
+                if best["score"] > match["score"]:
+                    report.fail(
+                        "consistency.false_superlative",
+                        f"the advice calls this the highest-scoring play, but "
+                        f"{best['cards']} scores {best['score']} against its "
+                        f"{match['score']}",
+                    )
+
+            # 3. A strictly better play exists and no tradeoff is offered.
+            #    Domination is judged only on axes where "better" is
+            #    unambiguous - score, and the gold/steel given up. Card count
+            #    is deliberately excluded: playing fewer cards preserves
+            #    held-in-hand effects but draws fewer replacements, and which
+            #    of those matters is a judgment the scorer cannot make.
+            dominators = [
+                c for c in candidates
+                if c["score"] > match["score"]
+                and c.get("gold_forfeited", 0) <= match.get("gold_forfeited", 0)
+                and c.get("steel_forfeited", 0) <= match.get("steel_forfeited", 0)
+                and not (match.get("clears_blind") and not c.get("clears_blind"))
+            ]
+            #    FLAGGED, not failed. Spec 5d draws the validator's boundary at
+            #    rules rather than judgment - "selling the wrong joker is a
+            #    valid action and no rule check will flag it" - and taking a
+            #    lower score to set up a later hand is a legitimate choice the
+            #    scorer cannot evaluate. So this surfaces the arithmetic loudly
+            #    and lets the human decide, rather than blocking a play that
+            #    may well be right.
+            if dominators and not _TRADEOFF.search(prose_all):
+                best = max(dominators, key=lambda c: c["score"])
+                report.flag(
+                    "consistency.dominated_play",
+                    f"{best['cards']} scores {best['score']} against this play's "
+                    f"{match['score']} while giving up no more gold or steel, and "
+                    f"the advice gives no reason for taking the lower score",
                 )
 
     # A joker's claimed contribution must not contradict what the state reports.

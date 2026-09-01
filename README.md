@@ -70,6 +70,21 @@ So the cheap tier cannot produce a wrong score. It can only produce weaker
 feeding a fabricated "about 36000" through the pipeline and asserting the user
 never sees it as an answer.
 
+Beyond rejecting invented numbers, the scorer is used as an **oracle against
+the model's claims** — these are the checks that earn their keep on a small
+model, where a confident wrong sentence is the likely failure:
+
+| Claim | How the scorer settles it |
+|---|---|
+| "this clears the blind" | Compared against the computed score and the requirement. Negation-aware, so "does **not** clear" is not mistaken for the opposite |
+| "the highest-scoring play" | Compared against the best of all 218 enumerated plays |
+| Recommending a play a better one dominates | Every legal play is ranked; if one beats it on score while giving up no more gold or steel, that is surfaced |
+
+The last is **flagged, not blocked**. Spec §5d keeps the validator on rules
+rather than judgment, and taking a lower score to keep a Steel card in hand for
+the next hand is a real strategy the scorer cannot evaluate. Stating that
+tradeoff in the reasoning suppresses the flag.
+
 Claude is always called through the official `anthropic` SDK, never an
 OpenAI-compatible shim. The open tier is a genuinely different provider, so it
 speaks the OpenAI protocol its servers implement — over stdlib `urllib`, so
@@ -176,7 +191,7 @@ a cached response valid under an older ruleset may not be valid now.
 |---|---|
 | Legality | Cards not in hand, 6-card plays, selling an Eternal joker, buying past your money or your slots, picking more than a pack allows, playing a hand while in the shop |
 | Arithmetic | Any number in the prose with no source in the computed set. This is the check that catches 36,000 against 20,700. Differences and ratios between computed scores are allowed; inventions are not |
-| Consistency | A recommended play that was never enumerated; a claim about a joker that contradicts its reported `current_contribution`; an unacknowledged failure to clear the blind |
+| Consistency | A recommended play that is not a legal play at all; a claim about a joker that contradicts its reported `current_contribution`; an unacknowledged failure to clear the blind; asserting the blind *is* cleared when it is not; calling a play the highest-scoring one when it is not |
 | Mechanics | Assertions about the two mechanics recorded as genuinely unresolved, and the specific Jumbo/Mega pick-count error made during manual testing. Unbacked rule claims are *flagged for review*, not blocked |
 
 Advice that fails is regenerated once with the failed check appended as a
@@ -258,7 +273,7 @@ Ordered by spec §8's build order. Steps 1–8 and 10 are done.
 ## Development
 
 ```bash
-pytest                          # 216 tests, no network required
+pytest                          # 224 tests, no network required
 python tools/build_fixtures.py  # regenerate fixtures from their derivations
 balatro-advisor fixtures        # the regression gate for any scorer change
 ```

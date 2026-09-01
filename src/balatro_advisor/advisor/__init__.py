@@ -4,6 +4,8 @@ The advisor never computes a score. It receives computed scores as input and
 reasons about them (spec section 1).
 """
 
+from __future__ import annotations
+
 from .cache import ResponseCache, state_hash
 from .client import AnthropicProvider, ProviderError, StubProvider, default_provider
 from .decision_log import DecisionLog

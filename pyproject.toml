@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "balatro-advisor"
 version = "0.1.0"
 description = "Reads Balatro game state, computes scores exactly, and advises on them."
-requires-python = ">=3.10"
+# 3.8 is what macOS 11 Big Sur ships, and the core needs nothing newer.
+requires-python = ">=3.8"
 dependencies = [
     "jsonschema>=4.0",
 ]
@@ -14,6 +15,8 @@ dependencies = [
 [project.optional-dependencies]
 # The advisor runs without this: the offline stub provider takes over when no
 # model is reachable, and the whole test suite runs on it.
+# The Anthropic SDK itself needs 3.10+; the core scorer and CLI do not,
+# so an older interpreter still gets everything except live advice.
 llm = ["anthropic>=1.0"]
 dev = ["pytest>=8.0", "anthropic>=1.0"]
 

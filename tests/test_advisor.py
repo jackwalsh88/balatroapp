@@ -407,3 +407,118 @@ def test_a_torn_log_line_costs_one_entry_not_the_file(tmp_path, state):
     with open(log.path, "a") as handle:
         handle.write('{"id": "torn", "sta\n')
     assert len(list(log.entries())) == 2
+
+
+# -- provider tiers ---------------------------------------------------------
+
+
+def test_the_three_tiers_are_reported(monkeypatch):
+    from balatro_advisor.advisor import available_providers
+
+    rows = available_providers(probe=False)
+    assert [r["tier"] for r in rows] == ["anthropic", "open", "offline"]
+    assert rows[-1]["available"] is True, "offline must always be usable"
+
+
+def test_auto_falls_back_to_offline_when_nothing_is_configured(monkeypatch, tmp_path):
+    from balatro_advisor.advisor import client as client_module
+
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
+    monkeypatch.delenv("BALATRO_ADVISOR_BASE_URL", raising=False)
+    monkeypatch.setattr(client_module, "_has_anthropic_credential", lambda: False)
+    monkeypatch.setattr(
+        client_module.OpenModelProvider, "reachable", lambda self, timeout=1.0: False
+    )
+    assert client_module.default_provider("auto").name == "offline"
+
+
+def test_auto_prefers_the_open_tier_over_offline(monkeypatch):
+    from balatro_advisor.advisor import client as client_module
+
+    monkeypatch.setattr(client_module, "_has_anthropic_credential", lambda: False)
+    monkeypatch.setattr(
+        client_module.OpenModelProvider, "reachable", lambda self, timeout=1.0: True
+    )
+    assert client_module.default_provider("auto").name == "open"
+
+
+def test_auto_prefers_the_frontier_tier_when_credentialled(monkeypatch):
+    from balatro_advisor.advisor import client as client_module
+
+    monkeypatch.setattr(client_module, "_has_anthropic_credential", lambda: True)
+    assert client_module.default_provider("auto").name == "anthropic"
+
+
+def test_an_explicit_tier_is_honoured(monkeypatch):
+    from balatro_advisor.advisor import client as client_module
+
+    monkeypatch.setattr(client_module, "_has_anthropic_credential", lambda: True)
+    assert client_module.default_provider("offline").name == "offline"
+
+
+def test_an_unknown_tier_is_rejected():
+    from balatro_advisor.advisor import client as client_module
+
+    with pytest.raises(ValueError):
+        client_module.default_provider("gpt")
+
+
+def test_open_model_reads_its_configuration_from_the_environment(monkeypatch):
+    from balatro_advisor.advisor import OpenModelProvider
+
+    monkeypatch.setenv("BALATRO_ADVISOR_BASE_URL", "https://example.invalid/v1/")
+    monkeypatch.setenv("BALATRO_ADVISOR_MODEL", "qwen2.5:3b")
+    monkeypatch.setenv("BALATRO_ADVISOR_API_KEY", "sk-test")
+    provider = OpenModelProvider()
+    assert provider.base_url == "https://example.invalid/v1"  # trailing slash trimmed
+    assert provider.model == "qwen2.5:3b"
+    assert provider.api_key == "sk-test"
+
+
+def test_an_unreachable_open_model_falls_back_and_says_why(tmp_path, state):
+    """The failure must name the cause, not just 'validation failed'."""
+    from balatro_advisor.advisor import OpenModelProvider
+
+    provider = OpenModelProvider(base_url="http://127.0.0.1:59999/v1")
+    advisor = Advisor(
+        provider=provider, cache=ResponseCache(tmp_path / "c"),
+        log=DecisionLog(tmp_path / "l.jsonl"), glossary=Glossary(tmp_path / "g.json"),
+    )
+    result = advisor.advise(state)
+    assert result.fell_back
+    assert any("could not reach" in f for f in result.findings)
+    assert "could not reach" in result.render()
+    # And the arithmetic still stands.
+    assert result.action["cards"] == result.candidates[0]["cards"]
+
+
+def test_a_weak_model_inventing_a_score_is_caught_not_shown(tmp_path, state):
+    """The reason a cheap tier is safe.
+
+    A small model is likelier to make a number up. The validator rejects it,
+    the retry fails too, and the user gets the deterministic play - never the
+    invented figure.
+    """
+    invented = (
+        "DECISION: Play cards [0, 1] (pair).\n"
+        "REASONING: This comfortably scores about 36000, clearing the blind.\n"
+        "ALTERNATIVES: none\nUNCERTAIN: none\n"
+        '```json\n{"kind": "play", "cards": [0, 1]}\n```'
+    )
+    advisor = Advisor(
+        provider=ScriptedProvider(invented, invented),
+        cache=ResponseCache(tmp_path / "c"),
+        log=DecisionLog(tmp_path / "l.jsonl"), glossary=Glossary(tmp_path / "g.json"),
+    )
+    result = advisor.advise(state)
+    assert result.fell_back
+
+    # The invented figure is never presented AS the answer...
+    assert "36000" not in result.decision
+    assert "36000" not in result.reasoning
+    assert result.action["cards"] == result.candidates[0]["cards"]
+
+    # ...and it is named in the finding that rejected it, so the failure is
+    # legible rather than mysterious.
+    assert any("36000" in f and "no computed value" in f for f in result.findings)

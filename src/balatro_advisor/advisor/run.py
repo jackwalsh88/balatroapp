@@ -66,9 +66,14 @@ class AdviceResult:
         ]
         if self.fell_back:
             lines.append(
-                "\nNOTE: advisory generation failed validation twice. The above is "
-                "the deterministic top-ranked play, with no model reasoning behind it."
+                "\nNOTE: advisory generation failed twice, so the above is the "
+                "deterministic top-ranked play with no model reasoning behind it. "
+                "The arithmetic is unaffected - it never came from the model."
             )
+            # Say WHY. "failed validation" with no cause is the difference
+            # between a user fixing their setup and a user giving up.
+            for finding in self.findings:
+                lines.append(f"  - {finding}")
         if self.flags:
             lines.append("\nFLAGGED FOR REVIEW (shown, not blocked):")
             lines.extend(f"  - {f}" for f in self.flags)
@@ -83,9 +88,10 @@ class Advisor:
         log: DecisionLog | None = None,
         glossary: Glossary | None = None,
         *,
+        tier: str = "auto",
         force_stub: bool = False,
     ) -> None:
-        self.provider = provider or default_provider(force_stub=force_stub)
+        self.provider = provider or default_provider(tier, force_stub=force_stub)
         self.cache = cache if cache is not None else ResponseCache()
         self.log = log if log is not None else DecisionLog()
         self.glossary = glossary if glossary is not None else Glossary()
@@ -217,11 +223,17 @@ class Advisor:
         candidates: list[dict[str, Any]],
         discards: list[dict[str, Any]],
     ) -> validator.Report:
+        if advice.get("provider_error"):
+            # The model was never reached, so "no DECISION line" and "no action
+            # block" are consequences, not causes. Reporting all three buries
+            # the one the user can act on.
+            report = validator.Report()
+            report.fail("provider", advice["provider_error"])
+            return report
+
         report = validator.validate_advice(advice, state, candidates, discards)
         for message in advice.get("parse_errors") or []:
             report.fail("format.parse", message)
-        if advice.get("provider_error"):
-            report.fail("provider", advice["provider_error"])
         return report
 
     @staticmethod
@@ -313,11 +325,13 @@ def advise(
     *,
     mode: str = "expert",
     question: str | None = None,
+    tier: str = "auto",
     force_stub: bool = False,
     no_cache: bool = False,
 ) -> AdviceResult:
     """Convenience entry point for one-shot use."""
     return Advisor(
         cache=ResponseCache(enabled=not no_cache),
+        tier=tier,
         force_stub=force_stub,
     ).advise(state, mode=mode, question=question)

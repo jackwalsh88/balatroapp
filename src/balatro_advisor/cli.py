@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from .adapters.manual import DEFAULT_SESSION_PATH, ManualSession
-from .advisor import Advisor, DecisionLog, Glossary, ResponseCache
+from .advisor import Advisor, DecisionLog, Glossary, ResponseCache, available_providers
 from .core import cards as card_utils
 from .core import enumerate as enumerate_module
 from .core import schema, scorer
@@ -59,6 +59,7 @@ def cmd_advise(args: argparse.Namespace) -> int:
         cache=ResponseCache(args.cache_dir, enabled=not args.no_cache),
         log=DecisionLog(args.log),
         glossary=Glossary(args.glossary),
+        tier=args.provider,
         force_stub=args.stub,
     )
     result = advisor.advise(state, mode=args.mode, question=args.question)
@@ -272,6 +273,29 @@ def cmd_log(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_providers(args: argparse.Namespace) -> int:
+    """Explain the tiers and which one `auto` would pick."""
+    rows = available_providers(probe=not args.no_probe)
+    print("Advice quality tiers, best first. `auto` picks the first usable one.\n")
+    for row in rows:
+        mark = {True: "USABLE ", False: "no     ", None: "?      "}[row["available"]]
+        print(f"  [{mark}] {row['tier']}")
+        print(f"            {row['what']}")
+        print(f"            cost: {row['cost']}")
+        print(f"            {row['detail']}\n")
+
+    chosen = next((r["tier"] for r in rows if r["available"]), "offline")
+    print(f"auto would use: {chosen}")
+    if chosen != "anthropic":
+        print(
+            "\nNote: scores never come from the model in ANY tier - they come "
+            "from the\ndeterministic scorer, and the validator rejects numbers "
+            "with no computed\nsource. A weaker tier costs you judgment, not "
+            "arithmetic."
+        )
+    return 0
+
+
 def cmd_reset(args: argparse.Namespace) -> int:
     session = ManualSession(DEFAULT_SESSION_PATH)
     session.reset()
@@ -300,7 +324,14 @@ def build_parser() -> argparse.ArgumentParser:
     advise.add_argument("--question", help="a specific question instead of 'what should I do?'")
     advise.add_argument("--explain", action="store_true", help="show the scoring chain")
     advise.add_argument("--no-cache", action="store_true", help="bypass the response cache")
-    advise.add_argument("--stub", action="store_true", help="offline: no model call")
+    advise.add_argument(
+        "--provider", choices=("auto", "anthropic", "open", "offline"), default="auto",
+        help="which tier to use (default: best available)",
+    )
+    advise.add_argument(
+        "--stub", action="store_true",
+        help="alias for --provider offline",
+    )
     advise.add_argument("--no-session", action="store_true", help="do not persist manual entry")
     advise.set_defaults(func=cmd_advise)
 
@@ -331,6 +362,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     log_cmd = sub.add_parser("log", help="summarize the decision log")
     log_cmd.set_defaults(func=cmd_log)
+
+    providers = sub.add_parser(
+        "providers", help="show the three tiers and which are usable right now"
+    )
+    providers.add_argument(
+        "--no-probe", action="store_true",
+        help="skip the liveness check on the open-model endpoint",
+    )
+    providers.set_defaults(func=cmd_providers)
 
     reset = sub.add_parser("reset", help="clear session, glossary and cache")
     reset.set_defaults(func=cmd_reset)

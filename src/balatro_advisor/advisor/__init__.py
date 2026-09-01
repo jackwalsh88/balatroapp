@@ -7,7 +7,15 @@ reasons about them (spec section 1).
 from __future__ import annotations
 
 from .cache import ResponseCache, state_hash
-from .client import AnthropicProvider, ProviderError, StubProvider, default_provider
+from .client import (
+    AnthropicProvider,
+    OfflineProvider,
+    OpenModelProvider,
+    ProviderError,
+    StubProvider,
+    available_providers,
+    default_provider,
+)
 from .decision_log import DecisionLog
 from .glossary import Glossary
 from .parse import parse_advice, parse_render
@@ -24,7 +32,10 @@ __all__ = [
     "DecisionLog",
     "Glossary",
     "AnthropicProvider",
+    "OpenModelProvider",
+    "OfflineProvider",
     "StubProvider",
+    "available_providers",
     "ProviderError",
     "default_provider",
     "parse_advice",

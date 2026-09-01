@@ -28,16 +28,52 @@ pip install -e ".[dev]"
 
 balatro-advisor fixtures                     # scorer vs. every recorded derivation
 balatro-advisor explain fixtures/lower_hand_outscores_higher.json --chain
-balatro-advisor advise  fixtures/blue_joker_and_photograph.json --explain --stub
+balatro-advisor advise  fixtures/blue_joker_and_photograph.json --explain --provider offline
 balatro-advisor advise                       # manual entry, no state file needed
 ```
 
-Nothing above needs an API key. `--stub` forces the offline provider, and the
-advisor falls back to it automatically when no model is reachable — a missing
-credential degrades to "here is the arithmetic, unadorned", never to a guess.
+## Three tiers of advice
 
-For real advice, the SDK resolves `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`,
-or an `ant auth login` profile. Model: `claude-opus-5`.
+```bash
+balatro-advisor providers    # what's usable right now, and what auto would pick
+```
+
+| Tier | What runs | Cost |
+|---|---|---|
+| `anthropic` | Frontier model (`claude-opus-5`) via the official SDK | Paid — needs an Anthropic account |
+| `open` | A cheap open-weights model over an OpenAI-compatible API | Free on a local Ollama; a hosted service needs **that service's** key, not Anthropic's |
+| `offline` | Deterministic top-ranked play, no prose | Free. No network, no account, works forever |
+
+`--provider auto` (the default) takes the best tier that is actually usable and
+falls back quietly down the list. Force one with `--provider open`.
+
+The open tier is configured by environment, and defaults to a local Ollama —
+the one option needing no account at all:
+
+```bash
+export BALATRO_ADVISOR_BASE_URL=http://localhost:11434/v1   # default
+export BALATRO_ADVISOR_MODEL=llama3.2                       # default
+export BALATRO_ADVISOR_API_KEY=...                          # only for hosted services
+```
+
+### Why a weak model is safe here
+
+A 3B model is *more* likely to invent a number than a frontier one. This
+architecture already assumes the model will try:
+
+- Scores come from the deterministic scorer. **The model never computes one.**
+- The validator rejects any number in the prose with no computed source.
+- Advice that fails twice degrades to the top-ranked play with no prose.
+
+So the cheap tier cannot produce a wrong score. It can only produce weaker
+*judgment* — which is precisely what the decision log measures. There is a test
+feeding a fabricated "about 36000" through the pipeline and asserting the user
+never sees it as an answer.
+
+Claude is always called through the official `anthropic` SDK, never an
+OpenAI-compatible shim. The open tier is a genuinely different provider, so it
+speaks the OpenAI protocol its servers implement — over stdlib `urllib`, so
+there is nothing extra to install on an old Python.
 
 ## What the scorer actually does
 
@@ -222,7 +258,7 @@ Ordered by spec §8's build order. Steps 1–8 and 10 are done.
 ## Development
 
 ```bash
-pytest                          # 207 tests, no network required
+pytest                          # 216 tests, no network required
 python tools/build_fixtures.py  # regenerate fixtures from their derivations
 balatro-advisor fixtures        # the regression gate for any scorer change
 ```

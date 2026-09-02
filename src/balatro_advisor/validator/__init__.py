@@ -217,6 +217,7 @@ def known_numbers(
     state: dict[str, Any],
     candidates: list[dict[str, Any]],
     discards: list[dict[str, Any]],
+    shown: list[dict[str, Any]] | None = None,
 ) -> set[float]:
     """Every number the advice is entitled to quote.
 
@@ -250,6 +251,14 @@ def known_numbers(
 
     # Cardinalities of the things the advice can legitimately count: "11 other
     # plays scored lower", "4 jokers held", "3 cards in hand".
+    # The model may legitimately count what it was SHOWN ("11 other plays
+    # scored lower"), which is the shortlist, not the full enumeration. The
+    # validator sees every legal play, so without this the shortlist's size
+    # reads as an invented number.
+    if shown is not None:
+        known.add(float(len(shown)))
+        known.add(float(max(0, len(shown) - 1)))
+
     for collection in (
         candidates, discards, state.get("current_hand") or [],
         state.get("jokers") or [], state.get("consumables") or [],
@@ -270,8 +279,9 @@ def _check_arithmetic(
     state: dict[str, Any],
     candidates: list[dict[str, Any]],
     discards: list[dict[str, Any]],
+    shown: list[dict[str, Any]] | None = None,
 ) -> None:
-    known = known_numbers(state, candidates, discards)
+    known = known_numbers(state, candidates, discards, shown)
     prose = " ".join(
         str(advice.get(k) or "") for k in ("decision", "reasoning", "alternatives")
     )
@@ -542,8 +552,13 @@ def validate_advice(
     state: dict[str, Any],
     candidates: list[dict[str, Any]] | None = None,
     discards: list[dict[str, Any]] | None = None,
+    shown: list[dict[str, Any]] | None = None,
 ) -> Report:
     """Run every check. Advice with any failure must never reach the user.
+
+    ``candidates`` is every legal play, so a lower-ranked but legitimate
+    recommendation is not rejected as unenumerated. ``shown`` is the shortlist
+    the model actually received, which is what it can legitimately count.
 
     ``advice`` is the parsed advisor output: ``decision``, ``reasoning``,
     ``alternatives``, ``uncertain`` and a structured ``action``.
@@ -557,7 +572,7 @@ def validate_advice(
         report.fail("format.decision", "no DECISION line")
 
     _check_legality(report, action, state)
-    _check_arithmetic(report, advice, state, candidates, discards)
+    _check_arithmetic(report, advice, state, candidates, discards, shown)
     _check_consistency(report, advice, action, state, candidates)
     _check_mechanics(report, advice)
     return report

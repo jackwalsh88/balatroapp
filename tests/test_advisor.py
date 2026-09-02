@@ -522,3 +522,51 @@ def test_a_weak_model_inventing_a_score_is_caught_not_shown(tmp_path, state):
     # ...and it is named in the finding that rejected it, so the failure is
     # legible rather than mysterious.
     assert any("36000" in f and "no computed value" in f for f in result.findings)
+
+
+def test_the_model_may_count_the_shortlist_it_was_shown(tmp_path, state_factory, card):
+    """Regression: the validator sees all 218 plays, the model sees 12.
+
+    When validation moved to the full candidate set, the offline provider's
+    honest "11 other plays scored lower" became an unsourced number and every
+    hand fell back. It went unnoticed because the other tests use small hands
+    where the shortlist IS the full set.
+    """
+    from balatro_advisor.advisor import OfflineProvider
+
+    big_hand = schema.load_state(state_factory(
+        current_hand=[card(r, "hearts") for r in ("2", "3", "4", "5", "6", "7", "8", "9")],
+        blind={"type": "small", "key": "bl_small", "requirement": 10},
+    ))
+    advisor = Advisor(
+        provider=OfflineProvider(), cache=ResponseCache(tmp_path / "c", enabled=False),
+        log=DecisionLog(tmp_path / "l.jsonl"), glossary=Glossary(tmp_path / "g.json"),
+    )
+    result = advisor.advise(big_hand)
+    assert len(result.candidates) < 218, "this hand must exercise the shortlist"
+    assert not result.fell_back, f"unexpected fallback: {result.findings}"
+
+
+def test_a_lower_ranked_play_is_not_rejected_as_unenumerated(tmp_path, state_factory, card):
+    """The other half of the same fix: legal but outside the shortlist."""
+    # Requirement of 1 so even a single card clears it: this test is about
+    # whether a lower-ranked play is REACHABLE, not about shortfalls.
+    big_hand = schema.load_state(state_factory(
+        current_hand=[card(r, "hearts") for r in ("2", "3", "4", "5", "6", "7", "8", "9")],
+        blind={"type": "small", "key": "bl_small", "requirement": 1},
+    ))
+    # A single low card - legal, and nowhere near the top twelve.
+    lowly = (
+        "DECISION: Play card [0] (high card).\n"
+        "REASONING: Keeping the rest of the hand for the next round.\n"
+        "ALTERNATIVES: none\nUNCERTAIN: none\n"
+        '```json\n{"kind": "play", "cards": [0]}\n```'
+    )
+    advisor = Advisor(
+        provider=ScriptedProvider(lowly, lowly),
+        cache=ResponseCache(tmp_path / "c", enabled=False),
+        log=DecisionLog(tmp_path / "l.jsonl"), glossary=Glossary(tmp_path / "g.json"),
+    )
+    result = advisor.advise(big_hand)
+    assert not any("not in candidate_plays" in f for f in result.findings)
+    assert result.action["cards"] == [0]

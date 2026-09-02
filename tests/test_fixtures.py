@@ -37,10 +37,27 @@ def test_fixture_scores_as_derived(name, fixture):
     state = schema.load_state(fixture["state_before"])
     result = scorer.score_play(state, fixture["cards_played"])
 
-    derivation = fixture.get("arithmetic") or "(no derivation recorded)"
-    assert result.chips == pytest.approx(fixture["expected_chips"]), derivation
-    assert result.mult == pytest.approx(fixture["expected_mult"]), derivation
-    assert result.score == fixture["expected_score"], derivation
+    captured = fixture.get("provenance") == "captured"
+    if captured:
+        # The expectation came from the game, so a mismatch is a SCORER bug.
+        # Say so, because the instinct on a red test is to edit the fixture.
+        why = (
+            f"CAPTURED from a real game (log {fixture.get('source_log_id')}). "
+            f"The expectation is the game's own score, so the scorer is what is "
+            f"wrong here - do not 'fix' this fixture. At capture time the scorer "
+            f"said {fixture.get('scorer_said', {}).get('score')}."
+        )
+    else:
+        why = fixture.get("arithmetic") or "(no derivation recorded)"
+
+    # Captured fixtures may omit chips/mult: reading the score off the game is
+    # easy, reading the intermediate values is fiddly, and the score alone is
+    # enough to catch an error.
+    if fixture.get("expected_chips") is not None:
+        assert result.chips == pytest.approx(fixture["expected_chips"]), why
+    if fixture.get("expected_mult") is not None:
+        assert result.mult == pytest.approx(fixture["expected_mult"]), why
+    assert result.score == fixture["expected_score"], why
 
     if "expected_exact" in fixture:
         assert result.exact is fixture["expected_exact"], derivation
@@ -72,6 +89,22 @@ def test_fixture_set_covers_the_required_ground():
     assert any(f.get("expected_exact") is False for f in fixtures), (
         "at least one fixture must exercise the non-exact honesty path"
     )
+
+
+def test_a_captured_fixture_never_expects_the_scorers_own_answer():
+    """The trap that would make captured fixtures worthless.
+
+    Recording what the scorer said as the expectation produces a fixture that
+    can never fail, and therefore never tells you anything. `scorer_said` is
+    kept as a RECORD; `expected_score` must come from the game.
+    """
+    for name, fixture in _fixtures():
+        if fixture.get("provenance") != "captured":
+            continue
+        assert "scorer_said" in fixture, name
+        assert "agrees_at_capture" in fixture, name
+        if not fixture["agrees_at_capture"]:
+            assert fixture["expected_score"] != fixture["scorer_said"]["score"], name
 
 
 def test_every_fixture_declares_provenance():

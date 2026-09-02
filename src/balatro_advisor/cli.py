@@ -18,6 +18,7 @@ from typing import Any
 
 from .adapters.manual import DEFAULT_SESSION_PATH, ManualSession
 from .advisor import Advisor, DecisionLog, Glossary, ResponseCache, available_providers
+from .capture import CaptureError, build_fixture, write_fixture
 from .core import cards as card_utils
 from .core import enumerate as enumerate_module
 from .core import schema, scorer
@@ -176,11 +177,13 @@ def cmd_fixtures(args: argparse.Namespace) -> int:
 
         result = scorer.score_play(state, fixture["cards_played"])
         problems = []
-        checks = (
-            ("chips", result.chips, fixture["expected_chips"]),
-            ("mult", result.mult, fixture["expected_mult"]),
-            ("score", result.score, fixture["expected_score"]),
-        )
+        # chips/mult are optional: a captured fixture may record only the score,
+        # since reading that off the game is easy and the intermediates are not.
+        checks = [("score", result.score, fixture["expected_score"])]
+        if fixture.get("expected_chips") is not None:
+            checks.append(("chips", result.chips, fixture["expected_chips"]))
+        if fixture.get("expected_mult") is not None:
+            checks.append(("mult", result.mult, fixture["expected_mult"]))
         for label, got, want in checks:
             if abs(got - want) > 1e-6:
                 problems.append(f"{label} {got:g} != {want:g}")
@@ -198,7 +201,14 @@ def cmd_fixtures(args: argparse.Namespace) -> int:
                 problems.append(f"top-ranked play {top['cards']} != {fixture['also_assert_top_ranked_play']}")
 
         if problems:
-            print(f"FAIL {name}: {'; '.join(problems)}")
+            marker = "FAIL" if fixture.get("provenance") != "captured" else "FAIL*"
+            print(f"{marker} {name}: {'; '.join(problems)}")
+            if fixture.get("provenance") == "captured":
+                print(
+                    "       * CAPTURED from a real game. The expectation is the "
+                    "game's own score,\n         so this is a scorer bug, not a "
+                    "bad fixture."
+                )
             if args.verbose:
                 for step in result.steps:
                     print(f"       {step}")
@@ -215,7 +225,8 @@ def cmd_fixtures(args: argparse.Namespace) -> int:
         print(
             "  NOTE: no captured fixtures yet. Hand-computed fixtures prove the "
             "scorer is\n  self-consistent; only captured ones prove it matches "
-            "the game. See fixtures/README.md."
+            "the game. Play a hand,\n  then: balatro-advisor capture <log-id> "
+            "--score <what the game awarded>"
         )
     return 1 if failures else 0
 
@@ -241,6 +252,48 @@ def cmd_outcome(args: argparse.Namespace) -> int:
                 f"({divergence['error_pct']}% off). The arithmetic is wrong, not "
                 f"the judgment."
             )
+    return 0
+
+
+def cmd_capture(args: argparse.Namespace) -> int:
+    """Turn a played hand into ground truth the scorer had no hand in making."""
+    log = DecisionLog(args.log)
+    entry = next((e for e in log.entries() if e.get("id") == args.id), None)
+    if entry is None:
+        print(f"no log entry with id {args.id!r}", file=sys.stderr)
+        return 1
+
+    try:
+        fixture = build_fixture(
+            entry,
+            actual_score=args.score,
+            actual_chips=args.chips,
+            actual_mult=args.mult,
+            name=args.name,
+            note=args.note,
+        )
+    except CaptureError as exc:
+        print(f"cannot capture: {exc}", file=sys.stderr)
+        return 1
+
+    path = write_fixture(fixture)
+
+    # Record the outcome too, so predicted-vs-actual tracking stays complete.
+    log.record_outcome(
+        args.id,
+        action_taken="played_recommended" if args.recommended else "played_other",
+        actual_score=args.score,
+    )
+
+    print(f"wrote {path.relative_to(Path.cwd()) if path.is_relative_to(Path.cwd()) else path}")
+    said = fixture["scorer_said"]
+    if fixture["agrees_at_capture"]:
+        print(f"  scorer agreed: {said['chips']:g} x {said['mult']:g} = {said['score']}")
+        print("  This is now real ground truth rather than a self-check.")
+    else:
+        print(f"  DISAGREEMENT: game {args.score}, scorer {said['score']}")
+        print(f"  {fixture['disagreement']}")
+        print("\n  Run `balatro-advisor fixtures` - it will now fail, correctly.")
     return 0
 
 
@@ -359,6 +412,25 @@ def build_parser() -> argparse.ArgumentParser:
     outcome.add_argument("--cleared", action="store_true", help="the blind was cleared")
     outcome.add_argument("--ante-survived", action="store_true")
     outcome.set_defaults(func=cmd_outcome)
+
+    capture = sub.add_parser(
+        "capture",
+        help="turn a played hand into a captured fixture (real ground truth)",
+    )
+    capture.add_argument("id", help="log id from an earlier advise run")
+    capture.add_argument(
+        "--score", type=int, required=True,
+        help="the score THE GAME awarded, not what this computed",
+    )
+    capture.add_argument("--chips", type=float, help="chips the game displayed (optional)")
+    capture.add_argument("--mult", type=float, help="mult the game displayed (optional)")
+    capture.add_argument("--name", help="fixture name (default: generated)")
+    capture.add_argument("--note", help="anything worth recording about this hand")
+    capture.add_argument(
+        "--recommended", action="store_true",
+        help="you played what was recommended (default: played something else)",
+    )
+    capture.set_defaults(func=cmd_capture)
 
     log_cmd = sub.add_parser("log", help="summarize the decision log")
     log_cmd.set_defaults(func=cmd_log)

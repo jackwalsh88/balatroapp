@@ -232,11 +232,17 @@ Different bugs, different fixes, and without this they are indistinguishable.
 
 ## Honest gaps
 
-**No captured fixtures.** All 16 are `hand_computed`: the arithmetic was worked
+**No captured fixtures yet.** All of them are `hand_computed`: the arithmetic was worked
 out by hand, written into the fixture's `arithmetic` field, and checked against
 the scorer. That proves the scorer is self-consistent and does not regress. It
 **cannot** prove the scorer matches the game — both could be wrong the same
-way. Closing this needs the mod adapter, which §0 blocks. See
+way.
+
+`balatro-advisor capture <log-id> --score N` closes it one hand at a time —
+play a hand anywhere you have Balatro, type it in, record what the game
+awarded. A capture that disagrees with the scorer **fails the suite on
+purpose**: that is a real scoring bug, and the runner marks it `FAIL*` so the
+fixture is not mistaken for the thing to edit. See
 [`fixtures/README.md`](fixtures/README.md).
 
 **8 of 150 jokers are unmodelled**, each for a stated structural reason rather
@@ -273,7 +279,7 @@ Ordered by spec §8's build order. Steps 1–8 and 10 are done.
 ## Development
 
 ```bash
-pytest                          # 224 tests, no network required
+pytest                          # 235 tests, no network required
 python tools/build_fixtures.py  # regenerate fixtures from their derivations
 balatro-advisor fixtures        # the regression gate for any scorer change
 ```

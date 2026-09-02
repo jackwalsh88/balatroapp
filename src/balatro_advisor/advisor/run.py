@@ -194,7 +194,7 @@ class Advisor:
         else:
             advice = self._call_stage1(state, shortlist, discards, question)
 
-        report = self._validate(advice, state, all_candidates, discards)
+        report = self._validate(advice, state, all_candidates, discards, shortlist)
 
         if report.ok:
             if not cache_hit:
@@ -206,7 +206,7 @@ class Advisor:
             state, shortlist, discards, question,
             constraints=report.constraint_text(),
         )
-        retry_report = self._validate(retry, state, all_candidates, discards)
+        retry_report = self._validate(retry, state, all_candidates, discards, shortlist)
         if retry_report.ok:
             self.cache.put(key, "decision", retry["raw"])
             return retry, cache_hit, True, False, retry_report
@@ -243,6 +243,7 @@ class Advisor:
         state: dict[str, Any],
         candidates: list[dict[str, Any]],
         discards: list[dict[str, Any]],
+        shown: list[dict[str, Any]] | None = None,
     ) -> validator.Report:
         if advice.get("provider_error"):
             # The model was never reached, so "no DECISION line" and "no action
@@ -252,7 +253,7 @@ class Advisor:
             report.fail("provider", advice["provider_error"])
             return report
 
-        report = validator.validate_advice(advice, state, candidates, discards)
+        report = validator.validate_advice(advice, state, candidates, discards, shown)
         for message in advice.get("parse_errors") or []:
             report.fail("format.parse", message)
         return report
